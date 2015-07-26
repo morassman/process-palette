@@ -10,7 +10,7 @@
   {
     'label': 'Packages'
     'submenu': [
-      'label': 'process-palette'
+      'label': 'Process Palette'
       'submenu': [
         {
           'label': 'Toggle'

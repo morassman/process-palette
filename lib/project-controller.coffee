@@ -2,17 +2,14 @@ ProcessConfig = require './process-config'
 ProcessController = require './process-controller'
 {CompositeDisposable} = require 'atom'
 {BufferedProcess} = require 'atom'
-{File} = require 'atom'
+{Directory, File} = require 'atom'
 
 module.exports =
 class ProjectController
-  @filePath = null;
-  @processControllers = null;
 
-  constructor: (@projectPath) ->
+  constructor: (@processPaletteView, projectPath) ->
     @processControllers = [];
-    @filePath = projectPath+'/process-palette.json';
-    @loadFile();
+    @loadFile(projectPath);
 
   dispose: ->
     @clearProcessControllers();
@@ -23,27 +20,31 @@ class ProjectController
 
     processControllers = [];
 
-  loadFile: ->
+  loadFile: (projectPath) ->
     @clearProcessControllers();
 
-    file = new File(@filePath, false);
+    file = new Directory(projectPath).getFile('process-palette.json');
 
     if (!file.isFile() or !file.existsSync())
-      console.log('process-palette.json not found.');
       return;
 
     promise = file.read(true);
 
     promise.then (resolve) =>
-      console.log('parseFile1');
       @parseFile(resolve);
-      console.log('parseFile2');
 
-  parseFile: (resolve) ->
-    console.log('parseFile');
-    processConfigs = JSON.parse(resolve);
+  parseFile: (content) ->
+    processConfigs = JSON.parse(content);
 
-    for id, processConfig of processConfigs
-      processConfig.id = id;
-      processController = new ProcessController(new ProcessConfig(processConfig));
+    if !processConfigs
+      return;
+
+    commands = processConfigs.commands;
+
+    if !commands
+      return;
+
+    for command in commands
+      processController = new ProcessController(new ProcessConfig(command));
       @processControllers.push(processController);
+      @processPaletteView.addProcess(processController);

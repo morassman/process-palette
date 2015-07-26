@@ -5,19 +5,13 @@ ProjectController = require './project-controller'
 
 module.exports = ProcessPalette =
 
-  processPaletteView: null
-  modalPanel: null
-  subscriptions: null
-  disposables: null
-  projectControllers: null
-
   activate: (state) ->
-    @processPaletteView = new ProcessPaletteView(state.processPaletteViewState)
-    @modalPanel = atom.workspace.addModalPanel(item: @processPaletteView.getElement(), visible: false)
     @subscriptions = new CompositeDisposable
     @projectControllers = []
+    @processPaletteView = new ProcessPaletteView()
+    @bottomPanel = atom.workspace.addBottomPanel(item: @processPaletteView.getElement(), visible: false);
 
-    @subscriptions.add atom.commands.add 'atom-workspace', 'Process Palette:Sandbox': => @sandbox()
+    @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:toggle': => @toggle()
 
     configFile = new File(atom.config.getUserConfigPath());
     @addProjectPath(configFile.getParent().getRealPathSync());
@@ -26,7 +20,6 @@ module.exports = ProcessPalette =
       @addProjectPath(projectPath);
 
   deactivate: ->
-    @modalPanel.destroy();
     @processPaletteView.destroy();
     @subscriptions.dispose();
 
@@ -36,12 +29,14 @@ module.exports = ProcessPalette =
   serialize: ->
     processPaletteViewState: @processPaletteView.serialize()
 
-  sandbox: ->
+  toggle: ->
+    if (@bottomPanel.visible)
+      @bottomPanel.hide();
+    else
+      @bottomPanel.show();
 
   addProjectPath: (projectPath) ->
-    console.log('addProjectPath : '+projectPath);
-    projectController = new ProjectController(projectPath);
+    projectController = new ProjectController(@processPaletteView, projectPath);
     @projectControllers.push(projectController);
 
   removeProjectPath: (projectPath) ->
-    console.log('removeProjectPath : '+projectPath);

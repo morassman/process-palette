@@ -1,22 +1,28 @@
-module.exports =
-class ProcessPaletteView
-  constructor: (serializedState) ->
-    # Create root element
-    @element = document.createElement('div')
-    @element.classList.add('process-palette')
+ProcessView = require './process-view'
+{CompositeDisposable} = require 'atom'
+{$$, ScrollView} = require 'atom-space-pen-views'
 
-    # Create message element
-    message = document.createElement('div')
-    message.textContent = "The ProcessPalette package is Alive! It's ALIVE!"
-    message.classList.add('message')
-    @element.appendChild(message)
+module.exports =
+class ProcessPaletteView extends ScrollView
+  @content: ->
+    @div class:"process-palette", =>
+      @div {class:"process-list", outlet:"processList"}
+
+  addProcess: (processController) ->
+    @processList.append $$ ->
+      @div =>
+        @subview processController.config.id, new ProcessView(processController)
 
   # Returns an object that can be retrieved when package is activated
   serialize: ->
 
   # Tear down any state and detach
   destroy: ->
-    @element.remove()
+    @subscriptions?.dispose();
+    @element.remove();
 
   getElement: ->
     @element
+
+  getTitle: ->
+    return 'Process Palette'
