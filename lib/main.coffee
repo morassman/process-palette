@@ -1,15 +1,14 @@
-ProcessPaletteView = require './process-palette-view'
-ProjectController = require './project-controller'
-{CompositeDisposable} = require 'atom'
-{File} = require 'atom'
+ProcessListView = require './views/process-list-view'
+ProjectController = require './controllers/project-controller'
+{File, CompositeDisposable} = require 'atom'
 
 module.exports = ProcessPalette =
 
   activate: (state) ->
     @subscriptions = new CompositeDisposable
     @projectControllers = []
-    @processPaletteView = new ProcessPaletteView()
-    @bottomPanel = atom.workspace.addBottomPanel(item: @processPaletteView.getElement(), visible: false);
+    @processListView = new ProcessListView(@)
+    @bottomPanel = atom.workspace.addBottomPanel(item: @processListView.getElement(), visible: false);
 
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:toggle': => @toggle()
 
@@ -20,23 +19,27 @@ module.exports = ProcessPalette =
       @addProjectPath(projectPath);
 
   deactivate: ->
-    @processPaletteView.destroy();
+    @processListView.destroy();
     @subscriptions.dispose();
 
     for projectController in projectControllers
       projectController.dispose();
 
   serialize: ->
-    processPaletteViewState: @processPaletteView.serialize()
+    processPaletteViewState: @processListView.serialize()
 
   toggle: ->
-    if (@bottomPanel.visible)
+    if @bottomPanel.visible
       @bottomPanel.hide();
     else
       @bottomPanel.show();
 
+  show: ->
+    if !@bottomPanel.visible
+      @bottomPanel.show();
+
   addProjectPath: (projectPath) ->
-    projectController = new ProjectController(@processPaletteView, projectPath);
+    projectController = new ProjectController(@processListView, projectPath);
     @projectControllers.push(projectController);
 
   removeProjectPath: (projectPath) ->

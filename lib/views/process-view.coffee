@@ -4,19 +4,16 @@ _ = require 'underscore-plus'
 module.exports =
 class ProcessView extends View
 
-  constructor: (@processController) ->
-    super(@processController);
-    @processController.addProcessCallbacks(@processStarted, @processStopped);
+  constructor: (@processListView, @processController) ->
+    super(@processListView, @processController);
+    @processController.addProcessCallback(@);
 
-  @content: (processController) ->
-    title = _.humanizeEventName(processController.config.getCommandName());
-
-    if processController.config.keystroke
-      title += " (" + _.humanizeKeystroke(processController.config.keystroke) + ")";
-
+  @content: (processListView, processController) ->
     @div class:"process", =>
       @button {class:'btn btn-xs icon-playback-play inline-block-tight', outlet:'runKillButton', click:'runKillProcess'}
-      @span title, class:'header inline-block text-highlight'
+      @span _.humanizeEventName(processController.config.getCommandName()), {class:'header inline-block text-highlight', click:'showProcessOutput'}
+      if processController.config.keystroke
+        @span _.humanizeKeystroke(processController.config.keystroke), class:'keystroke inline-block highlight'
       @table =>
         @tbody =>
           @tr =>
@@ -26,9 +23,15 @@ class ProcessView extends View
             @td "Output (#{processController.config.outputTarget})", class:'table-title'
             @td "#{processController.config.successOutput}"
 
+  showProcessOutput: =>
+    @processListView.showProcessOutput(@processController);
+
   processStarted: =>
     @runKillButton.removeClass('icon-playback-play');
     @runKillButton.addClass('icon-x');
+
+    if @processController.config.outputTarget == null
+      @showProcessOutput();
 
   processStopped: =>
     @runKillButton.removeClass('icon-x');
@@ -42,6 +45,7 @@ class ProcessView extends View
 
   # Tear down any state and detach
   destroy: ->
+    @processController.removeProcessCallback(@);
     @element.remove()
 
   getElement: ->

@@ -1,5 +1,5 @@
 _ = require 'underscore-plus'
-ProcessConfig = require './process-config'
+ProcessConfig = require '../process-config'
 {BufferedProcess, File} = require 'atom'
 
 # Fields :
@@ -24,20 +24,17 @@ class ProcessController
   @config : null;
   @disposable : null;
   @process : null;
-  @processStartedCallbacks : null;
-  @processStoppedCallbacks : null;
+  @processCallbacks : null;
 
   constructor: (@config) ->
-    @processStartedCallbacks = [];
-    @processStoppedCallbacks = [];
+    @processCallbacks = [];
     @replaceRegExp = new RegExp('{.*?}','g');
     @fields = {};
+    @output = '';
     cssSelector = 'atom-workspace';
 
     if (@config.outputTarget == 'editor')
       cssSelector = 'atom-text-editor';
-    else if (@config.outputTarget != 'clipboard')
-      @config.outputTarget = 'console';
 
     @disposable = atom.commands.add(cssSelector, @config.getCommandName(), @runProcess);
 
@@ -92,7 +89,7 @@ class ProcessController
 
     exit = (exitStatus) =>
       @fields.exitStatus = exitStatus;
-      @processExited();
+      @processStopped(false);
 
     @process = new BufferedProcess({command, args, stdout, stderr, exit});
     @process.onWillThrowError(@handleProcessErrorCallback);
@@ -105,17 +102,14 @@ class ProcessController
     return (text) =>
       return fields[text.slice(1,-1)];
 
-  addProcessCallbacks: (processStartedCallback, processStoppedCallback) ->
-    if (processStartedCallback)
-      @processStartedCallbacks.push(processStartedCallback);
+  addProcessCallback: (callback) ->
+    @processCallbacks.push(callback);
 
-    if (processStoppedCallback)
-      @processStoppedCallbacks.push(processStoppedCallback);
+  removeProcessCallback: (callback) ->
+    index = @processCallbacks.indexOf(callback);
 
-  handleProcessErrorCallback: (errorObject) =>
-    # Indicate that the error has been handled.
-    errorObject.handle();
-    @processStopped(true);
+    if (index != -1)
+      @processCallbacks.splice(index, 1);
 
   runKillProcess: ->
     if @process
@@ -130,45 +124,59 @@ class ProcessController
     @process.kill();
     @processStopped(false);
 
-  processExited: ->
-    if @fields.exitStatus == 0
-      formatted = @insertFields(@config.successOutput);
-    else
-      formatted = @insertFields(@config.errorOutput);
-
-    editor = atom.workspace.getActiveTextEditor();
-
-    if ((@config.outputTarget == 'editor') and editor)
-      editor.insertText(formatted);
-    else if (@config.outputTarget == 'clipboard')
-      atom.clipboard.write(formatted);
-    else
-      console.log(formatted);
-
-    @processStopped(false);
+  handleProcessErrorCallback: (errorObject) =>
+    # Indicate that the error has been handled.
+    errorObject.handle();
+    @processStopped(true);
 
   processStarted: ->
-    for processStartedCallback in @processStartedCallbacks
-      processStartedCallback();
+    for processCallback in @processCallbacks
+      if typeof processCallback.processStarted is 'function'
+        processCallback.processStarted();
 
   processStopped: (fatal) =>
-    message = _.humanizeEventName(@config.getCommandName());
+    output = '';
+    @output = '';
+    messageTitle = _.humanizeEventName(@config.getCommandName());
     options = {};
 
     if fatal
+      if @config.fatalOutput
+        output = @insertFields(@config.fatalOutput);
+
       if @config.fatalMessage
         options["detail"] = @insertFields(@config.fatalMessage);
-        atom.notifications.addError(message, options);
+        atom.notifications.addError(messageTitle, options);
     else if @fields.exitStatus == 0
+      if @config.successOutput
+        output = @insertFields(@config.successOutput);
+
       if @config.successMessage
         options["detail"] = @insertFields(@config.successMessage);
-        atom.notifications.addSuccess(message, options);
-    else if @config.errorMessage
-      options["detail"] = @insertFields(@config.errorMessage);
-      atom.notifications.addWarning(message, options);
+        atom.notifications.addSuccess(messageTitle, options);
+    else
+      if @config.errorOutput
+        output = @insertFields(@config.errorOutput);
+
+      if @config.errorMessage
+        options["detail"] = @insertFields(@config.errorMessage);
+        atom.notifications.addWarning(messageTitle, options);
+
+    if (@config.outputTarget == 'editor')
+      editor = atom.workspace.getActiveTextEditor();
+
+      if editor
+        editor.insertText(output);
+    else if (@config.outputTarget == 'clipboard')
+      atom.clipboard.write(output);
+    else if (@config.outputTarget == 'console')
+      console.log(output);
+    else
+      @output = output;
 
     @process = null;
     @fields = {};
 
-    for processStoppedCallback in @processStoppedCallbacks
-      processStoppedCallback();
+    for processCallback in @processCallbacks
+      if typeof processCallback.processStopped is 'function'
+        processCallback.processStopped();

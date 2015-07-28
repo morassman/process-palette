@@ -1,7 +1,6 @@
-ProcessConfig = require './process-config'
+ProcessConfig = require '../process-config'
 ProcessController = require './process-controller'
-{CompositeDisposable} = require 'atom'
-{BufferedProcess} = require 'atom'
+{BufferedProcess, CompositeDisposable} = require 'atom'
 {Directory, File} = require 'atom'
 
 module.exports =

@@ -4,30 +4,41 @@
 // for a full listing of what's available.
 @import "ui-variables";
 
-.process-palette {
+.scrollable {
   overflow: auto;
   height: 100%;
   width: 100%;
   min-height: 100px;
   height: 200px;
 }
-.process-list {
-  .process {
-    margin: 2px;
-    padding: 2px;
-    // border-radius: 4px;
-    // border: 1px solid @tool-panel-border-color;
-    background: @tool-panel-background-color;
 
-    .header {
-      color: @text-color-info;
-      font-size: 115%;
-    }
+.process {
+  margin: 2px;
+  padding: 2px;
+  background: @tool-panel-background-color;
 
-    .table-title {
-      font-weight: 800;
-      padding-right: 24px;
-      color: @text-color-highlight;
+  .header {
+    color: @text-color-info;
+    font-size: 115%;
+    // cursor: pointer;
+    // cursor: hand;
+
+    .keystroke {
+      color: @text-color;
     }
   }
+
+  .table-title {
+    font-weight: 800;
+    padding-right: 24px;
+    color: @text-color-highlight;
+  }
+}
+
+.visible {
+  visibility: visible;
+}
+
+.hidden {
+  visibility: hidden;
 }
