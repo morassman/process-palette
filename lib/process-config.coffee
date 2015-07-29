@@ -25,3 +25,6 @@ class ProcessConfig
 
   getFullCommand: ->
     return @command + " " + @arguments.join(" ");
+
+  outputToPanel: ->
+    return @outputTarget == 'panel';

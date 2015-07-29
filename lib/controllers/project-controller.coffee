@@ -15,6 +15,7 @@ class ProjectController
 
   clearProcessControllers: ->
     for processController in @processControllers
+      @processPaletteView.removeProcess(processController);
       processController.dispose();
 
     processControllers = [];

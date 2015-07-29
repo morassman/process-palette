@@ -13,15 +13,11 @@
 }
 
 .process {
-  margin: 2px;
-  padding: 2px;
   background: @tool-panel-background-color;
 
   .header {
     color: @text-color-info;
     font-size: 115%;
-    // cursor: pointer;
-    // cursor: hand;
 
     .keystroke {
       color: @text-color;
@@ -42,3 +38,10 @@
 .hidden {
   visibility: hidden;
 }
+
+.hand-cursor {
+  cursor: pointer;
+  cursor: hand;
+}
+
+.close-button { display: inline-block; position: absolute; top: 6px; right: 6px; z-index: 30; text-align: center;}

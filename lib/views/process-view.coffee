@@ -9,9 +9,26 @@ class ProcessView extends View
     @processController.addProcessCallback(@);
 
   @content: (processListView, processController) ->
+    headerArgs = {};
+    outputTitleArgs = {};
+    outputValueArgs = {};
+
+    if processController.config.outputToPanel()
+      headerArgs.class = 'header inline-block text-highlight hand-cursor';
+      headerArgs.click = 'showProcessOutput';
+
+      outputTitleArgs.class = 'table-title hand-cursor';
+      outputTitleArgs.click = 'showProcessOutput';
+
+      outputValueArgs.class = 'hand-cursor';
+      outputValueArgs.click = 'showProcessOutput';
+    else
+      headerArgs.class = 'header inline-block text-highlight';
+      outputTitleArgs.class = 'table-title';
+
     @div class:"process", =>
       @button {class:'btn btn-xs icon-playback-play inline-block-tight', outlet:'runKillButton', click:'runKillProcess'}
-      @span _.humanizeEventName(processController.config.getCommandName()), {class:'header inline-block text-highlight', click:'showProcessOutput'}
+      @span _.humanizeEventName(processController.config.getCommandName()), headerArgs
       if processController.config.keystroke
         @span _.humanizeKeystroke(processController.config.keystroke), class:'keystroke inline-block highlight'
       @table =>
@@ -20,17 +37,18 @@ class ProcessView extends View
             @td "Command", class:'table-title'
             @td "#{processController.config.getFullCommand()}"
           @tr =>
-            @td "Output (#{processController.config.outputTarget})", class:'table-title'
-            @td "#{processController.config.successOutput}"
+            @td "Output (#{processController.config.outputTarget})", outputTitleArgs
+            @td "#{processController.config.successOutput}", outputValueArgs
 
   showProcessOutput: =>
+    console.log('showProcessOutput');
     @processListView.showProcessOutput(@processController);
 
   processStarted: =>
     @runKillButton.removeClass('icon-playback-play');
     @runKillButton.addClass('icon-x');
 
-    if @processController.config.outputTarget == null
+    if @processController.config.outputToPanel()
       @showProcessOutput();
 
   processStopped: =>

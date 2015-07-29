@@ -11,22 +11,37 @@ module.exports = ProcessPalette =
     @bottomPanel = atom.workspace.addBottomPanel(item: @processListView.getElement(), visible: false);
 
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:toggle': => @toggle()
+    @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:reload': => @reload()
 
+    @load();
+
+  deactivate: ->
+    @processListView.destroy();
+    @subscriptions.dispose();
+    @disposeProjectControllers();
+
+  disposeProjectControllers: ->
+    for projectController in projectControllers
+      projectController.dispose();
+
+  serialize: ->
+    processPaletteViewState: @processListView.serialize()
+
+  load: ->
     configFile = new File(atom.config.getUserConfigPath());
     @addProjectPath(configFile.getParent().getRealPathSync());
 
     for projectPath in atom.project.getPaths()
       @addProjectPath(projectPath);
 
-  deactivate: ->
-    @processListView.destroy();
-    @subscriptions.dispose();
-
-    for projectController in projectControllers
+  reload: ->
+    @processListView.showProcessList();
+    
+    for projectController in @projectControllers
       projectController.dispose();
 
-  serialize: ->
-    processPaletteViewState: @processListView.serialize()
+    @projectControllers = [];
+    @load();
 
   toggle: ->
     if @bottomPanel.visible
@@ -37,6 +52,10 @@ module.exports = ProcessPalette =
   show: ->
     if !@bottomPanel.visible
       @bottomPanel.show();
+
+  hide: ->
+    if @bottomPanel.visible
+      @bottomPanel.hide();
 
   addProjectPath: (projectPath) ->
     projectController = new ProjectController(@processListView, projectPath);

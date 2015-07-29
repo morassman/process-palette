@@ -6,18 +6,25 @@ class ProcessOutputView extends View
 
   constructor: (@processListView, @processController) ->
     super(@processListView, @processController);
-    @processController.addProcessCallback(@);
+
+    if @processController.process
+      @processStarted();
+
     @showOutput();
+    @processController.addProcessCallback(@);
 
   @content: (processListView, processController) ->
     @div =>
-      @div class:"process", =>
+      @div {class:"process", outlet:"header"}, =>
         @button {class:'btn btn-xs icon-three-bars inline-block-tight', click:'showProcessList'}
         @button {class:'btn btn-xs icon-playback-play inline-block-tight', outlet:'runKillButton', click:'runKillProcess'}
         @span _.humanizeEventName(processController.config.getCommandName()), class:'header inline-block text-highlight'
         if processController.config.keystroke
           @span _.humanizeKeystroke(processController.config.keystroke), class:'keystroke inline-block highlight'
-      @div {class:"scrollable height:100px", outlet:'outputPanel'}
+      @div {class:"scrollable", outlet:'outputPanel'}
+
+  attached: ->
+    @outputPanel.height(@height() - 2*@header.height());
 
   processStarted: =>
     @runKillButton.removeClass('icon-playback-play');
