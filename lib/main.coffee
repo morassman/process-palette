@@ -36,7 +36,7 @@ module.exports = ProcessPalette =
 
   reload: ->
     @processListView.showProcessList();
-    
+
     for projectController in @projectControllers
       projectController.dispose();
 

@@ -2,10 +2,14 @@
   "name": "process-palette",
   "main": "./lib/main",
   "version": "0.0.0",
-  "description": "A short description of your package",
+  "description": "Run any command line process via the command palette.",
   "keywords": [
+    "run",
+    "execute",
+    "terminal",
+    "shell"
   ],
-  "repository": "https://github.com/atom/process-palette",
+  "repository": "https://github.com/hgmarais/process-palette",
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"

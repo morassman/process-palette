@@ -1,22 +1,25 @@
 _ = require 'underscore-plus'
 ProcessConfig = require '../process-config'
-{BufferedProcess, File} = require 'atom'
+{BufferedProcess, Directory, File} = require 'atom'
 
 # Fields :
 # stdout : Standard output.
 # stderr : Standard error output.
 # exitStatus : Code returned by command.
-# projectAbsPath : Absolute path of project folder. - TODO
 # clipboard : Text currently on clipboard.
 # fullCommand : The full command along with its arguments.
+# configDirAbsPath : Absolute path of folder that the configuration file is in.
 #
 # Only if a file is currently open :
-# fileExt : Extention of file. - TODO
-# fileName : Name of file without extention. - TODO
-# fileNameExt : Name of file with extention.
-# filePath : Path of file relative to project. - TODO
+# fileExt : Extension of file.
+# fileName : Name of file without extension.
+# fileNameExt : Name of file with extension.
+# filePath : Path of file relative to project.
+# fileDirPath : Path of file's directory relative to project.
 # fileAbsPath : Absolute path of file.
+# fileDirAbsPath : Absolute path of file's directory.
 # selection : Currently selected text.
+# projectPath : Absolute path of project folder.
 
 module.exports =
 class ProcessController
@@ -26,7 +29,7 @@ class ProcessController
   @process : null;
   @processCallbacks : null;
 
-  constructor: (@config) ->
+  constructor: (@projectController, @config) ->
     @processCallbacks = [];
     @replaceRegExp = new RegExp('{.*?}','g');
     @fields = {};
@@ -57,6 +60,7 @@ class ProcessController
 
     @fields = {};
     @fields.clipboard = atom.clipboard.read();
+    @fields.configDirAbsPath = @projectController.projectPath;
     @fields.stdout = '';
     @fields.stderr = '';
 
@@ -64,22 +68,53 @@ class ProcessController
 
     if editor
       file = new File(editor.getPath());
+
+      nameExt = @splitFileName(file.getBaseName());
+      @fields.fileName = nameExt[0];
+      @fields.fileExt = nameExt[1];
+
       @fields.fileNameExt = file.getBaseName();
       @fields.fileAbsPath = file.getRealPathSync();
+      @fields.fileDirAbsPath = file.getParent().getRealPathSync();
+
+      relPaths = atom.project.relativizePath(@fields.fileAbsPath);
+      @fields.projectPath = relPaths[0];
+      @fields.filePath = relPaths[1];
+
+      relPaths = atom.project.relativizePath(@fields.fileDirAbsPath);
+      @fields.fileDirPath = relPaths[1];
+
       @fields.selection = editor.getSelectedText();
+      console.log(@fields);
     else
+      @fields.fileName = '';
+      @fields.fileExt = '';
       @fields.fileNameExt = '';
       @fields.fileAbsPath = '';
+      @fields.fileDirAbsPath = '';
+      @fields.projectPath = '';
+      @fields.filePath = '';
+      @fields.fileDirPath = '';
       @fields.selection = '';
 
-    replaceCallback = @createReplaceCallback(@fields);
-    command = @config.command.replace(@replaceRegExp, replaceCallback);
+    command = @insertFields(@config.command);
 
     args = [];
     for argument in @config.arguments
-      args.push(argument.replace(@replaceRegExp, replaceCallback));
+      args.push(@insertFields(argument));
 
-    @fields.fullCommand = command + " " + args.join(" ");
+    @fields.fullCommand = command;
+
+    if args.length > 0
+     @fields.fullCommand += " " + args.join(" ");
+
+    options = {};
+
+    if @config.cwd
+      dir = new Directory(@insertFields(@config.cwd));
+
+      if dir.existsSync() and dir.isDirectory()
+        options.cwd = dir.getRealPathSync();
 
     stdout = (output) =>
       @fields.stdout += output;
@@ -91,9 +126,17 @@ class ProcessController
       @fields.exitStatus = exitStatus;
       @processStopped(false);
 
-    @process = new BufferedProcess({command, args, stdout, stderr, exit});
+    @process = new BufferedProcess({command, args, options, stdout, stderr, exit});
     @process.onWillThrowError(@handleProcessErrorCallback);
     @processStarted();
+
+  splitFileName: (fileNameExt) ->
+    index = fileNameExt.lastIndexOf(".");
+
+    if index == -1
+      return [fileNameExt, ""];
+
+    return [fileNameExt.substr(0, index), fileNameExt.substr(index+1)];
 
   insertFields: (text) =>
     return text.replace(@replaceRegExp, @createReplaceCallback(@fields));

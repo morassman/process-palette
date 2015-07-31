@@ -7,7 +7,6 @@ class ProcessConfig
     @command = null;
     @arguments = [];
     @cwd = null;
-    @timeout = 0;
     @keystroke = null;
     @outputTarget = 'console';
     @successOutput = '{stdout}';

@@ -6,7 +6,7 @@ ProcessController = require './process-controller'
 module.exports =
 class ProjectController
 
-  constructor: (@processPaletteView, projectPath) ->
+  constructor: (@processPaletteView, @projectPath) ->
     @processControllers = [];
     @loadFile(projectPath);
 
@@ -45,6 +45,6 @@ class ProjectController
       return;
 
     for command in commands
-      processController = new ProcessController(new ProcessConfig(command));
+      processController = new ProcessController(@, new ProcessConfig(command));
       @processControllers.push(processController);
       @processPaletteView.addProcess(processController);

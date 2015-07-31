@@ -41,7 +41,6 @@ class ProcessView extends View
             @td "#{processController.config.successOutput}", outputValueArgs
 
   showProcessOutput: =>
-    console.log('showProcessOutput');
     @processListView.showProcessOutput(@processController);
 
   processStarted: =>
