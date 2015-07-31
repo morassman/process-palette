@@ -26,6 +26,13 @@ class ProcessView extends View
       headerArgs.class = 'header inline-block text-highlight';
       outputTitleArgs.class = 'table-title';
 
+    outputTarget = processController.config.outputTarget;
+
+    if outputTarget == "panel"
+      outputTarget = "";
+    else
+      outputTarget = " (#{outputTarget})";
+
     @div class:"process", =>
       @button {class:'btn btn-xs icon-playback-play inline-block-tight', outlet:'runKillButton', click:'runKillProcess'}
       @span _.humanizeEventName(processController.config.getCommandName()), headerArgs
@@ -37,7 +44,7 @@ class ProcessView extends View
             @td "Command", class:'table-title'
             @td "#{processController.config.getFullCommand()}"
           @tr =>
-            @td "Output (#{processController.config.outputTarget})", outputTitleArgs
+            @td "Output#{outputTarget}", outputTitleArgs
             @td "#{processController.config.successOutput}", outputValueArgs
 
   showProcessOutput: =>

@@ -8,7 +8,7 @@ class ProcessConfig
     @arguments = [];
     @cwd = null;
     @keystroke = null;
-    @outputTarget = 'console';
+    @outputTarget = 'panel';
     @successOutput = '{stdout}';
     @errorOutput = '{stderr}';
     @fatalOutput = 'Failed to execute : {fullCommand}\n{stdout}\n{stderr}';
@@ -18,6 +18,9 @@ class ProcessConfig
 
     for key, val of object
       @[key] = val
+
+    if @outputTarget not in ["panel", "editor", "clipboard", "console", "void"]
+      @outputTarget = "void";
 
   getCommandName: ->
     return @namespace + ":" + @action;

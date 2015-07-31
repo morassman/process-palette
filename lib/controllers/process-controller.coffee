@@ -64,6 +64,14 @@ class ProcessController
     @fields.stdout = '';
     @fields.stderr = '';
 
+    options = {};
+
+    if @config.cwd
+      dir = new Directory(@insertFields(@config.cwd));
+
+      if dir.existsSync() and dir.isDirectory()
+        options.cwd = dir.getRealPathSync();
+
     editor = atom.workspace.getActiveTextEditor();
 
     if editor
@@ -85,7 +93,9 @@ class ProcessController
       @fields.fileDirPath = relPaths[1];
 
       @fields.selection = editor.getSelectedText();
-      console.log(@fields);
+
+      if !options.cwd
+        options.cwd = @fields.projectPath;
     else
       @fields.fileName = '';
       @fields.fileExt = '';
@@ -97,6 +107,17 @@ class ProcessController
       @fields.fileDirPath = '';
       @fields.selection = '';
 
+      projectPaths = atom.project.getPaths();
+
+      if projectPaths.length > 0
+        @fields.projectPath = projectPaths[0];
+
+      if !options.cwd
+        if projectPaths.length > 0
+          options.cwd = projectPaths[0];
+        else
+          options.cwd = @projectController.projectPath;
+
     command = @insertFields(@config.command);
 
     args = [];
@@ -107,14 +128,6 @@ class ProcessController
 
     if args.length > 0
      @fields.fullCommand += " " + args.join(" ");
-
-    options = {};
-
-    if @config.cwd
-      dir = new Directory(@insertFields(@config.cwd));
-
-      if dir.existsSync() and dir.isDirectory()
-        options.cwd = dir.getRealPathSync();
 
     stdout = (output) =>
       @fields.stdout += output;
@@ -214,7 +227,7 @@ class ProcessController
       atom.clipboard.write(output);
     else if (@config.outputTarget == 'console')
       console.log(output);
-    else
+    else if (@config.outputTarget == 'panel')
       @output = output;
 
     @process = null;
