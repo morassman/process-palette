@@ -25,10 +25,10 @@ Each entry in the array is an object that describes one command. The most basic 
   ]
 }
 ```
-<p>
+
 **Tip!** :
 All `process-palette.json` configuration files can be reloaded by running the `Process Palette: Reload` command. It can be found in the `Command Palette` or in the `Packages|Process Palette` menu.
-</p>
+
 
 The new command will cause an entry to be added to the command palette called `Process Palette: Ant default`.
 
@@ -168,6 +168,7 @@ configDirAbsPath | Absolute path of folder where the `process-palette.json` conf
 projectPath | Absolute path of project folder. If a file is open then that file's project folder will be used. If there isn't a file open then the first project's folder will be used. If there aren't any projects open then the path of the folder containing the `process-palette.json` file is used.
 
 **Input from editor**
+
 The following input variables are only available if an editor is open. Their values default to an empty string otherwise.
 
 Variable|Description
@@ -183,6 +184,7 @@ selection | Currently selected text.
 projectPath | Absolute path of file's project folder.
 
 **Output**
+
 These variables are only available after the process has executed. They can therefore typically be used in the output and message related properties.
 
 Variable|Description
