@@ -113,6 +113,7 @@ Each time a process is executed a message will be shown in the top right hand co
 
 ## Advanced Configuration
 The `namespace`, `action`, `command` and `keystroke` aren't the only properties that can be configured. Of these only the `action` and `command` are required, some are optional and some have default values. Many of the properties can also be parameterized with variables from the environment. The following two sections describe the configurable properties and also the variables that can be used to parameterize them.
+
 ### Properties
 Property|Description|Default
 ---|---|---
@@ -140,7 +141,7 @@ successMessage|The format of the message when the process returned with an exit 
 errorMessage|The format of the message when the process returned with a non-0 exit status.|"Executed : {fullCommand}\nReturned with code {exitStatus}\n{stderr}"
 fatalMessage|The format of the message when the command could not be executed at all.|"Failed to execute : {fullCommand}\n{stdout}\n{stderr}"
 
-## Output Targets
+### Output Targets
 The `outputTarget` property specifies where the output produced by the process should be directed to. The following are valid targets:
 
 Target|Description
@@ -192,3 +193,36 @@ Variable|Description
 stdout | Standard output produced by process.
 stderr | Standard error output produced by process.
 exitStatus | Exit status code returned by process.
+
+### Applying Variables To Properties
+The table below shows which properties support input variables and/or output variables:
+
+Property|Input|Output
+---|---|---
+cwd|yes|no
+command|yes|no
+arguments|yes|no
+successOutput|yes|yes
+errorOutput|yes|yes
+fatalOutput|yes|yes
+successMessage|yes|yes
+errorMessage|yes|yes
+fatalMessage|yes|yes
+
+The `namespace`, `action` and `keystroke` properties do not support variables.
+
+A useful way of seeing the values of the variables is to add them to one of the output properties and then executing the command. For instance :
+
+```json
+"successOutput" : "File path : {filePath}\nProject path : {projectPath}"
+```
+
+will show the values of `filePath` and `projectPath` respectively.
+
+Keep in mind that the `arguments` property is an array of strings. Adding variables to arguments should therefore be done such as
+
+```json
+"arguments" : ["{fileNameExt}", "{selection}"]
+```
+
+in order to pass the file name and the currently selected text as arguments to the command.
