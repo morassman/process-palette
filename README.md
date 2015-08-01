@@ -1,6 +1,21 @@
 # Process Palette
 With Process Palette you can add custom entries to the command palette to run any command that you typically would from a terminal. This prevents you from having to switch to a terminal each time you need to run something and is especially useful for commands that you use regularly.
 
+## Quick Start
+To quickly get a feel for how it works:
+
+1. Install process-palette.
+2. Download the example [process-palette.json][2f6a8e37] configuration file and place it in the root of your project folder.
+3. Load the new configuration file by choosing `Packages|Process Palette|Reload` from the menu or `Process Palette: Reload` from the command palette.
+
+  [2f6a8e37]: https://github.com/hgmarais/process-palette/blob/master/examples/process-palette.json "process-palette.json"
+
+The configuration file defines a single command that will list the files in the project folder by running `ls -lh`. It can be run by choosing `Process Palette: List` from the command palette. This will open the Process Palette panel and show the output. The panel can also be opened directly by pressing `Ctrl-Alt-P` or running `Process Palette: Toggle` from the command palette.
+
+### Next Steps
+1. Poke around in the configuration file a bit. Just remember to run the `Process Palette: Reload` command after making changes.
+2. Read the rest of this document. Especially the **Properties** and **Variables** sections for extra flexibility.
+
 ## Configuration
 Commands are specified with a configuration file in JSON format. The name of the file must be `process-palette.json` and should be in the root of your project folder. If you have multiple project folders, each with its own configuration file, then their configurations will be merged.
 
