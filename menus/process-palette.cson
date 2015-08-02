@@ -1,11 +1,4 @@
 # See https://atom.io/docs/latest/hacking-atom-package-word-count#menus for more details
-'context-menu':
-  'atom-workspace': [
-    {
-      'label': 'Toggle process-palette'
-      'command': 'process-palette:toggle'
-    }
-  ]
 'menu': [
   {
     'label': 'Packages'
@@ -17,9 +10,13 @@
           'command': 'process-palette:toggle'
         },
         {
-          'label': 'Reload'
-          'command': 'process-palette:reload'
+          'label': 'Edit Configuration'
+          'command': 'process-palette:edit-configuration'
         },
+        {
+          'label': 'Reload Configuration'
+          'command': 'process-palette:reload-configuration'
+        }
       ]
     ]
   }

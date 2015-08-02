@@ -8,7 +8,8 @@ class ProjectController
 
   constructor: (@processPaletteView, @projectPath) ->
     @processControllers = [];
-    @loadFile(projectPath);
+    @configurationFile = new Directory(@projectPath).getFile('process-palette.json');
+    @loadFile();
 
   dispose: ->
     @clearProcessControllers();
@@ -23,12 +24,10 @@ class ProjectController
   loadFile: (projectPath) ->
     @clearProcessControllers();
 
-    file = new Directory(projectPath).getFile('process-palette.json');
-
-    if (!file.isFile() or !file.existsSync())
+    if (!@configurationFile.isFile() or !@configurationFile.existsSync())
       return;
 
-    promise = file.read(true);
+    promise = @configurationFile.read(true);
 
     promise.then (resolve) =>
       @parseFile(resolve);
@@ -48,3 +47,9 @@ class ProjectController
       processController = new ProcessController(@, new ProcessConfig(command));
       @processControllers.push(processController);
       @processPaletteView.addProcess(processController);
+
+  editConfiguration: ->
+    if (!@configurationFile.isFile() or !@configurationFile.existsSync())
+      return;
+
+    atom.workspace.open(@configurationFile.getPath());

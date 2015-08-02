@@ -6,14 +6,14 @@ To quickly get a feel for how it works:
 
 1. Install process-palette.
 2. Download the example [process-palette.json][2f6a8e37] configuration file and place it in the root of your project folder.
-3. Load the new configuration file by choosing `Packages|Process Palette|Reload` from the menu or `Process Palette: Reload` from the command palette.
+3. Load the new configuration file by choosing `Packages|Process Palette|Reload Configuration` from the menu or `Process Palette: Reload Configuration` from the command palette.
 
   [2f6a8e37]: https://github.com/hgmarais/process-palette/blob/master/examples/process-palette.json "process-palette.json"
 
 The configuration file defines a single command that will list the files in the project folder by running `ls -lh`. It can be run by choosing `Process Palette: List` from the command palette. This will open the Process Palette panel and show the output. The panel can also be opened directly by pressing `Ctrl-Alt-P` or running `Process Palette: Toggle` from the command palette.
 
 ### Next Steps
-1. Poke around in the configuration file a bit. Just remember to run the `Process Palette: Reload` command after making changes.
+1. Poke around in the configuration file a bit. Just remember to run the `Process Palette: Reload Configuration` command after making changes.
 2. Read the rest of this document. Especially the **Properties** and **Variables** sections for extra flexibility.
 
 ## Configuration
@@ -42,7 +42,7 @@ Each entry in the array is an object that describes one command. The most basic 
 ```
 
 **Tip!** :
-All `process-palette.json` configuration files can be reloaded by running the `Process Palette: Reload` command. It can be found in the `Command Palette` or in the `Packages|Process Palette` menu.
+All `process-palette.json` configuration files can be reloaded by running the `Process Palette: Reload Configuration` command. It can be found in the `Command Palette` or in the `Packages|Process Palette` menu.
 
 
 The new command will cause an entry to be added to the command palette called `Process Palette: Ant default`.

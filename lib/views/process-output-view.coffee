@@ -21,7 +21,7 @@ class ProcessOutputView extends View
         @span _.humanizeEventName(processController.config.getCommandName()), class:'header inline-block text-highlight'
         if processController.config.keystroke
           @span _.humanizeKeystroke(processController.config.keystroke), class:'keystroke inline-block highlight'
-      @div {class:"scrollable", outlet:'outputPanel'}
+      @div {class:"scrollable native-key-bindings", outlet:'outputPanel', tabindex: -1}
 
   attached: ->
     @outputPanel.height(@height() - 2*@header.height());

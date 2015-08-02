@@ -10,8 +10,9 @@ module.exports = ProcessPalette =
     @processListView = new ProcessListView(@)
     @bottomPanel = atom.workspace.addBottomPanel(item: @processListView.getElement(), visible: false);
 
-    @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:toggle': => @toggle()
-    @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:reload': => @reload()
+    @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:toggle': => @togglePanel()
+    @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:edit-configuration': => @editConfiguration()
+    @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:reload-configuration': => @reloadConfiguration()
 
     @load();
 
@@ -34,7 +35,7 @@ module.exports = ProcessPalette =
     for projectPath in atom.project.getPaths()
       @addProjectPath(projectPath);
 
-  reload: ->
+  reloadConfiguration: ->
     @processListView.showProcessList();
 
     for projectController in @projectControllers
@@ -43,17 +44,17 @@ module.exports = ProcessPalette =
     @projectControllers = [];
     @load();
 
-  toggle: ->
+  togglePanel: ->
     if @bottomPanel.visible
       @bottomPanel.hide();
     else
       @bottomPanel.show();
 
-  show: ->
+  showPanel: ->
     if !@bottomPanel.visible
       @bottomPanel.show();
 
-  hide: ->
+  hidePanel: ->
     if @bottomPanel.visible
       @bottomPanel.hide();
 
@@ -61,4 +62,6 @@ module.exports = ProcessPalette =
     projectController = new ProjectController(@processListView, projectPath);
     @projectControllers.push(projectController);
 
-  removeProjectPath: (projectPath) ->
+  editConfiguration: ->
+    for projectController in @projectControllers
+      projectController.editConfiguration();
