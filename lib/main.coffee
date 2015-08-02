@@ -44,6 +44,8 @@ module.exports = ProcessPalette =
     @projectControllers = [];
     @load();
 
+    atom.notifications.addInfo("Process Palette configurations reloaded");
+
   togglePanel: ->
     if @bottomPanel.visible
       @bottomPanel.hide();
