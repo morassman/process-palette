@@ -9,7 +9,7 @@
     "terminal",
     "shell"
   ],
-  "repository": "https://github.com/hgmarais/process-palette",
+  "repository": "https://github.com/morassman/process-palette",
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
