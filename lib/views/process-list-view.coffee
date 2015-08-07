@@ -17,7 +17,7 @@ class ProcessListView extends View
       @div {outlet:"processOutput"}
 
   hide: ->
-    @main.hide();
+    @main.hidePanel();
 
   addProcess: (processController) =>
     processView = new ProcessView(@, processController);
@@ -67,7 +67,7 @@ class ProcessListView extends View
         @subview "processController.config.id", f()
 
     # Ensure that the panel is visible.
-    @main.show();
+    @main.showPanel();
 
   # Returns an object that can be retrieved when package is activated
   serialize: ->
