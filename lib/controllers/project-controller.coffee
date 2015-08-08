@@ -6,7 +6,7 @@ ProcessController = require './process-controller'
 module.exports =
 class ProjectController
 
-  constructor: (@processPaletteView, @projectPath) ->
+  constructor: (@mainView, @projectPath) ->
     @processControllers = [];
     @configurationFile = new Directory(@projectPath).getFile('process-palette.json');
     @loadFile();
@@ -16,7 +16,7 @@ class ProjectController
 
   clearProcessControllers: ->
     for processController in @processControllers
-      @processPaletteView.removeProcess(processController);
+      @mainView.removeProcess(processController);
       processController.dispose();
 
     processControllers = [];
@@ -46,7 +46,7 @@ class ProjectController
     for command in commands
       processController = new ProcessController(@, new ProcessConfig(command));
       @processControllers.push(processController);
-      @processPaletteView.addProcess(processController);
+      @mainView.addProcess(processController);
 
   editConfiguration: ->
     if (!@configurationFile.isFile() or !@configurationFile.existsSync())

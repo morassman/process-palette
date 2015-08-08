@@ -4,15 +4,45 @@
 // for a full listing of what's available.
 @import "ui-variables";
 
-.process-list {
+.process-palette {
+  margin: 0;
+  padding: 0;
+  min-height: 200px;
+
+  .button-group {
+    display: inline-block;
+    position: absolute;
+    top: 6px;
+    right: 16px;
+    z-index: 30;
+    text-align: center;
+  }
+
+  .help {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+
+    .header {
+      margin-top: 6px;
+      padding: 0;
+      text-align: center;
+    }
+
+    .content {
+      margin-top: 1em;
+      margin-left: 100px;
+      margin-right: 100px;
+      margin-bottom: 1em;
+      font-size: larger;
+      line-height: 175%;
+    }
+  }
 }
 
-.scrollable {
-  overflow: auto;
+.process-list {
   height: 100%;
   width: 100%;
-  min-height: 100px;
-  height: 200px;
 }
 
 .process {
@@ -34,6 +64,19 @@
   }
 }
 
+.process-output {
+  height: 100%;
+  width: 100%;
+}
+
+.scrollable {
+  overflow: auto;
+  height: 100%;
+  width: 100%;
+  min-height: 100px;
+  height: 200px;
+}
+
 .visible {
   visibility: visible;
 }
@@ -46,5 +89,3 @@
   cursor: pointer;
   cursor: hand;
 }
-
-.close-button { display: inline-block; position: absolute; top: 6px; right: 6px; z-index: 30; text-align: center;}

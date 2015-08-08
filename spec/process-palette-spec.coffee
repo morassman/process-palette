@@ -15,7 +15,7 @@ describe "ProcessPalette", ->
     it "hides and shows the bottom panel", ->
       # Before the activation event the view is not on the DOM, and no panel
       # has been created
-      expect(workspaceElement.querySelector('.process-list')).not.toExist()
+      expect(workspaceElement.querySelector('.process-palette')).not.toExist()
 
       # Activate the package.
       activationPromise = atom.packages.activatePackage('process-palette')
@@ -25,9 +25,9 @@ describe "ProcessPalette", ->
         activationPromise
 
       runs ->
-        expect(workspaceElement.querySelector('.process-list')).toExist()
+        expect(workspaceElement.querySelector('.process-palette')).toExist()
 
-        processPaletteElement = workspaceElement.querySelector('.process-list')
+        processPaletteElement = workspaceElement.querySelector('.process-palette')
         expect(processPaletteElement).toExist()
 
         processPalettePanel = atom.workspace.panelForItem(processPaletteElement)

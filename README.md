@@ -10,7 +10,7 @@ To quickly get a feel for how it works:
 
   [2f6a8e37]: https://github.com/hgmarais/process-palette/blob/master/examples/process-palette.json "process-palette.json"
 
-The configuration file defines a single command that will list the files in the project folder by running `ls -lh`. It can be run by choosing `Process Palette: List` from the command palette. This will open the Process Palette panel and show the output. The panel can also be opened directly by pressing `Ctrl-Alt-P` or running `Process Palette: Toggle` from the command palette.
+This configuration file defines a single command that will list the files in the project folder by running `ls -lh`. It can be run by choosing `Process Palette: List` from the command palette. This will open the Process Palette panel and show the output. The panel can also be opened directly by pressing `Ctrl-Alt-P` or running `Process Palette: Toggle` from the command palette.
 
 ### Next Steps
 1. Poke around in the configuration file a bit. Just remember to run the `Process Palette: Reload Configuration` command after making changes.

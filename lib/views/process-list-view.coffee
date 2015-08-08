@@ -12,12 +12,11 @@ class ProcessListView extends View
 
   @content: ->
     @div {class:"process-list"}, =>
-      @button {class:'close-button btn btn-xs icon-chevron-down inline-block-tight', click:'hide'}
       @div {class:"scrollable", outlet:"processList"}
       @div {outlet:"processOutput"}
 
-  hide: ->
-    @main.hidePanel();
+  isEmpty: =>
+    return @processViews.length == 0;
 
   addProcess: (processController) =>
     processView = new ProcessView(@, processController);
@@ -67,7 +66,7 @@ class ProcessListView extends View
         @subview "processController.config.id", f()
 
     # Ensure that the panel is visible.
-    @main.showPanel();
+    @main.showListView();
 
   # Returns an object that can be retrieved when package is activated
   serialize: ->

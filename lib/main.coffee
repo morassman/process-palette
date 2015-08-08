@@ -1,4 +1,4 @@
-ProcessListView = require './views/process-list-view'
+MainView = require './views/main-view'
 ProjectController = require './controllers/project-controller'
 {File, CompositeDisposable} = require 'atom'
 
@@ -7,8 +7,8 @@ module.exports = ProcessPalette =
   activate: (state) ->
     @subscriptions = new CompositeDisposable
     @projectControllers = []
-    @processListView = new ProcessListView(@)
-    @bottomPanel = atom.workspace.addBottomPanel(item: @processListView.getElement(), visible: false);
+    @mainView = new MainView(@)
+    @bottomPanel = atom.workspace.addBottomPanel(item: @mainView.getElement(), visible: false);
 
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:toggle': => @togglePanel()
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:edit-configuration': => @editConfiguration()
@@ -17,7 +17,7 @@ module.exports = ProcessPalette =
     @load();
 
   deactivate: ->
-    @processListView.destroy();
+    @mainView.destroy();
     @subscriptions.dispose();
     @disposeProjectControllers();
 
@@ -26,7 +26,7 @@ module.exports = ProcessPalette =
       projectController.dispose();
 
   serialize: ->
-    processPaletteViewState: @processListView.serialize()
+    processPaletteViewState: @mainView.serialize()
 
   load: ->
     configFile = new File(atom.config.getUserConfigPath());
@@ -36,7 +36,7 @@ module.exports = ProcessPalette =
       @addProjectPath(projectPath);
 
   reloadConfiguration: ->
-    @processListView.showProcessList();
+    @mainView.reset();
 
     for projectController in @projectControllers
       projectController.dispose();
@@ -60,8 +60,13 @@ module.exports = ProcessPalette =
     if @bottomPanel.visible
       @bottomPanel.hide();
 
+  showListView: ->
+    console.log(@mainView);
+    @showPanel();
+    @mainView.showProcessList();
+
   addProjectPath: (projectPath) ->
-    projectController = new ProjectController(@processListView, projectPath);
+    projectController = new ProjectController(@mainView, projectPath);
     @projectControllers.push(projectController);
 
   editConfiguration: ->

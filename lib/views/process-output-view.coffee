@@ -14,7 +14,7 @@ class ProcessOutputView extends View
     @processController.addProcessCallback(@);
 
   @content: (processListView, processController) ->
-    @div =>
+    @div {class: "process-output"}, =>
       @div {class:"process", outlet:"header"}, =>
         @button {class:'btn btn-xs icon-three-bars inline-block-tight', click:'showProcessList'}
         @button {class:'btn btn-xs icon-playback-play inline-block-tight', outlet:'runKillButton', click:'runKillProcess'}
@@ -24,7 +24,10 @@ class ProcessOutputView extends View
       @div {class:"scrollable native-key-bindings", outlet:'outputPanel', tabindex: -1}
 
   attached: ->
-    @outputPanel.height(@height() - 2*@header.height());
+    @calculateHeight();
+
+  calculateHeight: =>
+    @outputPanel.height(@processListView.main.mainView.height() - 2*@header.height());
 
   processStarted: =>
     @runKillButton.removeClass('icon-playback-play');
@@ -43,6 +46,8 @@ class ProcessOutputView extends View
       for line in @processController.output.split('\n')
         @outputPanel.append(line);
         @outputPanel.append("<br>");
+
+    @calculateHeight();
 
   showProcessList: ->
     @processListView.showProcessList();
