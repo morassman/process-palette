@@ -27,7 +27,7 @@ class ProcessOutputView extends View
     @calculateHeight();
 
   calculateHeight: =>
-    @outputPanel.height(@processListView.main.mainView.height() - 2*@header.height());
+    @outputPanel.height(@processListView.main.mainView.height() - @header.height());
 
   processStarted: =>
     @runKillButton.removeClass('icon-playback-play');

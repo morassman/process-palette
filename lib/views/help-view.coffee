@@ -17,7 +17,7 @@ class HelpView extends View
         @div =>
           @span "Add commands by creating a "
           @span "process-palette.json", {class: "text-info"}
-          @span " configuration file in any of the following:"
+          @span " configuration file in any of the following locations:"
         @ul =>
           @li =>
             @span "Your "
