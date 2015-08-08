@@ -22,11 +22,15 @@ class ProcessConfig
     if @outputTarget not in ["panel", "editor", "clipboard", "console", "void"]
       @outputTarget = "void";
 
+    if !@arguments
+      @arguments = [];
+
   getCommandName: ->
     return @namespace + ":" + @action;
 
   getFullCommand: ->
-    return @command + " " + @arguments.join(" ");
+    full = @command + " " + @arguments.join(" ");
+    return full.trim();
 
   outputToPanel: ->
     return @outputTarget == 'panel';

@@ -11,7 +11,7 @@ class ProcessListView extends View
     @processViews = [];
 
   @content: ->
-    @div =>
+    @div {class:"process-list"}, =>
       @button {class:'close-button btn btn-xs icon-chevron-down inline-block-tight', click:'hide'}
       @div {class:"scrollable", outlet:"processList"}
       @div {outlet:"processOutput"}
