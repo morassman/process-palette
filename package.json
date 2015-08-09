@@ -2,7 +2,7 @@
   "name": "process-palette",
   "main": "./lib/main",
   "version": "0.4.6",
-  "description": "Run any command line process via the command palette.",
+  "description": "Run any shell command via the command palette.",
   "keywords": [
     "run",
     "execute",
