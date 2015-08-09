@@ -21,15 +21,13 @@ class ProjectController
 
     processControllers = [];
 
-  loadFile: (projectPath) ->
+  loadFile: ->
     @clearProcessControllers();
 
     if (!@configurationFile.isFile() or !@configurationFile.existsSync())
       return;
 
-    promise = @configurationFile.read(true);
-
-    promise.then (resolve) =>
+    @configurationFile.read(true).then (resolve) =>
       @parseFile(resolve);
 
   parseFile: (content) ->
@@ -49,7 +47,5 @@ class ProjectController
       @mainView.addProcess(processController);
 
   editConfiguration: ->
-    if (!@configurationFile.isFile() or !@configurationFile.existsSync())
-      return;
-
-    atom.workspace.open(@configurationFile.getPath());
+    if (@configurationFile.isFile() and @configurationFile.existsSync())
+      atom.workspace.open(@configurationFile.getPath());

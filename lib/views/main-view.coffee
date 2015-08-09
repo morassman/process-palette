@@ -1,5 +1,6 @@
 HelpView = require './help-view'
 ProcessListView = require './process-list-view'
+ProcessOutputView = require './process-output-view'
 {View} = require 'atom-space-pen-views'
 
 module.exports =
@@ -8,58 +9,70 @@ class MainView extends View
   constructor: (@main) ->
     super(@main);
 
-    @showHelp();
+    @showHelpView();
 
   @content: (main) ->
     @div {class: "process-palette"}, =>
       @div {class: "button-group"}, =>
-        @button {class:'btn btn-xs icon-question inline-block-tight', outlet: "helpButton", click:'toggleHelp'}
+        @button {class:'btn btn-xs icon-question inline-block-tight', outlet: "helpButton", click:'toggleHelpView'}
         @button {class:'btn btn-xs icon-chevron-down inline-block-tight', click:'closePressed'}
-      @subview "helpView", new HelpView()
+      @subview "helpView", new HelpView(main)
       @subview "listView", new ProcessListView(main)
+      @subview "outputView", new ProcessOutputView(main)
 
-  showProcessList: =>
-    @hideHelp();
-
-  toggleHelp: =>
+  showListView: =>
     if @listView.isHidden()
-      @hideHelp();
-    else
-      @showHelp();
+      @hideHelpView();
+      @outputView.hide();
+      @listView.show();
 
-  hideHelp: =>
+  showOutputView: =>
+    if @outputView.isHidden()
+      @hideHelpView();
+      @listView.hide();
+      @outputView.show();
+
+  toggleHelpView: =>
+    if @helpView.isHidden()
+      @showHelpView();
+    else
+      @showListView();
+
+  hideHelpView: =>
     @helpView.hide();
-    @listView.show();
     @helpButton.removeClass("btn-info");
 
-  showHelp: =>
+  showHelpView: =>
     @listView.hide();
+    @outputView.hide();
     @helpView.show();
-    @helpButton.addClass("btn-info");
+
+    if !@helpButton.hasClass("btn-info")
+      @helpButton.addClass("btn-info");
+
+  showProcessOutput: (processController) =>
+    @outputView.showProcessOutput(processController);
+    @showOutputView();
+
+  isOutputViewVisible: =>
+    return @outputView.isVisible();
 
   closePressed: =>
     @main.hidePanel();
 
-  reset: =>
-    # @listView.showProcessList();
-    # @listView.hide();
-    # @helpView.show();
-
   addProcess: (processController) =>
     @listView.addProcess(processController);
-
-    if @listView.isHidden()
-      @hideHelp();
+    @showListView();
 
   removeProcess: (processController) =>
     @listView.removeProcess(processController);
 
-  # Returns an object that can be retrieved when package is activated
   serialize: ->
 
-  # Tear down any state and detach
   destroy: ->
     @listView.destroy();
+    @outputView.destroy();
+    @helpView.destroy();
     @element.remove();
 
   getElement: ->

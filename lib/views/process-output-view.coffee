@@ -4,30 +4,23 @@ _ = require 'underscore-plus'
 module.exports =
 class ProcessOutputView extends View
 
-  constructor: (@processListView, @processController) ->
-    super(@processListView, @processController);
+  constructor: (@main) ->
+    super(@main);
 
-    if @processController.process
-      @processStarted();
-
-    @showOutput();
-    @processController.addProcessCallback(@);
-
-  @content: (processListView, processController) ->
-    @div {class: "process-output"}, =>
+  @content: (main) ->
+    @div {class: "processOutput"}, =>
       @div {class:"process", outlet:"header"}, =>
-        @button {class:'btn btn-xs icon-three-bars inline-block-tight', click:'showProcessList'}
+        @button {class:'btn btn-xs icon-three-bars inline-block-tight', click:'showListView'}
         @button {class:'btn btn-xs icon-playback-play inline-block-tight', outlet:'runKillButton', click:'runKillProcess'}
-        @span _.humanizeEventName(processController.config.getCommandName()), class:'header inline-block text-highlight'
-        if processController.config.keystroke
-          @span _.humanizeKeystroke(processController.config.keystroke), class:'keystroke inline-block highlight'
+        @span {class:'header inline-block text-highlight', outlet: 'commandName'}
+        @span {class:'keystroke inline-block highlight', outlet:'keystroke'}
       @div {class:"scrollable native-key-bindings", outlet:'outputPanel', tabindex: -1}
 
   attached: ->
     @calculateHeight();
 
   calculateHeight: =>
-    @outputPanel.height(@processListView.main.mainView.height() - @header.height());
+    @outputPanel.height(@main.mainView.height() - @header.height());
 
   processStarted: =>
     @runKillButton.removeClass('icon-playback-play');
@@ -37,20 +30,41 @@ class ProcessOutputView extends View
     @runKillButton.removeClass('icon-x');
     @runKillButton.addClass('icon-playback-play');
 
-    @showOutput();
+    @refreshOutputPanel();
 
-  showOutput: =>
+  showProcessOutput: (processController) =>
+    if @processController
+      @processController.removeProcessCallback(@);
+
+    @processController = processController;
+    @processController.addProcessCallback(@);
+
+    if @processController.process
+      @processStarted();
+
+    @commandName.text(_.humanizeEventName(@processController.config.getCommandName()));
+
+    if @processController.config.keystroke
+      @keystroke.text(_.humanizeKeystroke(@processController.config.keystroke));
+      @keystroke.show();
+    else
+      @keystroke.text("");
+      @keystroke.hide();
+
+    @refreshOutputPanel();
+
+  refreshOutputPanel: =>
+    @outputPanel.text("");
+
     if @processController.output
-      @outputPanel.text("");
-
       for line in @processController.output.split('\n')
         @outputPanel.append(line);
         @outputPanel.append("<br>");
 
     @calculateHeight();
 
-  showProcessList: ->
-    @processListView.showProcessList();
+  showListView: ->
+    @main.showListView();
 
   runKillProcess: ->
     @processController.runKillProcess();
@@ -60,7 +74,9 @@ class ProcessOutputView extends View
 
   # Tear down any state and detach
   destroy: ->
-    @processController.removeProcessCallback(@);
+    if @processController
+      @processController.removeProcessCallback(@);
+
     @element.remove()
 
   getElement: ->

@@ -5,7 +5,7 @@
       "action" : "List",
       "command" : "ls",
       "arguments" : ["-lh"],
-      "cwd" : "{projectPath}",
+      "cwd" : "{configDirAbsPath}",
       "keystroke" : "ctrl-alt-l",
       "outputTarget" : "panel",
       "successOutput" : "{stdout}",

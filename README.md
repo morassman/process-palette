@@ -2,15 +2,21 @@
 With Process Palette you can add custom entries to the command palette to run any command that you typically would from a terminal. This prevents you from having to switch to a terminal each time you need to run something and is especially useful for commands that you use regularly.
 
 ## Quick Start
-To quickly get a feel for how it works:
+Install Process Palette and then either generate or download a configuration file.
 
-1. Install process-palette.
-2. Download the example [process-palette.json][2f6a8e37] configuration file and place it in the root of your project folder.
-3. Load the new configuration file by choosing `Packages|Process Palette|Reload Configuration` from the menu or `Process Palette: Reload Configuration` from the command palette.
+### Generate Configuration
+1. Open the Process Palette panel by choosing `Packages|Process Palette|Toggle` from the menu or `Process Palette: Toggle` from the command palette. The following panel will appear:
+![Screenshot](https://github.com/hgmarais/process-palette/blob/master/resources/help.png?raw=true)
+2. Create a global configuration or project specific configuration with the respective `Do it!` buttons.
+3. Load the new configuration files by choosing `Packages|Process Palette|Reload Configuration` from the menu, `Process Palette: Reload Configuration` from the command palette or simply pressing the reload button at the bottom.
+
+### Download Configuration
+1. Download the example [process-palette.json][2f6a8e37] configuration file and place it in the root of your project folder.
+2. Load the new configuration file by choosing `Packages|Process Palette|Reload Configuration` from the menu or `Process Palette: Reload Configuration` from the command palette.
 
   [2f6a8e37]: https://github.com/hgmarais/process-palette/blob/master/examples/process-palette.json "process-palette.json"
 
-This configuration file defines a single command that will list the files in the project folder by running `ls -lh`. It can be run by choosing `Process Palette: List` from the command palette. This will open the Process Palette panel and show the output. The panel can also be opened directly by pressing `Ctrl-Alt-P` or running `Process Palette: Toggle` from the command palette.
+These example configurations define a single command that will list the files in the `process-palette.json` folder by running `ls -lh`. It can be run by choosing `Process Palette: List` from the command palette. This will open the Process Palette panel and show the output. The panel can also be opened directly by pressing `Ctrl-Alt-P` or running `Process Palette: Toggle` from the command palette.
 
 ### Next Steps
 1. Poke around in the configuration file a bit. Just remember to run the `Process Palette: Reload Configuration` command after making changes.
@@ -117,7 +123,9 @@ From here one can see all the commands and even run them.
 
 ![Screenshot](https://github.com/hgmarais/process-palette/blob/master/resources/panel-basic.png?raw=true)
 
-Pressing the down arrow in the top right corner will hide the panel. Clicking on the name of the command will cause the panel to switch to showing the output that was produced by the command when it was executed.
+Pressing the down arrow in the top right corner will hide the panel.
+
+If the command is configured to output to the Process Palette panel then clicking on the name of the command will cause the panel to switch to showing the output that was produced by the command when it was executed.
 
 ![Screenshot](https://github.com/hgmarais/process-palette/blob/master/resources/panel-output-basic.png?raw=true)
 

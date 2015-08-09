@@ -17,9 +17,9 @@ module.exports = ProcessPalette =
     @load();
 
   deactivate: ->
-    @mainView.destroy();
     @subscriptions.dispose();
     @disposeProjectControllers();
+    @mainView.destroy();
 
   disposeProjectControllers: ->
     for projectController in projectControllers
@@ -36,7 +36,8 @@ module.exports = ProcessPalette =
       @addProjectPath(projectPath);
 
   reloadConfiguration: ->
-    @mainView.reset();
+    if @mainView.isOutputViewVisible()
+      @mainView.showListView();
 
     for projectController in @projectControllers
       projectController.dispose();
@@ -61,9 +62,11 @@ module.exports = ProcessPalette =
       @bottomPanel.hide();
 
   showListView: ->
-    console.log(@mainView);
     @showPanel();
-    @mainView.showProcessList();
+    @mainView.showListView();
+
+  showProcessOutput: (processController) ->
+    @mainView.showProcessOutput(processController);
 
   addProjectPath: (projectPath) ->
     projectController = new ProjectController(@mainView, projectPath);

@@ -51,9 +51,6 @@ class ProcessController
   dispose: ->
     @disposable.dispose();
 
-  # Called from the command palette and also from the process panel. The =>, instead of ->, is important
-  # so that 'this' can refer to the ProcessController. If it is -> then, when calling from the command palette,
-  # this will reference the DOM node.
   runProcess: =>
     if @process
       return;

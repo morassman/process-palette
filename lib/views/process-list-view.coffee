@@ -13,13 +13,9 @@ class ProcessListView extends View
   @content: ->
     @div {class:"process-list"}, =>
       @div {class:"scrollable", outlet:"processList"}
-      @div {outlet:"processOutput"}
-
-  isEmpty: =>
-    return @processViews.length == 0;
 
   addProcess: (processController) =>
-    processView = new ProcessView(@, processController);
+    processView = new ProcessView(@main, processController);
     @processViews.push(processView);
 
     @processList.append $$ ->
@@ -41,37 +37,11 @@ class ProcessListView extends View
 
     return null;
 
-  showProcessList: =>
-    @processList.removeClass("hidden");
-
-    if @processOutputView
-      @processOutputView.destroy();
-      @processOutputView = null;
-
-    @processOutput.text("");
-
   showProcessOutput: (processController) =>
-    # If output is already shown then first remove it.
-    if @processOutputView
-      @processOutputView.destroy();
+    @main.showProcessOutput(processController);
 
-    @processList.addClass("hidden");
-    @processOutputView = new ProcessOutputView(@, processController);
-
-    f = () =>
-      return @processOutputView;
-
-    @processOutput.append $$ ->
-      @div =>
-        @subview "processController.config.id", f()
-
-    # Ensure that the panel is visible.
-    @main.showListView();
-
-  # Returns an object that can be retrieved when package is activated
   serialize: ->
 
-  # Tear down any state and detach
   destroy: ->
     @element.remove();
 

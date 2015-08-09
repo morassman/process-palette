@@ -4,11 +4,11 @@ _ = require 'underscore-plus'
 module.exports =
 class ProcessView extends View
 
-  constructor: (@processListView, @processController) ->
-    super(@processListView, @processController);
+  constructor: (@main, @processController) ->
+    super(@main, @processController);
     @processController.addProcessCallback(@);
 
-  @content: (processListView, processController) ->
+  @content: (main, processController) ->
     headerArgs = {};
     outputTitleArgs = {};
     outputValueArgs = {};
@@ -48,7 +48,7 @@ class ProcessView extends View
             @td "#{processController.config.successOutput}", outputValueArgs
 
   showProcessOutput: =>
-    @processListView.showProcessOutput(@processController);
+    @main.showProcessOutput(@processController);
 
   processStarted: =>
     @runKillButton.removeClass('icon-playback-play');

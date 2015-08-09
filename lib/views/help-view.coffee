@@ -1,11 +1,11 @@
-{File} = require 'atom'
+{Directory, File} = require 'atom'
 {View} = require 'atom-space-pen-views'
 
 module.exports =
 class HelpView extends View
 
-  constructor: () ->
-    super();
+  constructor: (@main) ->
+    super(@main);
 
   @content: ->
     configFile = new File(atom.config.getUserConfigPath());
@@ -23,15 +23,24 @@ class HelpView extends View
             @span "Your "
             @span "#{configFolder}", {class: "text-info"}
             @span " folder for global commands "
-            @button "Do it!", {class:'btn btn-sm inline-block-tight', click:'createConfigurationFile'}
-          @li "The root of any of your project folders for project specific commands"
+            @button "Do it!", {class:'btn btn-sm inline-block-tight', click:'createGlobalConfigurationFile'}
+          @li =>
+            @span "The root of any of your project folders for project specific commands "
+            @button "Do it!", {class:'btn btn-sm inline-block-tight', click:'createProjectConfigurationFile'}
         @span "Once you've created a configuration file, run "
-        @span "Process Palette: Reload Configuration", {class: "inline-block highlight"}
+        @span "Process Palette: Reload Configuration", {class: "btn btn-sm inline-block-tight", click:'reloadConfiguration'}
         @span "to load it."
 
-  createConfigurationFile: ->
+  createGlobalConfigurationFile: ->
     configFile = new File(atom.config.getUserConfigPath());
     configFolder = configFile.getParent();
+    @createConfigurationFile(configFolder);
+
+  createProjectConfigurationFile: ->
+    for projectPath in atom.project.getPaths()
+      @createConfigurationFile(new Directory(projectPath));
+
+  createConfigurationFile: (configFolder) ->
     configFile = configFolder.getFile("process-palette.json");
 
     if !configFile.existsSync()
@@ -40,6 +49,9 @@ class HelpView extends View
         atom.workspace.open(configFile.getPath());
     else
       atom.workspace.open(configFile.getPath());
+
+  reloadConfiguration: ->
+    @main.reloadConfiguration();
 
   getExampleFileContent: ->
     return """
@@ -50,7 +62,7 @@ class HelpView extends View
           "action" : "List",
           "command" : "ls",
           "arguments" : ["-lh"],
-          "cwd" : "{projectPath}",
+          "cwd" : "{configDirAbsPath}",
           "keystroke" : "ctrl-alt-l",
           "outputTarget" : "panel",
           "successOutput" : "{stdout}",
@@ -64,10 +76,8 @@ class HelpView extends View
     }
     """
 
-  # Returns an object that can be retrieved when package is activated
   serialize: ->
 
-  # Tear down any state and detach
   destroy: ->
     @element.remove();
 
