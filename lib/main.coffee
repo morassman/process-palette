@@ -66,6 +66,7 @@ module.exports = ProcessPalette =
     @mainView.showListView();
 
   showProcessOutput: (processController) ->
+    @showPanel();
     @mainView.showProcessOutput(processController);
 
   addProjectPath: (projectPath) ->
