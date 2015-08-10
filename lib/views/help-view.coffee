@@ -62,7 +62,7 @@ class HelpView extends View
           "action" : "List",
           "command" : "ls",
           "arguments" : ["-lh"],
-          "cwd" : "{configDirAbsPath}",
+          "cwd" : "{projectPath}",
           "keystroke" : "ctrl-alt-l",
           "outputTarget" : "panel",
           "successOutput" : "{stdout}",
