@@ -9,6 +9,7 @@ ProcessConfig = require '../process-config'
 # clipboard : Text currently on clipboard.
 # fullCommand : The full command along with its arguments.
 # configDirAbsPath : Absolute path of folder that the configuration file is in.
+# projectPath : Absolute path of project folder.
 #
 # Only if a file is currently open :
 # fileExt : Extension of file.
@@ -19,7 +20,7 @@ ProcessConfig = require '../process-config'
 # fileAbsPath : Absolute path of file.
 # fileDirAbsPath : Absolute path of file's directory.
 # selection : Currently selected text.
-# projectPath : Absolute path of project folder.
+# fileProjectPath : Absolute path of project folder.
 
 module.exports =
 class ProcessController
@@ -56,23 +57,25 @@ class ProcessController
       return;
 
     @fields = {};
+    options = {};
+
     @fields.clipboard = atom.clipboard.read();
     @fields.configDirAbsPath = @projectController.projectPath;
     @fields.stdout = '';
     @fields.stderr = '';
 
-    options = {};
+    projectPaths = atom.project.getPaths();
 
-    if @config.cwd
-      dir = new Directory(@insertFields(@config.cwd));
-
-      if dir.existsSync() and dir.isDirectory()
-        options.cwd = dir.getRealPathSync();
+    if projectPaths.length > 0
+      @fields.projectPath = projectPaths[0];
+    else
+      @fields.projectPath = @projectController.projectPath;
 
     editor = atom.workspace.getActiveTextEditor();
 
     if editor
       file = new File(editor.getPath());
+      @fields.selection = editor.getSelectedText();
 
       nameExt = @splitFileName(file.getBaseName());
       @fields.fileName = nameExt[0];
@@ -83,37 +86,26 @@ class ProcessController
       @fields.fileDirAbsPath = file.getParent().getRealPathSync();
 
       relPaths = atom.project.relativizePath(@fields.fileAbsPath);
-      @fields.projectPath = relPaths[0];
+      @fields.fileProjectPath = relPaths[0];
       @fields.filePath = relPaths[1];
 
       relPaths = atom.project.relativizePath(@fields.fileDirAbsPath);
       @fields.fileDirPath = relPaths[1];
-
-      @fields.selection = editor.getSelectedText();
-
-      if !options.cwd
-        options.cwd = @fields.projectPath;
     else
       @fields.fileName = '';
       @fields.fileExt = '';
       @fields.fileNameExt = '';
       @fields.fileAbsPath = '';
       @fields.fileDirAbsPath = '';
-      @fields.projectPath = '';
       @fields.filePath = '';
       @fields.fileDirPath = '';
+      @fields.fileProjectPath = '';
       @fields.selection = '';
 
-      projectPaths = atom.project.getPaths();
-
-      if projectPaths.length > 0
-        @fields.projectPath = projectPaths[0];
-
-      if !options.cwd
-        if projectPaths.length > 0
-          options.cwd = projectPaths[0];
-        else
-          options.cwd = @projectController.projectPath;
+    if @config.cwd
+      options.cwd = @insertFields(@config.cwd);
+    else
+      options.cwd = @fields.projectPath;
 
     command = @insertFields(@config.command);
 
@@ -124,7 +116,7 @@ class ProcessController
     @fields.fullCommand = command;
 
     if args.length > 0
-     @fields.fullCommand += " " + args.join(" ");
+      @fields.fullCommand += " " + args.join(" ");
 
     stdout = (output) =>
       @fields.stdout += output;

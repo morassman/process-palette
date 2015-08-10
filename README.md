@@ -6,7 +6,7 @@ Install Process Palette and then either generate or download a configuration fil
 
 ### Generate Configuration
 1. Open the Process Palette panel by choosing `Packages|Process Palette|Toggle` from the menu or `Process Palette: Toggle` from the command palette. The following panel will appear:
-![Screenshot](https://github.com/hgmarais/process-palette/blob/master/resources/help.png?raw=true)
+![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/help.png?raw=true)
 2. Create a global configuration or project specific configuration with the respective `Do it!` buttons.
 3. Load the new configuration files by choosing `Packages|Process Palette|Reload Configuration` from the menu, `Process Palette: Reload Configuration` from the command palette or simply pressing the reload button at the bottom.
 
@@ -14,7 +14,7 @@ Install Process Palette and then either generate or download a configuration fil
 1. Download the example [process-palette.json][2f6a8e37] configuration file and place it in the root of your project folder.
 2. Load the new configuration file by choosing `Packages|Process Palette|Reload Configuration` from the menu or `Process Palette: Reload Configuration` from the command palette.
 
-  [2f6a8e37]: https://github.com/hgmarais/process-palette/blob/master/examples/process-palette.json "process-palette.json"
+  [2f6a8e37]: https://github.com/morassman/process-palette/blob/master/examples/process-palette.json "process-palette.json"
 
 These example configurations define a single command that will list the files in the `process-palette.json` folder by running `ls -lh`. It can be run by choosing `Process Palette: List` from the command palette. This will open the Process Palette panel and show the output. The panel can also be opened directly by pressing `Ctrl-Alt-P` or running `Process Palette: Toggle` from the command palette.
 
@@ -53,7 +53,7 @@ All `process-palette.json` configuration files can be reloaded by running the `P
 
 The new command will cause an entry to be added to the command palette called `Process Palette: Ant default`.
 
-![Screenshot](https://github.com/hgmarais/process-palette/blob/master/resources/command-palette-basic.png?raw=true)
+![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/command-palette-basic.png?raw=true)
 
 The working directory used when running a command is by default the project path, but it can also be configured. More on this in the Advanced Configuration section.
 
@@ -112,7 +112,7 @@ Custom shortcut keys can also be associated with commands by adding a `keystroke
 }
 ```
 
-![Screenshot](https://github.com/hgmarais/process-palette/blob/master/resources/command-palette-keystroke.png?raw=true)
+![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/command-palette-keystroke.png?raw=true)
 
 After reloading the configuration the `Ant: Default` command can be run by pressing `Ctrl-Alt-A`.
 
@@ -121,13 +121,13 @@ After reloading the configuration the `Ant: Default` command can be run by press
 Process Palette has a small panel that lists all the commands that are configured. It can be toggled by pressing `Ctrl-Alt-P` or from the menu `Packages|Process Palette|Toggle`.
 From here one can see all the commands and even run them.
 
-![Screenshot](https://github.com/hgmarais/process-palette/blob/master/resources/panel-basic.png?raw=true)
+![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/panel-basic.png?raw=true)
 
 Pressing the down arrow in the top right corner will hide the panel.
 
 If the command is configured to output to the Process Palette panel then clicking on the name of the command will cause the panel to switch to showing the output that was produced by the command when it was executed.
 
-![Screenshot](https://github.com/hgmarais/process-palette/blob/master/resources/panel-output-basic.png?raw=true)
+![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/panel-output-basic.png?raw=true)
 
 From here one can return to the list by pressing the button in the top left corner.
 
@@ -190,7 +190,7 @@ Variable|Description
 clipboard | Text currently on clipboard.
 fullCommand | The full command along with its arguments. Both the command and arguments will have their variables resolved.
 configDirAbsPath | Absolute path of folder where the `process-palette.json` configuration file is that defines this command.
-projectPath | Absolute path of project folder. If a file is open then that file's project folder will be used. If there isn't a file open then the first project's folder will be used. If there aren't any projects open then the path of the folder containing the `process-palette.json` file is used.
+projectPath | If projects are open then the first project's folder will be used. If there aren't any projects open then the path of the folder containing the `process-palette.json` file is used.
 
 **Input from editor**
 
@@ -206,7 +206,7 @@ fileDirPath | Path of file's directory relative to project.
 fileAbsPath | Absolute path of file.
 fileDirAbsPath | Absolute path of file's directory.
 selection | Currently selected text.
-projectPath | Absolute path of file's project folder.
+fileProjectPath | Absolute path of file's project folder.
 
 **Output**
 
