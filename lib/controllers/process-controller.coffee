@@ -1,6 +1,8 @@
 _ = require 'underscore-plus'
+shell = require 'shelljs'
 ProcessConfig = require '../process-config'
-{BufferedProcess, Directory, File} = require 'atom'
+{Directory, File} = require 'atom'
+# {BufferedProcess} = require 'atom'
 
 # Fields :
 # stdout : Standard output.
@@ -53,6 +55,14 @@ class ProcessController
     @disposable.dispose();
 
   runProcess: =>
+    editor = atom.workspace.getActiveTextEditor();
+
+    if editor
+      @runProcessWithFile(editor.getPath());
+    else
+      @runProcessWithFile(null);
+
+  runProcessWithFile: (filePath) =>
     if @process
       return;
 
@@ -74,8 +84,10 @@ class ProcessController
     editor = atom.workspace.getActiveTextEditor();
 
     if editor
-      file = new File(editor.getPath());
       @fields.selection = editor.getSelectedText();
+
+    if filePath
+      file = new File(filePath);
 
       nameExt = @splitFileName(file.getBaseName());
       @fields.fileName = nameExt[0];
@@ -117,20 +129,37 @@ class ProcessController
 
     if args.length > 0
       @fields.fullCommand += " " + args.join(" ");
+      @fields.fullCommand = @fields.fullCommand.trim();
 
-    stdout = (output) =>
-      @fields.stdout += output;
+    # shell.env['FOO'] = 'MyGoodness';
 
-    stderr = (output) =>
-      @fields.stderr += output;
-
-    exit = (exitStatus) =>
-      @fields.exitStatus = exitStatus;
+    @process = shell.exec @fields.fullCommand, {silent:true, async:true}, (code) =>
+      @fields.exitStatus = code;
       @processStopped(false);
 
-    @process = new BufferedProcess({command, args, options, stdout, stderr, exit});
-    @process.onWillThrowError(@handleProcessErrorCallback);
+    @process.stdout.on 'data', (data) =>
+      @fields.stdout += data;
+
+    @process.stderr.on 'data', (data) =>
+      @fields.stderr += data;
+
     @processStarted();
+
+    # stdout = (output) =>
+    #   @fields.stdout += output;
+    #
+    # stderr = (output) =>
+    #   @fields.stderr += output;
+    #
+    # exit = (exitStatus) =>
+    #   @fields.exitStatus = exitStatus;
+    #   @processStopped(false);
+
+    # options.env = process.env;
+
+    # @process = new BufferedProcess({command, args, options, stdout, stderr, exit});
+    # @process.onWillThrowError(@handleProcessErrorCallback);
+    # @processStarted();
 
   splitFileName: (fileNameExt) ->
     index = fileNameExt.lastIndexOf(".");
@@ -167,7 +196,7 @@ class ProcessController
       return;
 
     @process.kill();
-    @processStopped(false);
+    # @processStopped(false);
 
   handleProcessErrorCallback: (errorObject) =>
     # Indicate that the error has been handled.
