@@ -37,6 +37,7 @@ class HelpView extends View
     @createConfigurationFile(configFolder);
 
   createProjectConfigurationFile: ->
+    for projectPath in atom.project.getPaths()
       @createConfigurationFile(new Directory(projectPath));
 
   createConfigurationFile: (configFolder) ->
@@ -58,9 +59,12 @@ class HelpView extends View
       "commands" : [
         {
           "namespace" : "Process Palette",
-          "action" : "List",
-          "command" : "ls",
-          "arguments" : ["-lh"],
+          "action" : "Echo",
+          "command" : "echo",
+          "arguments" : ["Hello", "$CUSTOM_VAR", "from", "{configDirAbsPath}"],
+          "env" : {
+            "CUSTOM_VAR" : "Atom"
+          },
           "cwd" : "{projectPath}",
           "keystroke" : "ctrl-alt-l",
           "outputTarget" : "panel",

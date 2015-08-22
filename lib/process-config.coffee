@@ -7,6 +7,7 @@ class ProcessConfig
     @command = null;
     @arguments = [];
     @cwd = null;
+    @env = {};
     @keystroke = null;
     @outputTarget = 'panel';
     @successOutput = '{stdout}';

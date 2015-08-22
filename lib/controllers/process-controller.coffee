@@ -49,9 +49,21 @@ class ProcessController
       bindings = {};
       binding[@config.keystroke] = @config.getCommandName();
       bindings[cssSelector] = binding;
+
+      # params = {};
+      # params.keystrokes = @config.keystroke;
+      # params.command = @config.getCommandName();
+      # params.target = cssSelector;
+      #
+      # try
+      #   console.log(atom.keymaps.findKeyBindings(params));
+      # catch error
+      #   console.log(error);
+
       atom.keymaps.add('process-palette', bindings);
 
   dispose: ->
+    # TODO : The key binding should preferably be removed, but atom.keymaps.findKeyBindings throws an error.
     @disposable.dispose();
 
   runProcess: =>
@@ -131,7 +143,15 @@ class ProcessController
       @fields.fullCommand += " " + args.join(" ");
       @fields.fullCommand = @fields.fullCommand.trim();
 
-    # shell.env['FOO'] = 'MyGoodness';
+    @envBackup = {};
+    @pwdBackup = shell.pwd();
+
+    if @config.env != null
+      for key, val of @config.env
+        @envBackup[key] = shell.env[key];
+        shell.env[key] = @insertFields(val);
+
+    shell.cd(options.cwd);
 
     @process = shell.exec @fields.fullCommand, {silent:true, async:true}, (code) =>
       @fields.exitStatus = code;
@@ -247,6 +267,14 @@ class ProcessController
       console.log(output);
     else if (@config.outputTarget == 'panel')
       @output = output;
+
+    for key, val of @envBackup
+      if _.isUndefined(@envBackup[key])
+        delete shell.env[key];
+      else
+        shell.env[key] = @envBackup[key];
+
+    shell.cd(@pwdBackup);
 
     @process = null;
     @fields = {};

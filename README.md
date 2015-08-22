@@ -16,7 +16,7 @@ Install Process Palette and then either generate or download a configuration fil
 
   [2f6a8e37]: https://github.com/morassman/process-palette/blob/master/examples/process-palette.json "process-palette.json"
 
-These example configurations define a single command that will list the files in the `process-palette.json` folder by running `ls -lh`. It can be run by choosing `Process Palette: List` from the command palette. This will open the Process Palette panel and show the output. The panel can also be opened directly by pressing `Ctrl-Alt-P` or running `Process Palette: Toggle` from the command palette.
+These example configurations define a single command that will echo a message to standard output. It can be run by choosing `Process Palette: Echo` from the command palette. This will open the Process Palette panel and show the output. The panel can also be opened directly by pressing `Ctrl-Alt-P` or running `Process Palette: Toggle` from the command palette.
 
 ### Next Steps
 1. Poke around in the configuration file a bit. Just remember to run the `Process Palette: Reload Configuration` command after making changes.
@@ -146,6 +146,7 @@ command (required)|A string with the name of the command to execute.|null
 arguments|An array of strings to pass as arguments to the command.|[ ]
 cwd|The working directory from which to execute the command. It doesn't have a default value, but one is automatically determined when the command is executed. If projects are open then the first project's folder is used. If there aren't any projects open then the folder of the `process-palette.json` file is used.|null
 keystroke|A string describing the shortcut to associate with this command. It can be any combination of `ctrl`, `alt`, `shift` and `cmd` separated with `-` characters.|null
+env|A map of environment variables. These will be made available in addition to the ones that are already defined in `process.env`|{ }
 
 
 The following properties relate to the output produced by the process. The output can be redirected to a particular target. It can also be formatted depending on whether the process executed successfully or not. Giving any of these a value of `null` will prevent that output from being shown.
@@ -224,6 +225,7 @@ The table below shows which properties support input variables and/or output var
 Property|Input|Output
 ---|---|---
 cwd|yes|no
+env|yes|no
 command|yes|no
 arguments|yes|no
 successOutput|yes|yes
@@ -233,7 +235,13 @@ successMessage|yes|yes
 errorMessage|yes|yes
 fatalMessage|yes|yes
 
-The `namespace`, `action` and `keystroke` properties do not support variables.
+The `namespace`, `action` and `keystroke` properties do not support variables. The `env` property supports variables only in its values, for example :
+
+```json
+"env" : {
+  "MYVAR" : "{fileName}"
+}
+```
 
 A useful way of seeing the values of the variables is to add them to one of the output properties and then executing the command. For instance :
 
@@ -250,3 +258,9 @@ Keep in mind that the `arguments` property is an array of strings. Adding variab
 ```
 
 in order to pass the file name and the currently selected text as arguments to the command.
+
+## Credits
+
+User|Contribution
+---|---
+[abe](https://discuss.atom.io/users/abe)|Suggested ability to define additional environment variables.
