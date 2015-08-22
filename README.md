@@ -144,7 +144,7 @@ namespace|The namespace under which the command is categorized. This forms part 
 action (required)|The name of the action. This, together with the namespace, gives the command a unique identifier in the Command Palette.|null
 command (required)|A string with the name of the command to execute.|null
 arguments|An array of strings to pass as arguments to the command.|[ ]
-cwd|The working directory from which to execute the command. It doesn't have a default value, but one is automatically determined when the command is executed. If a file is open then that file's project folder is used. If a file isn't open then the first project's folder is used. If there aren't any projects open then the folder of the `process-palette.json` file is used.|null
+cwd|The working directory from which to execute the command. It doesn't have a default value, but one is automatically determined when the command is executed. If projects are open then the first project's folder is used. If there aren't any projects open then the folder of the `process-palette.json` file is used.|null
 keystroke|A string describing the shortcut to associate with this command. It can be any combination of `ctrl`, `alt`, `shift` and `cmd` separated with `-` characters.|null
 
 

@@ -14,6 +14,11 @@ module.exports = ProcessPalette =
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:edit-configuration': => @editConfiguration()
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:reload-configuration': => @reloadConfiguration()
 
+    # TODO : Enable this again later to support 'on-save' behavior.
+    # @subscriptions.add atom.workspace.observeTextEditors (editor) =>
+    #   @subscriptions.add editor.onDidSave (event) =>
+    #     @fileSaved(event.path);
+
     @load();
 
   deactivate: ->
@@ -22,11 +27,15 @@ module.exports = ProcessPalette =
     @mainView.destroy();
 
   disposeProjectControllers: ->
-    for projectController in projectControllers
+    for projectController in @projectControllers
       projectController.dispose();
 
   serialize: ->
     processPaletteViewState: @mainView.serialize()
+
+  fileSaved: (path) ->
+    for projectController in @projectControllers
+      projectController.fileSaved(path);
 
   load: ->
     configFile = new File(atom.config.getUserConfigPath());
@@ -70,9 +79,18 @@ module.exports = ProcessPalette =
     @mainView.showProcessOutput(processController);
 
   addProjectPath: (projectPath) ->
-    projectController = new ProjectController(@mainView, projectPath);
+    projectController = new ProjectController(@, projectPath);
     @projectControllers.push(projectController);
 
   editConfiguration: ->
     for projectController in @projectControllers
       projectController.editConfiguration();
+
+  getProcessController: (namespace, action) ->
+    for projectController in @projectControllers
+      processController = projectController.getProcessController(namespace, action);
+
+      if processController
+        return processController;
+
+    return null;

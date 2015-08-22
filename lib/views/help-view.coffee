@@ -37,7 +37,6 @@ class HelpView extends View
     @createConfigurationFile(configFolder);
 
   createProjectConfigurationFile: ->
-    for projectPath in atom.project.getPaths()
       @createConfigurationFile(new Directory(projectPath));
 
   createConfigurationFile: (configFolder) ->
