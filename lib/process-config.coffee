@@ -9,6 +9,7 @@ class ProcessConfig
     @cwd = null;
     @env = {};
     @keystroke = null;
+    @stream = false;
     @outputTarget = 'panel';
     @successOutput = '{stdout}';
     @errorOutput = '{stderr}';

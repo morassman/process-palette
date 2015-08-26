@@ -80,6 +80,7 @@ class ProcessController
 
     @fields = {};
     options = {};
+    @output = '';
 
     @fields.clipboard = atom.clipboard.read();
     @fields.configDirAbsPath = @projectController.projectPath;
@@ -155,31 +156,21 @@ class ProcessController
 
     @process = shell.exec @fields.fullCommand, {silent:true, async:true}, (code) =>
       @fields.exitStatus = code;
-      @processStopped(false);
+      @processStopped(false, !code?);
 
     @process.stdout.on 'data', (data) =>
-      @fields.stdout += data;
+      if @config.stream
+        @streamOutput(data);
+      else
+        @fields.stdout += data;
 
     @process.stderr.on 'data', (data) =>
-      @fields.stderr += data;
+      if @config.stream
+        @streamOutput(data);
+      else
+        @fields.stderr += data;
 
     @processStarted();
-
-    # stdout = (output) =>
-    #   @fields.stdout += output;
-    #
-    # stderr = (output) =>
-    #   @fields.stderr += output;
-    #
-    # exit = (exitStatus) =>
-    #   @fields.exitStatus = exitStatus;
-    #   @processStopped(false);
-
-    # options.env = process.env;
-
-    # @process = new BufferedProcess({command, args, options, stdout, stderr, exit});
-    # @process.onWillThrowError(@handleProcessErrorCallback);
-    # @processStarted();
 
   splitFileName: (fileNameExt) ->
     index = fileNameExt.lastIndexOf(".");
@@ -216,57 +207,56 @@ class ProcessController
       return;
 
     @process.kill();
-    # @processStopped(false);
+    @processStopped(false, true);
 
   handleProcessErrorCallback: (errorObject) =>
     # Indicate that the error has been handled.
     errorObject.handle();
-    @processStopped(true);
+    @processStopped(true, false);
+
+  streamOutput: (output) ->
+    @outputToTarget(output, true);
+
+    for processCallback in @processCallbacks
+      if typeof processCallback.streamOutput is 'function'
+        processCallback.streamOutput(output);
 
   processStarted: ->
     for processCallback in @processCallbacks
       if typeof processCallback.processStarted is 'function'
         processCallback.processStarted();
 
-  processStopped: (fatal) =>
+  processStopped: (fatal, killed) =>
     output = '';
-    @output = '';
     messageTitle = _.humanizeEventName(@config.getCommandName());
     options = {};
 
-    if fatal
-      if @config.fatalOutput
-        output = @insertFields(@config.fatalOutput);
+    if !killed
+      if fatal
+        if @config.fatalMessage?
+          options["detail"] = @insertFields(@config.fatalMessage);
+          atom.notifications.addError(messageTitle, options);
+      else if @fields.exitStatus == 0
+        if @config.successMessage?
+          options["detail"] = @insertFields(@config.successMessage);
+          atom.notifications.addSuccess(messageTitle, options);
+      else
+        if @config.errorMessage?
+          options["detail"] = @insertFields(@config.errorMessage);
+          atom.notifications.addWarning(messageTitle, options);
 
-      if @config.fatalMessage
-        options["detail"] = @insertFields(@config.fatalMessage);
-        atom.notifications.addError(messageTitle, options);
-    else if @fields.exitStatus == 0
-      if @config.successOutput
-        output = @insertFields(@config.successOutput);
+    if !@config.stream
+      if fatal
+        if @config.fatalOutput?
+          output = @insertFields(@config.fatalOutput);
+      else if @fields.exitStatus == 0
+        if @config.successOutput?
+          output = @insertFields(@config.successOutput);
+      else
+        if @config.errorOutput?
+          output = @insertFields(@config.errorOutput);
 
-      if @config.successMessage
-        options["detail"] = @insertFields(@config.successMessage);
-        atom.notifications.addSuccess(messageTitle, options);
-    else
-      if @config.errorOutput
-        output = @insertFields(@config.errorOutput);
-
-      if @config.errorMessage
-        options["detail"] = @insertFields(@config.errorMessage);
-        atom.notifications.addWarning(messageTitle, options);
-
-    if (@config.outputTarget == 'editor')
-      editor = atom.workspace.getActiveTextEditor();
-
-      if editor
-        editor.insertText(output);
-    else if (@config.outputTarget == 'clipboard')
-      atom.clipboard.write(output);
-    else if (@config.outputTarget == 'console')
-      console.log(output);
-    else if (@config.outputTarget == 'panel')
-      @output = output;
+      @outputToTarget(output, false);
 
     for key, val of @envBackup
       if _.isUndefined(@envBackup[key])
@@ -282,3 +272,23 @@ class ProcessController
     for processCallback in @processCallbacks
       if typeof processCallback.processStopped is 'function'
         processCallback.processStopped();
+
+  outputToTarget: (output, stream) ->
+    if (@config.outputTarget == 'editor')
+      editor = atom.workspace.getActiveTextEditor();
+
+      if editor?
+        editor.insertText(output);
+    else if (@config.outputTarget == 'clipboard')
+      if stream
+        @output += output;
+        atom.clipboard.write(@output);
+      else
+        atom.clipboard.write(output);
+    else if (@config.outputTarget == 'console')
+      console.log(output);
+    else if (@config.outputTarget == 'panel')
+      if stream
+        @output += output;
+      else
+        @output = output;

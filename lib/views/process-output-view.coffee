@@ -30,7 +30,11 @@ class ProcessOutputView extends View
     @runKillButton.removeClass('icon-x');
     @runKillButton.addClass('icon-playback-play');
 
-    @refreshOutputPanel();
+    if !@processController.config.stream
+      @refreshOutputPanel();
+
+  streamOutput: (output) =>
+    @appendOutput(output);
 
   showProcessOutput: (processController) =>
     if @processController
@@ -55,11 +59,17 @@ class ProcessOutputView extends View
 
   refreshOutputPanel: =>
     @outputPanel.text("");
+    @appendOutput(@processController.output);
 
-    if @processController.output
-      for line in @processController.output.split('\n')
+  appendOutput: (output) ->
+    if output?
+      addNewLine = false;
+      for line in output.split('\n')
+        if addNewLine
+          @outputPanel.append("<br>");
+
         @outputPanel.append(line);
-        @outputPanel.append("<br>");
+        addNewLine = true;
 
     @calculateHeight();
 

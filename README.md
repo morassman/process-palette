@@ -157,6 +157,7 @@ outputTarget|Where the output produced by the process should be directed to. It 
 successOutput|The format of the output when the process returned with an exit status of 0.|"{stdout}"
 errorOutput|The format of the output when the process returned with a non-0 exit status.|"{stderr}"
 fatalOutput|The format of the output when the command could not be executed at all.|"Failed to execute : {fullCommand}\n{stdout}\n{stderr}"
+stream|Indicate whether the output should be streamed. If this is false then the output will be formatted and sent to the target only after the process completes. If it is true then the output, both standard and error, will be streamed to the target without any formatting applied.|false
 
 The following properties relate to the messages shown after a command is executed. Giving any of these a value of `null` will prevent that message from being shown.
 

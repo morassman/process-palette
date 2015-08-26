@@ -67,6 +67,7 @@ class HelpView extends View
           },
           "cwd" : "{projectPath}",
           "keystroke" : "ctrl-alt-l",
+          "stream" : false,
           "outputTarget" : "panel",
           "successOutput" : "{stdout}",
           "errorOutput" : "{stderr}",
