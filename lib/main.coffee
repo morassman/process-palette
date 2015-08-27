@@ -1,10 +1,11 @@
+_ = require 'underscore-plus'
 MainView = require './views/main-view'
 ProjectController = require './controllers/project-controller'
 {File, CompositeDisposable} = require 'atom'
 
 module.exports = ProcessPalette =
 
-  activate: (state) ->
+  activate: (@state) ->
     @subscriptions = new CompositeDisposable
     @projectControllers = []
     @mainView = new MainView(@)
@@ -21,6 +22,12 @@ module.exports = ProcessPalette =
 
     @load();
 
+    if _.isNumber(@state.height)
+      @mainView.setViewHeight(@state.height);
+
+    if @state.visible
+      @bottomPanel.show();
+
   deactivate: ->
     @subscriptions.dispose();
     @disposeProjectControllers();
@@ -31,7 +38,13 @@ module.exports = ProcessPalette =
       projectController.dispose();
 
   serialize: ->
-    processPaletteViewState: @mainView.serialize()
+    if @mainView != null
+      state = {};
+      state.visible = @bottomPanel.isVisible();
+      state.height = @mainView.viewHeight;
+      return state;
+
+    return @state;
 
   fileSaved: (path) ->
     for projectController in @projectControllers

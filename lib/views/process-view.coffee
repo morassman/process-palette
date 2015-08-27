@@ -33,7 +33,7 @@ class ProcessView extends View
     else
       outputTarget = " (#{outputTarget})";
 
-    @div class:"process", =>
+    @div class:"process-palette-process", =>
       @button {class:'btn btn-xs icon-playback-play inline-block-tight', outlet:'runKillButton', click:'runKillProcess'}
       @span _.humanizeEventName(processController.config.getCommandName()), headerArgs
       if processController.config.keystroke

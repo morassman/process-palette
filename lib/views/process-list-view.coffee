@@ -11,8 +11,8 @@ class ProcessListView extends View
     @processViews = [];
 
   @content: ->
-    @div {class:"process-list"}, =>
-      @div {class:"scrollable", outlet:"processList"}
+    @div {class:"process-palette-process-list"}, =>
+      @div {class:"process-palette-scrollable", outlet:"processList"}
 
   addProcess: (processController) =>
     processView = new ProcessView(@main, processController);
@@ -47,3 +47,6 @@ class ProcessListView extends View
 
   getElement: ->
     @element
+
+  parentHeightChanged: (parentHeight) ->
+    @processList.height(parentHeight);

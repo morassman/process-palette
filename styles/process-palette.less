@@ -4,11 +4,26 @@
 // for a full listing of what's available.
 @import "ui-variables";
 
+.process-palette-resizer {
+  .process-palette-resize-handle {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -5px;
+    height: 10px;
+    cursor: row-resize;
+    z-index: 3;
+  }
+}
+
 .process-palette {
   margin: 0;
   padding: 0;
-  min-height: 200px;
-  max-height: 200px;
+  min-height: 100px;
+
+  .main-content {
+    height: 100%;
+  }
 
   .button-group {
     display: inline-block;
@@ -41,12 +56,12 @@
   }
 }
 
-.process-list {
+.process-palette-process-list {
   height: 100%;
   width: 100%;
 }
 
-.process {
+.process-palette-process {
   background: @tool-panel-background-color;
 
   .header {
@@ -70,12 +85,10 @@
   width: 100%;
 }
 
-.scrollable {
+.process-palette-scrollable {
   overflow: auto;
   height: 100%;
   width: 100%;
-  min-height: 100px;
-  height: 200px;
 }
 
 .visible {

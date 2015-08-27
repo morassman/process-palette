@@ -8,30 +8,43 @@ class ProcessOutputView extends View
     super(@main);
 
   @content: (main) ->
-    @div {class: "processOutput"}, =>
-      @div {class:"process", outlet:"header"}, =>
+    @div =>
+      @div {class:"process-palette-process", outlet:"header"}, =>
         @button {class:'btn btn-xs icon-three-bars inline-block-tight', click:'showListView'}
         @button {class:'btn btn-xs icon-playback-play inline-block-tight', outlet:'runKillButton', click:'runKillProcess'}
         @span {class:'header inline-block text-highlight', outlet: 'commandName'}
         @span {class:'keystroke inline-block highlight', outlet:'keystroke'}
-      @div {class:"scrollable native-key-bindings", outlet:'outputPanel', tabindex: -1}
+      @div {class:"process-palette-scrollable native-key-bindings", outlet:'outputPanel', tabindex: -1}
+
+  parentHeightChanged: (parentHeight) ->
+    @calculateHeight();
 
   attached: ->
+    @calculateHeight();
+
+  show: ->
+    super();
     @calculateHeight();
 
   calculateHeight: =>
     @outputPanel.height(@main.mainView.height() - @header.height());
 
   processStarted: =>
-    @runKillButton.removeClass('icon-playback-play');
-    @runKillButton.addClass('icon-x');
+    @showStopIcon();
 
   processStopped: =>
-    @runKillButton.removeClass('icon-x');
-    @runKillButton.addClass('icon-playback-play');
+    @showPlayIcon();
 
     if !@processController.config.stream
       @refreshOutputPanel();
+
+  showPlayIcon: ->
+    @runKillButton.removeClass('icon-x');
+    @runKillButton.addClass('icon-playback-play');
+
+  showStopIcon: ->
+    @runKillButton.removeClass('icon-playback-play');
+    @runKillButton.addClass('icon-x');
 
   streamOutput: (output) =>
     @appendOutput(output);
@@ -44,7 +57,9 @@ class ProcessOutputView extends View
     @processController.addProcessCallback(@);
 
     if @processController.process
-      @processStarted();
+      @showStopIcon();
+    else
+      @showPlayIcon();
 
     @commandName.text(_.humanizeEventName(@processController.config.getCommandName()));
 
