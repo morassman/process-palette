@@ -1,3 +1,10 @@
+## v0.4.12 (28 August 2015)
+- Added ability to resize panel.
+- Added panel size and visibility to package state.
+- Added ability to clear output.
+- Added scroll lock behavior to output panel.
+- Changed output panel's font to mono spaced.
+
 ## v0.4.11 (26 August 2015)
 - Added option to stream output.
 

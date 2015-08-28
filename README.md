@@ -1,6 +1,8 @@
 # Process Palette
 With Process Palette you can add custom entries to the command palette to run any command that you typically would from a terminal. This prevents you from having to switch to a terminal each time you need to run something and is especially useful for commands that you use regularly.
 
+See the [changelog](https://github.com/morassman/process-palette/blob/master/CHANGELOG.md) for the latest improvements.
+
 ## Quick Start
 Install Process Palette and then either generate or download a configuration file.
 
@@ -16,7 +18,9 @@ Install Process Palette and then either generate or download a configuration fil
 
   [2f6a8e37]: https://github.com/morassman/process-palette/blob/master/examples/process-palette.json "process-palette.json"
 
-These example configurations define a single command that will echo a message to standard output. It can be run by choosing `Process Palette: Echo` from the command palette. This will open the Process Palette panel and show the output. The panel can also be opened directly by pressing `Ctrl-Alt-P` or running `Process Palette: Toggle` from the command palette.
+These example configurations define a command that will echo a message to standard output. It can be run by choosing `Process Palette: Echo Example` from the command palette. This will open the Process Palette panel and show the output. The panel can also be opened directly by pressing `Ctrl-Alt-P` or running `Process Palette: Toggle` from the command palette.
+
+It also contains an example called `Ping Example` to show the direct stream ability. When streaming is enabled the output is written directly to the target without being formatted.
 
 ### Next Steps
 1. Poke around in the configuration file a bit. Just remember to run the `Process Palette: Reload Configuration` command after making changes.
@@ -67,12 +71,13 @@ Command line arguments can also be specified in the form of an array of strings.
     },
     {
       "action"  : "Ant clean artifacts",
-      "command" : "ant",
-      "arguments" : ["clean"]
+      "command" : "ant clean"
     }
   ]
 }
 ```
+
+
 Reloading the configuration will cause the command palette to now have two new entries:
 - Process Palette: Ant default
 - Process Palette: Ant clean artifacts
@@ -91,8 +96,7 @@ Let's modify the previous two commands to use a namespace call `Ant`:
     {
       "namespace" : "Ant",
       "action"    : "Clean artifacts",
-      "command"   : "ant",
-      "arguments" : ["clean"]
+      "command"   : "ant clean",
     }
   ]
 }
@@ -142,8 +146,8 @@ Property|Description|Default
 ---|---|---
 namespace|The namespace under which the command is categorized. This forms part of its identity in the Command Palette.|"Process Palette"
 action (required)|The name of the action. This, together with the namespace, gives the command a unique identifier in the Command Palette.|null
-command (required)|A string with the name of the command to execute.|null
-arguments|An array of strings to pass as arguments to the command.|[ ]
+command (required)|A string with the name and arguments of the command to execute.|null
+arguments|An array of strings to pass as arguments to the command. Since v0.4.10 arguments can be added directly to the `command` property's value, however this approach can still be used.|[ ]
 cwd|The working directory from which to execute the command. It doesn't have a default value, but one is automatically determined when the command is executed. If projects are open then the first project's folder is used. If there aren't any projects open then the folder of the `process-palette.json` file is used.|null
 keystroke|A string describing the shortcut to associate with this command. It can be any combination of `ctrl`, `alt`, `shift` and `cmd` separated with `-` characters.|null
 env|A map of environment variables. These will be made available in addition to the ones that are already defined in `process.env`|{ }
@@ -259,9 +263,3 @@ Keep in mind that the `arguments` property is an array of strings. Adding variab
 ```
 
 in order to pass the file name and the currently selected text as arguments to the command.
-
-## Credits
-
-User|Contribution
----|---
-[abe](https://discuss.atom.io/users/abe)|Suggested ability to define additional environment variables.

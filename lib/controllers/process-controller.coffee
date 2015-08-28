@@ -37,6 +37,7 @@ class ProcessController
     @replaceRegExp = new RegExp('{.*?}','g');
     @fields = {};
     @output = '';
+    @scrollLocked = false;
     cssSelector = 'atom-workspace';
 
     if (@config.outputTarget == 'editor')

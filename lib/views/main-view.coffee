@@ -40,6 +40,7 @@ class MainView extends View
     @setViewHeight(@mainContent.height() + change);
 
   setViewHeight: (@viewHeight) ->
+    @viewHeight = Math.max(@viewHeight, 100);
     @mainContent.height(@viewHeight);
     @viewHeight = @mainContent.height();
     @listView.parentHeightChanged(@viewHeight);

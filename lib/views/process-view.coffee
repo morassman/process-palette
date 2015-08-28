@@ -47,6 +47,11 @@ class ProcessView extends View
             @td "Output#{outputTarget}", outputTitleArgs
             @td "#{processController.config.successOutput}", outputValueArgs
 
+  initialize: ->
+    # Prevent the button from getting focus.
+    @runKillButton.on 'mousedown', (e) ->
+      e.preventDefault();
+
   showProcessOutput: =>
     @main.showProcessOutput(@processController);
 

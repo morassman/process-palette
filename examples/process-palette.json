@@ -2,7 +2,7 @@
   "commands" : [
     {
       "namespace" : "Process Palette",
-      "action" : "Echo",
+      "action" : "Echo Example",
       "command" : "echo",
       "arguments" : ["Hello", "$CUSTOM_VAR", "from", "{configDirAbsPath}"],
       "env" : {
@@ -11,6 +11,19 @@
       "cwd" : "{projectPath}",
       "keystroke" : "ctrl-alt-l",
       "stream" : false,
+      "outputTarget" : "panel",
+      "successOutput" : "{stdout}",
+      "errorOutput" : "{stderr}",
+      "fatalOutput" : "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "successMessage" : "Executed : {fullCommand}",
+      "errorMessage" : "Executed : {fullCommand}\nReturned with code {exitStatus}\n{stderr}",
+      "fatalMessage" : "Failed to execute : {fullCommand}\n{stdout}\n{stderr}"
+    },
+    {
+      "namespace" : "Process Palette",
+      "action" : "Ping Example",
+      "command" : "ping localhost",
+      "stream" : true,
       "outputTarget" : "panel",
       "successOutput" : "{stdout}",
       "errorOutput" : "{stderr}",

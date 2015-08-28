@@ -1,3 +1,4 @@
+path = require 'path'
 {Directory, File} = require 'atom'
 {View} = require 'atom-space-pen-views'
 
@@ -44,41 +45,18 @@ class HelpView extends View
     configFile = configFolder.getFile("process-palette.json");
 
     if !configFile.existsSync()
-      configFile.create().then =>
-        configFile.writeSync(@getExampleFileContent());
-        atom.workspace.open(configFile.getPath());
+      packagePath = atom.packages.getActivePackage('process-palette').path
+      file = new File(path.join(packagePath, 'examples', 'process-palette.json'));
+
+      file.read(false).then (content) =>
+        configFile.create().then =>
+          configFile.writeSync(content);
+          atom.workspace.open(configFile.getPath());
     else
       atom.workspace.open(configFile.getPath());
 
   reloadConfiguration: ->
     @main.reloadConfiguration();
-
-  getExampleFileContent: ->
-    return """
-    {
-      "commands" : [
-        {
-          "namespace" : "Process Palette",
-          "action" : "Echo",
-          "command" : "echo",
-          "arguments" : ["Hello", "$CUSTOM_VAR", "from", "{configDirAbsPath}"],
-          "env" : {
-            "CUSTOM_VAR" : "Atom"
-          },
-          "cwd" : "{projectPath}",
-          "keystroke" : "ctrl-alt-l",
-          "stream" : false,
-          "outputTarget" : "panel",
-          "successOutput" : "{stdout}",
-          "errorOutput" : "{stderr}",
-          "fatalOutput" : "Failed to execute : {fullCommand}\\n{stdout}\\n{stderr}",
-          "successMessage" : "Executed : {fullCommand}",
-          "errorMessage" : "Executed : {fullCommand}\\nReturned with code {exitStatus}\\n{stderr}",
-          "fatalMessage" : "Failed to execute : {fullCommand}\\n{stdout}\\n{stderr}"
-        }
-      ]
-    }
-    """
 
   serialize: ->
 
