@@ -38,6 +38,9 @@ class ProcessController
     @fields = {};
     @output = '';
     @scrollLocked = false;
+    @newFile = null;
+    @creatingNewFile = false;
+    @newFileDisposable = null;
     cssSelector = 'atom-workspace';
 
     if (@config.outputTarget == 'editor')
@@ -66,6 +69,7 @@ class ProcessController
   dispose: ->
     # TODO : The key binding should preferably be removed, but atom.keymaps.findKeyBindings throws an error.
     @disposable.dispose();
+    @newFileDisposable?.dispose();
 
   runProcess: =>
     editor = atom.workspace.getActiveTextEditor();
@@ -265,6 +269,8 @@ class ProcessController
       else
         shell.env[key] = @envBackup[key];
 
+    @cleanUpNewFileAfterProcess();
+
     shell.cd(@pwdBackup);
 
     @process = null;
@@ -288,8 +294,48 @@ class ProcessController
         atom.clipboard.write(output);
     else if (@config.outputTarget == 'console')
       console.log(output);
-    else if (@config.outputTarget == 'panel')
+    else if ((@config.outputTarget == 'panel') or (@config.outputTarget == 'file'))
       if stream
+        if @config.outputTarget == 'file'
+          @outputToNewFile(output);
         @output += output;
       else
         @output = output;
+        if @config.outputTarget == 'file'
+          @outputToNewFile(@output);
+
+  openNewFile: ->
+    @creatingNewFile = true;
+
+    atom.workspace.open().then (textEditor) =>
+      @newFile = textEditor;
+      @creatingNewFile = false;
+
+      @newFileDisposable = @newFile.onDidDestroy =>
+        @newFileDestroyed();
+
+      @outputToNewFile(@output);
+
+      # It's possible for the text editor to open only after to process has stopped.
+      if @process == null
+        @cleanUpNewFileAfterProcess();
+
+  cleanUpNewFileAfterProcess: ->
+    if !@config.reuseOutputTarget
+      @newFile = null;
+      @newFileDisposable?.dispose();
+      @newFileDisposable = null;
+
+  newFileDestroyed: ->
+    @newFile = null;
+    @newFileDisposable?.dispose();
+    @newFileDisposable = null;
+
+  outputToNewFile: (text) ->
+    if @creatingNewFile
+      return;
+
+    if @newFile == null
+      @openNewFile();
+    else
+      @newFile.insertText(text);

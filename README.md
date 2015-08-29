@@ -135,6 +135,10 @@ If the command is configured to output to the Process Palette panel then clickin
 
 From here one can return to the list by pressing the button in the top left corner.
 
+Scroll lock can be toggled with the lock button. Scroll lock will also enable when one starts to scroll or clicks on the output while the process is running. It will automatically disable when one scrolls to the bottom.
+
+The output can be cleared by pressing the trash can button.
+
 ### Notifications
 Each time a process is executed a message will be shown in the top right hand corner. A successful execution with an exit status code of 0 will show a success message. Anything other than 0 will show a warning. If the process could not be executed at all then a fatal message is shown. What these messages display can be configured or even disabled completely as will be seen in the Advanced Configuration section.
 

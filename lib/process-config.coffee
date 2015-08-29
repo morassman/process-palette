@@ -11,6 +11,7 @@ class ProcessConfig
     @keystroke = null;
     @stream = false;
     @outputTarget = 'panel';
+    @reuseOutputTarget = true;
     @successOutput = '{stdout}';
     @errorOutput = '{stderr}';
     @fatalOutput = 'Failed to execute : {fullCommand}\n{stdout}\n{stderr}';
@@ -21,7 +22,7 @@ class ProcessConfig
     for key, val of object
       @[key] = val
 
-    if @outputTarget not in ["panel", "editor", "clipboard", "console", "void"]
+    if @outputTarget not in ["panel", "editor", "file", "clipboard", "console", "void"]
       @outputTarget = "void";
 
     if !@arguments
