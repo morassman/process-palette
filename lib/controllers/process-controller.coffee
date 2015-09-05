@@ -2,6 +2,7 @@ _ = require 'underscore-plus'
 shell = require 'shelljs'
 ProcessConfig = require '../process-config'
 {Directory, File} = require 'atom'
+{$$} = require 'atom-space-pen-views'
 # {BufferedProcess} = require 'atom'
 
 # Fields :
@@ -42,10 +43,14 @@ class ProcessController
     @creatingNewFile = false;
     @newFileDisposable = null;
     @endTime = null;
+    @outputPanel = null;
+    @lastScrollTop = 0;
     cssSelector = 'atom-workspace';
 
     if (@config.outputTarget == 'editor')
       cssSelector = 'atom-text-editor';
+    else if (@config.outputTarget == 'panel')
+      @outputPanel = $$ -> @div {class:"process-palette-scrollable native-key-bindings", tabindex: -1}
 
     @disposable = atom.commands.add(cssSelector, @config.getCommandName(), @runProcess);
 
@@ -301,11 +306,15 @@ class ProcessController
       if stream
         if @config.outputTarget == 'file'
           @outputToNewFile(output);
-        @output += output;
+        else
+          @outputToPanel(output);
+        # @output += output;
       else
         @output = output;
         if @config.outputTarget == 'file'
           @outputToNewFile(@output);
+        else
+          @outputToPanel(output);
 
   openNewFile: ->
     @creatingNewFile = true;
@@ -342,3 +351,13 @@ class ProcessController
       @openNewFile();
     else
       @newFile.insertText(text);
+
+  outputToPanel: (text) ->
+    addNewLine = false;
+
+    for line in text.split('\n')
+      if addNewLine
+        @outputPanel.append("<br>");
+
+      @outputPanel.append(line);
+      addNewLine = true;
