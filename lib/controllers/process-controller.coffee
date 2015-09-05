@@ -32,7 +32,7 @@ class ProcessController
   @process : null;
   @processCallbacks : null;
 
-  constructor: (@projectController, @config) ->
+  constructor: (@configController, @config) ->
     @processCallbacks = [];
     @replaceRegExp = new RegExp('{.*?}','g');
     @fields = {};
@@ -41,6 +41,7 @@ class ProcessController
     @newFile = null;
     @creatingNewFile = false;
     @newFileDisposable = null;
+    @endTime = null;
     cssSelector = 'atom-workspace';
 
     if (@config.outputTarget == 'editor')
@@ -66,6 +67,9 @@ class ProcessController
 
       atom.keymaps.add('process-palette', bindings);
 
+  getProcessID: ->
+    return @processID;
+
   dispose: ->
     # TODO : The key binding should preferably be removed, but atom.keymaps.findKeyBindings throws an error.
     @disposable.dispose();
@@ -88,7 +92,7 @@ class ProcessController
     @output = '';
 
     @fields.clipboard = atom.clipboard.read();
-    @fields.configDirAbsPath = @projectController.projectPath;
+    @fields.configDirAbsPath = @configController.projectPath;
     @fields.stdout = '';
     @fields.stderr = '';
 
@@ -97,7 +101,7 @@ class ProcessController
     if projectPaths.length > 0
       @fields.projectPath = projectPaths[0];
     else
-      @fields.projectPath = @projectController.projectPath;
+      @fields.projectPath = @configController.projectController.projectPath;
 
     editor = atom.workspace.getActiveTextEditor();
 
@@ -163,6 +167,8 @@ class ProcessController
       @fields.exitStatus = code;
       @processStopped(false, !code?);
 
+    @processID = @process.pid;
+
     @process.stdout.on 'data', (data) =>
       if @config.stream
         @streamOutput(data);
@@ -202,17 +208,15 @@ class ProcessController
       @processCallbacks.splice(index, 1);
 
   runKillProcess: ->
-    if @process
+    if @process != null
       @killProcess();
     else
       @runProcess();
 
   killProcess:  ->
-    if !@process
-      return;
-
-    @process.kill();
-    @processStopped(false, true);
+    if @process != null
+      @process.kill();
+      @processStopped(false, true);
 
   handleProcessErrorCallback: (errorObject) =>
     # Indicate that the error has been handled.
@@ -227,11 +231,11 @@ class ProcessController
         processCallback.streamOutput(output);
 
   processStarted: ->
-    for processCallback in @processCallbacks
-      if typeof processCallback.processStarted is 'function'
-        processCallback.processStarted();
+    @configController.notifyProcessStarted(@);
+    _.invoke(_.clone(@processCallbacks), "processStarted");
 
   processStopped: (fatal, killed) =>
+    @endTime = Date.now();
     output = '';
     messageTitle = _.humanizeEventName(@config.getCommandName());
     options = {};
@@ -276,9 +280,8 @@ class ProcessController
     @process = null;
     @fields = {};
 
-    for processCallback in @processCallbacks
-      if typeof processCallback.processStopped is 'function'
-        processCallback.processStopped();
+    @configController.notifyProcessStopped(@);
+    _.invoke(_.clone(@processCallbacks), "processStopped");
 
   outputToTarget: (output, stream) ->
     if (@config.outputTarget == 'editor')

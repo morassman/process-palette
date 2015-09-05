@@ -1,5 +1,6 @@
 ProcessConfig = require '../process-config'
 SaveController = require './save-controller'
+ConfigController = require './config-controller'
 ProcessController = require './process-controller'
 {Directory, File, BufferedProcess, CompositeDisposable} = require 'atom'
 
@@ -7,7 +8,7 @@ module.exports =
 class ProjectController
 
   constructor: (@main, @projectPath) ->
-    @processControllers = [];
+    @configControllers = [];
     @saveControllers = [];
     @configurationFile = new Directory(@projectPath).getFile('process-palette.json');
     @loadFile();
@@ -16,15 +17,15 @@ class ProjectController
     @clearControllers();
 
   clearControllers: ->
-    @clearProcessControllers();
+    @clearConfigControllers();
     @clearSaveControllers();
 
-  clearProcessControllers: ->
-    for processController in @processControllers
-      @main.mainView.removeProcess(processController);
-      processController.dispose();
+  clearConfigControllers: ->
+    for configController in @configControllers
+      @main.mainView.removeConfigController(configController);
+      configController.dispose();
 
-    @processControllers = [];
+    @configControllers = [];
 
   clearSaveControllers: ->
     for saveController in @saveControllers
@@ -44,7 +45,7 @@ class ProjectController
   parseFile: (content) ->
     processConfigs = JSON.parse(content);
 
-    if !processConfigs
+    if !processConfigs?
       return;
 
     commands = processConfigs.commands;
@@ -52,9 +53,9 @@ class ProjectController
 
     if commands
       for command in commands
-        processController = new ProcessController(@, new ProcessConfig(command));
-        @processControllers.push(processController);
-        @main.mainView.addProcess(processController);
+        configController = new ConfigController(@, new ProcessConfig(command));
+        @configControllers.push(configController);
+        @main.mainView.addConfigController(configController);
 
     if saveCommands
       for saveCommand in saveCommands
@@ -69,9 +70,9 @@ class ProjectController
     for saveController in @saveControllers
       saveController.fileSaved(path);
 
-  getProcessController: (namespace, action) =>
-    for processController in @processControllers
-      if (processController.config.namespace == namespace) and (processController.config.action == action)
-        return processController;
+  getConfigController: (namespace, action) =>
+    for configController in @configControllers
+      if (configController.config.namespace == namespace) and (configController.config.action == action)
+        return configController;
 
     return null;

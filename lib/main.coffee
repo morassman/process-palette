@@ -91,6 +91,9 @@ module.exports = ProcessPalette =
     @showPanel();
     @mainView.showProcessOutput(processController);
 
+  processControllerRemoved: (processController) ->
+    @mainView.processControllerRemoved(processController);
+
   addProjectPath: (projectPath) ->
     projectController = new ProjectController(@, projectPath);
     @projectControllers.push(projectController);
@@ -99,9 +102,9 @@ module.exports = ProcessPalette =
     for projectController in @projectControllers
       projectController.editConfiguration();
 
-  getProcessController: (namespace, action) ->
+  getConfigController: (namespace, action) ->
     for projectController in @projectControllers
-      processController = projectController.getProcessController(namespace, action);
+      configController = projectController.getConfigController(namespace, action);
 
       if processController
         return processController;

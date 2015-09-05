@@ -1,25 +1,29 @@
 _ = require 'underscore-plus'
 {View} = require 'atom-space-pen-views'
 {CompositeDisposable} = require 'atom'
+ButtonsView = require './buttons-view'
 
 module.exports =
 class ProcessOutputView extends View
 
-  constructor: (@main) ->
-    super(@main);
+  constructor: (@main, @processController) ->
+    super(@main, @processController);
     @lastScrollTop = 0;
+    @showProcessOutput();
 
-  @content: (main) ->
+  @content: (main, processController) ->
     @div =>
       @div {class:"process-palette-process", style:'margin-bottom:5px', outlet:"header"}, =>
         @button {class:'btn btn-xs icon-three-bars inline-block-tight', outlet:'showListViewButton', click:'showListView'}
-        @button {class:'btn btn-xs icon-lock inline-block-tight', outlet:'scrollLockButton', click:'toggleScrollLock'}
-        @button {class:'btn btn-xs icon-trashcan inline-block-tight', outlet:'clearButton', click:'clearOutput'}
-        @button {class:'btn btn-xs icon-playback-play inline-block-tight', outlet:'runKillButton', click:'runKillProcess'}
+        # @button {class:'btn btn-xs icon-lock inline-block-tight', outlet:'scrollLockButton', click:'toggleScrollLock'}
+        # @button {class:'btn btn-xs icon-trashcan inline-block-tight', outlet:'clearButton', click:'clearOutput'}
+        @button {class:'btn btn-xs icon-playback-play inline-block-tight', outlet:'runButton', click:'runButtonPressed'}
         @span {class:'header inline-block text-highlight', outlet: 'commandName'}
         @span {class:'keystroke inline-block highlight', outlet:'keystroke'}
-        # @button {class:'btn btn-xs icon-trashcan', style:'margin-left:50px', outlet:'clearButton', click:'clearOutput'}
-        # @button {class:'btn btn-xs icon-lock', style:'margin-left:5px', outlet:'scrollLockButton', click:'toggleScrollLock'}
+        @span {class:'btn-group'}, =>
+          @button {class:'btn btn-xs icon-trashcan', style:'margin-left:15px', outlet:'clearButton', click:'clearOutput'}
+          @button {class:'btn btn-xs icon-lock', style:'margin-right:15px', outlet:'scrollLockButton', click:'toggleScrollLock'}
+        @subview "buttonsView", new ButtonsView(main, processController.configController);
       @div {class:"process-palette-scrollable native-key-bindings", outlet:'outputPanel', tabindex: -1}
 
   initialize: ->
@@ -28,16 +32,19 @@ class ProcessOutputView extends View
     fontFamily = atom.config.get("editor.fontFamily");
     @outputPanel.css("font-family", fontFamily);
 
+    @buttonsView.highlight(@processController);
+
     @addEventHandlers();
     @addToolTips();
     @refreshScrollLockButton();
+    @processController.addProcessCallback(@);
 
   addEventHandlers: ->
     # Prevent the buttons from getting focus.
     @showListViewButton.on 'mousedown', (e) ->
       e.preventDefault();
 
-    @runKillButton.on 'mousedown', (e) ->
+    @runButton.on 'mousedown', (e) ->
       e.preventDefault();
 
     @scrollLockButton.on 'mousedown', (e) ->
@@ -112,23 +119,17 @@ class ProcessOutputView extends View
       @scrollLockButton.addClass("btn-warning");
 
   showPlayIcon: ->
-    @runKillButton.removeClass('icon-x');
-    @runKillButton.addClass('icon-playback-play');
+    # @runKillButton.removeClass('icon-x');
+    # @runKillButton.addClass('icon-playback-play');
 
   showStopIcon: ->
-    @runKillButton.removeClass('icon-playback-play');
-    @runKillButton.addClass('icon-x');
+    # @runKillButton.removeClass('icon-playback-play');
+    # @runKillButton.addClass('icon-x');
 
   streamOutput: (output) =>
     @appendOutput(output);
 
-  showProcessOutput: (processController) =>
-    if @processController
-      @processController.removeProcessCallback(@);
-
-    @processController = processController;
-    @processController.addProcessCallback(@);
-
+  showProcessOutput: =>
     if @processController.process
       @showStopIcon();
     else
@@ -177,8 +178,8 @@ class ProcessOutputView extends View
   showListView: ->
     @main.showListView();
 
-  runKillProcess: ->
-    @processController.runKillProcess();
+  runButtonPressed: ->
+    @processController.configController.runProcess();
 
   # Returns an object that can be retrieved when package is activated
   serialize: ->
@@ -188,8 +189,9 @@ class ProcessOutputView extends View
     if @processController
       @processController.removeProcessCallback(@);
 
+    @buttonsView.destroy();
     @disposables.dispose();
-    @element.remove()
+    @element.remove();
 
   getElement: ->
-    @element
+    return @element;

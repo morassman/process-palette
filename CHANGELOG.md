@@ -1,3 +1,6 @@
+## v0.4.13 (4 September 2015)
+- Added `file` output target for writing output to a new file.
+
 ## v0.4.12 (28 August 2015)
 - Added ability to resize panel.
 - Added panel size and visibility to package state.

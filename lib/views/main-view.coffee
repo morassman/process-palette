@@ -9,18 +9,19 @@ class MainView extends View
   constructor: (@main) ->
     super(@main);
     @viewHeight = 200;
+    @outputView = null;
     @showHelpView();
 
   @content: (main) ->
     @div {class: "process-palette process-palette-resizer"}, =>
-      @div class: 'process-palette-resize-handle'
+      @div class: "process-palette-resize-handle"
       @div {class: "button-group"}, =>
-        @button {class:'btn btn-xs icon-question inline-block-tight', outlet: "helpButton", click:'toggleHelpView'}
-        @button {class:'btn btn-xs icon-chevron-down inline-block-tight', click:'closePressed'}
+        @button {class:"btn btn-xs icon-question inline-block-tight", outlet: "helpButton", click: "toggleHelpView"}
+        @button {class:"btn btn-xs icon-chevron-down inline-block-tight", click: "closePressed"}
       @div {class: "main-content", outlet: "mainContent"}, =>
         @subview "helpView", new HelpView(main)
         @subview "listView", new ProcessListView(main)
-        @subview "outputView", new ProcessOutputView(main)
+        @div {outlet: "outputViewContainer"}
 
   initialize: ->
     @on 'mousedown', '.process-palette-resize-handle', (e) => @resizeStarted(e);
@@ -44,19 +45,19 @@ class MainView extends View
     @mainContent.height(@viewHeight);
     @viewHeight = @mainContent.height();
     @listView.parentHeightChanged(@viewHeight);
-    @outputView.parentHeightChanged(@viewHeight);
+    @outputView?.parentHeightChanged(@viewHeight);
 
   showListView: =>
     if @listView.isHidden()
       @hideHelpView();
-      @outputView.hide();
+      @outputViewContainer.hide();
       @listView.show();
 
   showOutputView: =>
-    if @outputView.isHidden()
+    if @outputViewContainer.isHidden()
       @hideHelpView();
       @listView.hide();
-      @outputView.show();
+      @outputViewContainer.show();
 
   toggleHelpView: =>
     if @helpView.isHidden()
@@ -68,38 +69,56 @@ class MainView extends View
     @helpView.hide();
     @helpButton.removeClass("btn-info");
 
-  showHelpView: =>
+  showHelpView: ->
     @listView.hide();
-    @outputView.hide();
+    @outputViewContainer.hide();
     @helpView.show();
 
     if !@helpButton.hasClass("btn-info")
       @helpButton.addClass("btn-info");
 
   showProcessOutput: (processController) =>
-    @outputView.showProcessOutput(processController);
+    if @outputView != null
+      @outputView.destroy();
+
+    @outputView = new ProcessOutputView(@main, processController);
+    @outputViewContainer.append(@outputView);
     @showOutputView();
 
   isOutputViewVisible: =>
-    return @outputView.isVisible();
+    return @outputViewContainer.isVisible();
 
   closePressed: =>
     @main.hidePanel();
 
-  addProcess: (processController) =>
-    @listView.addProcess(processController);
+  addConfigController: (configController) =>
+    @listView.addConfigController(configController);
     @showListView();
 
-  removeProcess: (processController) =>
-    @listView.removeProcess(processController);
+  removeConfigController: (configController) =>
+    @listView.removeConfigController(configController);
 
-  serialize: ->
+  processControllerRemoved: (processController) ->
+    if @outputView == null
+      return;
+
+    if @outputView.processController != processController
+      return;
+
+    processController = processController.configController.getFirstProcessController();
+
+    if processController != null
+      @showProcessOutput(processController);
+    else
+      @showListView();
+      @outputView.destroy();
+      @outputView = null;
 
   destroy: ->
     @listView.destroy();
-    @outputView.destroy();
+    @outputView?.destroy();
     @helpView.destroy();
     @element.remove();
 
   getElement: ->
-    @element
+    return @element;

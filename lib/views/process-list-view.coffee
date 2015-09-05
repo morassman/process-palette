@@ -14,25 +14,25 @@ class ProcessListView extends View
     @div {class:"process-palette-process-list"}, =>
       @div {class:"process-palette-scrollable", outlet:"processList"}
 
-  addProcess: (processController) =>
-    processView = new ProcessView(@main, processController);
+  addConfigController: (configController) =>
+    processView = new ProcessView(@main, configController);
     @processViews.push(processView);
 
     @processList.append $$ ->
       @div =>
-        @subview processController.config.id, processView
+        @subview configController.config.id, processView
 
-  removeProcess: (processController) =>
-    processView = @getProcessView(processController);
+  removeConfigController: (configController) =>
+    processView = @getProcessView(configController);
 
     if processView
       index = @processViews.indexOf(processView);
       @processViews.splice(index, 1);
       processView.destroy();
 
-  getProcessView: (processController) =>
+  getProcessView: (configController) =>
     for processView in @processViews
-      if processView.processController == processController
+      if processView.configController == configController
         return processView;
 
     return null;

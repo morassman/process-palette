@@ -4,7 +4,7 @@ module.exports =
 class SaveController
 
   constructor: (@main, @config) ->
-    @processController = null;
+    @configController = null;
 
   dispose: ->
 
@@ -12,8 +12,8 @@ class SaveController
     if !minimatch(path, @config.pattern)
       return;
 
-    if !@processController
-      @processController = @main.getProcessController(@config.namespace, @config.action);
+    if !@configController?
+      @configController = @main.getConfigController(@config.namespace, @config.action);
 
-    if @processController
-      @processController.runProcess(path);
+    if @configController
+      @configController.runProcessWithFile(path);

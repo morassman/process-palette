@@ -1,19 +1,20 @@
 _ = require 'underscore-plus'
 {View} = require 'atom-space-pen-views'
+ButtonsView = require './buttons-view'
 
 module.exports =
 class ProcessView extends View
 
-  constructor: (@main, @processController) ->
-    super(@main, @processController);
-    @processController.addProcessCallback(@);
+  constructor: (@main, @configController) ->
+    super(@main, @configController);
+    @configController.addListener(@);
 
-  @content: (main, processController) ->
+  @content: (main, configController) ->
     headerArgs = {};
     outputTitleArgs = {};
     outputValueArgs = {};
 
-    if processController.config.outputToPanel()
+    if configController.config.outputToPanel()
       headerArgs.class = 'header inline-block text-highlight hand-cursor';
       headerArgs.click = 'showProcessOutput';
 
@@ -26,7 +27,7 @@ class ProcessView extends View
       headerArgs.class = 'header inline-block text-highlight';
       outputTitleArgs.class = 'table-title';
 
-    outputTarget = processController.config.outputTarget;
+    outputTarget = configController.config.outputTarget;
 
     if outputTarget == "panel"
       outputTarget = "";
@@ -34,48 +35,49 @@ class ProcessView extends View
       outputTarget = " (#{outputTarget})";
 
     @div class:"process-palette-process", =>
-      @button {class:'btn btn-xs icon-playback-play inline-block-tight', outlet:'runKillButton', click:'runKillProcess'}
-      @span _.humanizeEventName(processController.config.getCommandName()), headerArgs
-      if processController.config.keystroke
-        @span _.humanizeKeystroke(processController.config.keystroke), class:'keystroke inline-block highlight'
+      @button {class:'btn btn-xs icon-playback-play inline-block-tight', outlet:'runButton', click:'runButtonPressed'}
+      @span _.humanizeEventName(configController.config.getCommandName()), headerArgs
+      if configController.config.keystroke
+        @span _.humanizeKeystroke(configController.config.keystroke), class:'keystroke inline-block highlight'
+      @subview "buttonsView", new ButtonsView(main, configController);
       @table =>
         @tbody =>
           @tr =>
             @td "Command", class:'table-title'
-            @td "#{processController.config.getFullCommand()}"
+            @td "#{configController.config.getFullCommand()}"
           @tr =>
             @td "Output#{outputTarget}", outputTitleArgs
-            @td "#{processController.config.successOutput}", outputValueArgs
+            @td "#{configController.config.successOutput}", outputValueArgs
 
   initialize: ->
     # Prevent the button from getting focus.
-    @runKillButton.on 'mousedown', (e) ->
+    @runButton.on 'mousedown', (e) ->
       e.preventDefault();
 
   showProcessOutput: =>
-    @main.showProcessOutput(@processController);
+    # @main.showProcessOutput(@processController);
 
   processStarted: =>
-    @runKillButton.removeClass('icon-playback-play');
-    @runKillButton.addClass('icon-x');
+    # @runKillButton.removeClass('icon-playback-play');
+    # @runKillButton.addClass('icon-x');
 
-    if @processController.config.outputToPanel()
-      @showProcessOutput();
+    # if @configController.config.outputToPanel()
+      # @showProcessOutput();
 
   processStopped: =>
-    @runKillButton.removeClass('icon-x');
-    @runKillButton.addClass('icon-playback-play');
+    # @runKillButton.removeClass('icon-x');
+    # @runKillButton.addClass('icon-playback-play');
 
-  runKillProcess: ->
-    @processController.runKillProcess();
+  processControllerRemoved: (processController) ->
+    @main.processControllerRemoved(processController);
 
-  # Returns an object that can be retrieved when package is activated
-  serialize: ->
+  runButtonPressed: ->
+    @configController.runProcess();
 
-  # Tear down any state and detach
   destroy: ->
-    @processController.removeProcessCallback(@);
-    @element.remove()
+    @configController.removeListener(@);
+    @buttonsView.destroy();
+    @element.remove();
 
   getElement: ->
-    @element
+    return @element;
