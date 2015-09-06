@@ -8,8 +8,8 @@ class ProcessOutputView extends View
 
   constructor: (@main, @processController) ->
     super(@main, @processController);
-    @append(@processController.outputPanel);
-    @showProcessOutput();
+    @lastScrollTop = 0;
+    @addProcessDetails();
 
   @content: (main, processController) ->
     @div =>
@@ -21,21 +21,30 @@ class ProcessOutputView extends View
         @span {class:'btn-group'}, =>
           @button {class:'btn btn-xs icon-trashcan', style:'margin-left:15px', outlet:'clearButton', click:'clearOutput'}
           @button {class:'btn btn-xs icon-lock', style:'margin-right:15px', outlet:'scrollLockButton', click:'toggleScrollLock'}
-        @subview "buttonsView", new ButtonsView(main, processController.configController);
+        @subview "buttonsView", new ButtonsView(main, processController.configController, processController);
+      @div {class:"process-palette-scrollable native-key-bindings", tabindex: -1, outlet:'outputPanel'}
 
   initialize: ->
     @disposables = new CompositeDisposable();
 
     fontFamily = atom.config.get("editor.fontFamily");
-    @processController.outputPanel.css("font-family", fontFamily);
-
-    @buttonsView.highlight(@processController);
+    @outputPanel.css("font-family", fontFamily);
 
     @addEventHandlers();
     @addToolTips();
     @refreshScrollLockButton();
     @processController.addProcessCallback(@);
     @outputChanged();
+
+  addProcessDetails: =>
+    @commandName.text(_.humanizeEventName(@processController.config.getCommandName()));
+
+    if @processController.config.keystroke
+      @keystroke.text(_.humanizeKeystroke(@processController.config.keystroke));
+      @keystroke.show();
+    else
+      @keystroke.text("");
+      @keystroke.hide();
 
   addEventHandlers: ->
     # Prevent the buttons from getting focus.
@@ -51,13 +60,13 @@ class ProcessOutputView extends View
     @clearButton.on 'mousedown', (e) ->
       e.preventDefault();
 
-    @processController.outputPanel.on 'mousedown', (e) =>
+    @outputPanel.on 'mousedown', (e) =>
       # Only do this while the process is running.
       if @processController.process != null
         @setScrollLockEnabled(true);
 
-    @processController.outputPanel.on 'scroll', (e) =>
-      @processController.lastScrollTop = @processController.outputPanel.scrollTop();
+    @outputPanel.on 'scroll', (e) =>
+      @lastScrollTop = @outputPanel.scrollTop();
       @disableScrollLockIfAtBottom();
 
   addToolTips: ->
@@ -70,9 +79,9 @@ class ProcessOutputView extends View
     if @processController.process == null
       return;
 
-    if ((@processController.outputPanel.height() + @processController.outputPanel.scrollTop()) == @processController.outputPanel.get(0).scrollHeight)
+    if ((@outputPanel.height() + @outputPanel.scrollTop()) == @outputPanel.get(0).scrollHeight)
       # Only do this while the process is running.
-      if (@processController.outputPanel.scrollTop() > 0)
+      if (@outputPanel.scrollTop() > 0)
         @setScrollLockEnabled(false);
     else
       @setScrollLockEnabled(true);
@@ -88,12 +97,11 @@ class ProcessOutputView extends View
     @outputChanged();
 
   calculateHeight: =>
-    @processController.outputPanel.height(@main.mainView.height() - @header.height() - 5);
+    @outputPanel.height(@main.mainView.height() - @header.height() - 5);
 
   processStarted: =>
 
   processStopped: =>
-    @setScrollLockEnabled(false);
 
   setScrollLockEnabled: (enabled) ->
     if @processController.scrollLocked == enabled
@@ -102,50 +110,48 @@ class ProcessOutputView extends View
     @processController.scrollLocked = enabled;
     @refreshScrollLockButton();
 
+  showListView: ->
+    @main.showListView();
+
+  runButtonPressed: ->
+    @processController.configController.runProcess();
+
   toggleScrollLock: ->
     @setScrollLockEnabled(!@processController.scrollLocked);
 
   refreshScrollLockButton: ->
     @scrollLockButton.removeClass("btn-warning");
 
-    if @processController.process? and @processController.scrollLocked
+    if @processController.scrollLocked
       @scrollLockButton.addClass("btn-warning");
 
   streamOutput: (output) =>
     @outputChanged();
 
-  showProcessOutput: =>
-    @commandName.text(_.humanizeEventName(@processController.config.getCommandName()));
-
-    if @processController.config.keystroke
-      @keystroke.text(_.humanizeKeystroke(@processController.config.keystroke));
-      @keystroke.show();
-    else
-      @keystroke.text("");
-      @keystroke.hide();
-
-    @outputChanged();
-
   clearOutput: ->
-    @processController.lastScrollTop = 0;
-    @processController.outputPanel.text("");
+    @lastScrollTop = 0;
+    @outputPanel.text("");
     @outputChanged();
 
   outputChanged: ->
     @calculateHeight();
 
     if @processController.scrollLocked
-      @processController.outputPanel.scrollTop(@processController.lastScrollTop);
+      @outputPanel.scrollTop(@lastScrollTop);
     else
-      @processController.outputPanel.scrollTop(@processController.outputPanel.get(0).scrollHeight);
+      @outputPanel.scrollTop(@outputPanel.get(0).scrollHeight);
 
     @refreshScrollLockButton();
 
-  showListView: ->
-    @main.showListView();
+  outputToPanel: (text) ->
+    addNewLine = false;
 
-  runButtonPressed: ->
-    @processController.configController.runProcess();
+    for line in text.split('\n')
+      if addNewLine
+        @outputPanel.append("<br>");
+
+      @outputPanel.append(line);
+      addNewLine = true;
 
   # Tear down any state and detach
   destroy: ->

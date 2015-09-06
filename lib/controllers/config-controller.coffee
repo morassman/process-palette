@@ -11,6 +11,9 @@ class ConfigController
     @processControllers = [];
     @listeners = [];
 
+  getMain: ->
+    return @projectController.getMain();
+
   getFirstProcessController: ->
     if @processControllers.length == 0
       return null;
@@ -50,6 +53,7 @@ class ConfigController
     return processController;
 
   removeProcessController: (processController) ->
+    processController.dispose();
     index = @processControllers.indexOf(processController);
 
     if (index != -1)

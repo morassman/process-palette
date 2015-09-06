@@ -4,7 +4,7 @@ ButtonView = require './button-view'
 module.exports =
 class ButtonsView extends View
 
-  constructor: (@main, @configController) ->
+  constructor: (@main, @configController, @parentProcessController) ->
     super();
     @buttonViews = [];
 
@@ -36,6 +36,10 @@ class ButtonsView extends View
 
   addButton: (processController) ->
     buttonView = new ButtonView(@main, @configController, processController);
+
+    if processController == @parentProcessController
+      buttonView.highlight();
+
     @buttonViews.push(buttonView);
 
     @buttonListView.append $$ ->
@@ -65,7 +69,3 @@ class ButtonsView extends View
         return buttonView;
 
     return null;
-
-  highlight: (processController) ->
-    buttonView = @getButtonView(processController);
-    buttonView?.highlight();

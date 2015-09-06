@@ -1,6 +1,5 @@
 HelpView = require './help-view'
 ProcessListView = require './process-list-view'
-ProcessOutputView = require './process-output-view'
 {$, View} = require 'atom-space-pen-views'
 
 module.exports =
@@ -79,9 +78,9 @@ class MainView extends View
 
   showProcessOutput: (processController) =>
     if @outputView != null
-      @outputView.destroy();
+      @outputView.detach();
 
-    @outputView = new ProcessOutputView(@main, processController);
+    @outputView = processController.outputView;
     @outputViewContainer.append(@outputView);
     @showOutputView();
 
@@ -105,18 +104,18 @@ class MainView extends View
     if @outputView.processController != processController
       return;
 
+    @outputView.detach();
+    @outputView = null;
+
     processController = processController.configController.getFirstProcessController();
 
-    if processController != null
+    if @outputViewContainer.isVisible() and (processController != null)
       @showProcessOutput(processController);
     else
       @showListView();
-      @outputView.destroy();
-      @outputView = null;
 
   destroy: ->
     @listView.destroy();
-    @outputView?.destroy();
     @helpView.destroy();
     @element.remove();
 

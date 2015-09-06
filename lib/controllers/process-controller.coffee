@@ -1,9 +1,9 @@
 _ = require 'underscore-plus'
 shell = require 'shelljs'
-ProcessConfig = require '../process-config'
 {Directory, File} = require 'atom'
 {$$} = require 'atom-space-pen-views'
-# {BufferedProcess} = require 'atom'
+ProcessConfig = require '../process-config'
+ProcessOutputView = require '../views/process-output-view'
 
 # Fields :
 # stdout : Standard output.
@@ -43,14 +43,13 @@ class ProcessController
     @creatingNewFile = false;
     @newFileDisposable = null;
     @endTime = null;
-    @outputPanel = null;
-    @lastScrollTop = 0;
+    @outputView = null;
     cssSelector = 'atom-workspace';
 
     if (@config.outputTarget == 'editor')
       cssSelector = 'atom-text-editor';
     else if (@config.outputTarget == 'panel')
-      @outputPanel = $$ -> @div {class:"process-palette-scrollable native-key-bindings", tabindex: -1}
+      @outputView = new ProcessOutputView(@configController.getMain(), @);
 
     @disposable = atom.commands.add(cssSelector, @config.getCommandName(), @runProcess);
 
@@ -79,6 +78,8 @@ class ProcessController
     # TODO : The key binding should preferably be removed, but atom.keymaps.findKeyBindings throws an error.
     @disposable.dispose();
     @newFileDisposable?.dispose();
+    @outputView?.destroy();
+
 
   runProcess: =>
     editor = atom.workspace.getActiveTextEditor();
@@ -353,11 +354,4 @@ class ProcessController
       @newFile.insertText(text);
 
   outputToPanel: (text) ->
-    addNewLine = false;
-
-    for line in text.split('\n')
-      if addNewLine
-        @outputPanel.append("<br>");
-
-      @outputPanel.append(line);
-      addNewLine = true;
+    @outputView.outputToPanel(text);

@@ -13,6 +13,9 @@ class ProjectController
     @configurationFile = new Directory(@projectPath).getFile('process-palette.json');
     @loadFile();
 
+  getMain: ->
+    return @main;
+
   dispose: ->
     @clearControllers();
 
