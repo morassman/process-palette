@@ -42,52 +42,20 @@ class ProcessController
     @newFileDisposable = null;
     @endTime = null;
     @outputView = null;
-    cssSelector = 'atom-workspace';
 
-    if (@config.outputTarget == 'editor')
-      cssSelector = 'atom-text-editor';
-    else if (@config.outputTarget == 'panel')
+    if (@config.outputTarget == 'panel')
       @outputView = new ProcessOutputView(@configController.getMain(), @);
-
-    @disposable = atom.commands.add(cssSelector, @config.getCommandName(), @runProcess);
-
-    if @config.keystroke
-      binding = {};
-      bindings = {};
-      binding[@config.keystroke] = @config.getCommandName();
-      bindings[cssSelector] = binding;
-
-      # params = {};
-      # params.keystrokes = @config.keystroke;
-      # params.command = @config.getCommandName();
-      # params.target = cssSelector;
-      #
-      # try
-      #   console.log(atom.keymaps.findKeyBindings(params));
-      # catch error
-      #   console.log(error);
-
-      atom.keymaps.add('process-palette', bindings);
 
   getProcessID: ->
     return @processID;
 
   dispose: ->
     # TODO : The key binding should preferably be removed, but atom.keymaps.findKeyBindings throws an error.
-    @disposable.dispose();
     @newFileDisposable?.dispose();
     @outputView?.destroy();
 
-  runProcess: =>
-    editor = atom.workspace.getActiveTextEditor();
-
-    if editor
-      @runProcessWithFile(editor.getPath());
-    else
-      @runProcessWithFile(null);
-
-  runProcessWithFile: (filePath) =>
-    if @process
+  runProcessWithFile: (filePath) ->
+    if @process?
       return;
 
     @fields = {};
@@ -208,12 +176,6 @@ class ProcessController
 
     if (index != -1)
       @processCallbacks.splice(index, 1);
-
-  runKillProcess: ->
-    if @process != null
-      @killProcess();
-    else
-      @runProcess();
 
   killProcess:  ->
     if @process != null

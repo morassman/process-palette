@@ -10,6 +10,30 @@ class ConfigController
   constructor: (@projectController, @config) ->
     @processControllers = [];
     @listeners = [];
+    cssSelector = 'atom-workspace';
+
+    if (@config.outputTarget == 'editor')
+      cssSelector = 'atom-text-editor';
+
+    @disposable = atom.commands.add(cssSelector, @config.getCommandName(), @runProcess);
+
+    if @config.keystroke
+      binding = {};
+      bindings = {};
+      binding[@config.keystroke] = @config.getCommandName();
+      bindings[cssSelector] = binding;
+
+      # params = {};
+      # params.keystrokes = @config.keystroke;
+      # params.command = @config.getCommandName();
+      # params.target = cssSelector;
+      #
+      # try
+      #   console.log(atom.keymaps.findKeyBindings(params));
+      # catch error
+      #   console.log(error);
+
+      atom.keymaps.add('process-palette', bindings);
 
   getMain: ->
     return @projectController.getMain();
@@ -31,6 +55,7 @@ class ConfigController
 
   dispose: ->
     @clearControllers();
+    @disposable.dispose();
 
   clearControllers: ->
     for processController in @processControllers
@@ -38,19 +63,19 @@ class ConfigController
 
     @processControllers = [];
 
-  runProcess: ->
-    processController = new ProcessController(@, @config);
-    @processControllers.push(processController);
-    processController.runProcess();
+  runProcess: =>
+    filePath = null;
+    editor = atom.workspace.getActiveTextEditor();
 
-    return processController;
+    if editor?
+      filePath = editor.getPath();
+
+    @runProcessWithFile(filePath);
 
   runProcessWithFile: (filePath) ->
     processController = new ProcessController(@, @config);
     @processControllers.push(processController);
     processController.runProcessWithFile(filePath);
-
-    return processController;
 
   removeProcessController: (processController) ->
     processController.dispose();
