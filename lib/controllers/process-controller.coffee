@@ -35,15 +35,17 @@ class ProcessController
 
   constructor: (@configController, @config) ->
     @processCallbacks = [];
-    @replaceRegExp = new RegExp('{.*?}','g');
+    @replaceRegExp = new RegExp("{.*?}","g");
     @fields = {};
     @newFile = null;
     @creatingNewFile = false;
     @newFileDisposable = null;
     @endTime = null;
     @outputView = null;
+    @stdoutArray = [];
+    @stderrArray = [];
 
-    if (@config.outputTarget == 'panel')
+    if (@config.outputTarget == "panel")
       @outputView = new ProcessOutputView(@configController.getMain(), @);
 
   getProcessID: ->
@@ -63,8 +65,8 @@ class ProcessController
 
     @fields.clipboard = atom.clipboard.read();
     @fields.configDirAbsPath = @configController.projectPath;
-    @fields.stdout = '';
-    @fields.stderr = '';
+    @fields.stdout = "";
+    @fields.stderr = "";
 
     projectPaths = atom.project.getPaths();
 
@@ -96,15 +98,15 @@ class ProcessController
       relPaths = atom.project.relativizePath(@fields.fileDirAbsPath);
       @fields.fileDirPath = relPaths[1];
     else
-      @fields.fileName = '';
-      @fields.fileExt = '';
-      @fields.fileNameExt = '';
-      @fields.fileAbsPath = '';
-      @fields.fileDirAbsPath = '';
-      @fields.filePath = '';
-      @fields.fileDirPath = '';
-      @fields.fileProjectPath = '';
-      @fields.selection = '';
+      @fields.fileName = "";
+      @fields.fileExt = "";
+      @fields.fileNameExt = "";
+      @fields.fileAbsPath = "";
+      @fields.fileDirAbsPath = "";
+      @fields.filePath = "";
+      @fields.fileDirPath = "";
+      @fields.fileProjectPath = "";
+      @fields.selection = "";
 
     if @config.cwd
       options.cwd = @insertFields(@config.cwd);
@@ -135,21 +137,21 @@ class ProcessController
 
     @process = shell.exec @fields.fullCommand, {silent:true, async:true}, (code) =>
       @fields.exitStatus = code;
-      @processStopped(false, !code?);
+      @processStopped(!code?);
 
     @processID = @process.pid;
 
-    @process.stdout.on 'data', (data) =>
+    @process.stdout.on "data", (data) =>
       if @config.stream
         @streamOutput(data);
       else
-        @fields.stdout += data;
+        @stdoutArray.push(data);
 
-    @process.stderr.on 'data', (data) =>
+    @process.stderr.on "data", (data) =>
       if @config.stream
         @streamOutput(data);
       else
-        @fields.stderr += data;
+        @stderrArray.push(data);
 
     @processStarted();
 
@@ -180,36 +182,31 @@ class ProcessController
   killProcess:  ->
     if @process != null
       @process.kill();
-      @processStopped(false, true);
-
-  handleProcessErrorCallback: (errorObject) =>
-    # Indicate that the error has been handled.
-    errorObject.handle();
-    @processStopped(true, false);
+      # @processStopped(false, true);
 
   streamOutput: (output) ->
     @outputToTarget(output, true);
 
     for processCallback in @processCallbacks
-      if typeof processCallback.streamOutput is 'function'
+      if typeof processCallback.streamOutput is "function"
         processCallback.streamOutput(output);
 
   processStarted: ->
     @configController.notifyProcessStarted(@);
     _.invoke(_.clone(@processCallbacks), "processStarted");
 
-  processStopped: (fatal, killed) =>
+  processStopped: (killed) =>
     @endTime = Date.now();
-    output = '';
+    output = "";
     messageTitle = _.humanizeEventName(@config.getCommandName());
+    @fields.stdout = @stdoutArray.join("");
+    @fields.stderr = @stderrArray.join("");
+    @stdoutArray = [];
+    @stderrArray = [];
     options = {};
 
     if !killed
-      if fatal
-        if @config.fatalMessage?
-          options["detail"] = @insertFields(@config.fatalMessage);
-          atom.notifications.addError(messageTitle, options);
-      else if @fields.exitStatus == 0
+      if @fields.exitStatus == 0
         if @config.successMessage?
           options["detail"] = @insertFields(@config.successMessage);
           atom.notifications.addSuccess(messageTitle, options);
@@ -219,10 +216,7 @@ class ProcessController
           atom.notifications.addWarning(messageTitle, options);
 
     if !@config.stream
-      if fatal
-        if @config.fatalOutput?
-          output = @insertFields(@config.fatalOutput);
-      else if @fields.exitStatus == 0
+      if @fields.exitStatus == 0
         if @config.successOutput?
           output = @insertFields(@config.successOutput);
       else
@@ -237,8 +231,6 @@ class ProcessController
       else
         shell.env[key] = @envBackup[key];
 
-    @cleanUpNewFileAfterProcess();
-
     shell.cd(@pwdBackup);
 
     @process = null;
@@ -248,26 +240,19 @@ class ProcessController
     _.invoke(_.clone(@processCallbacks), "processStopped");
 
   outputToTarget: (output, stream) ->
-    if (@config.outputTarget == 'editor')
+    if (@config.outputTarget == "editor")
       editor = atom.workspace.getActiveTextEditor();
 
       if editor?
         editor.insertText(output);
-    else if (@config.outputTarget == 'clipboard')
+    else if (@config.outputTarget == "clipboard")
       atom.clipboard.write(output);
-    else if (@config.outputTarget == 'console')
+    else if (@config.outputTarget == "console")
       console.log(output);
-    else if ((@config.outputTarget == 'panel') or (@config.outputTarget == 'file'))
-      if stream
-        if @config.outputTarget == 'file'
-          @outputToNewFile(output);
-        else
-          @outputToPanel(output);
-      else
-        if @config.outputTarget == 'file'
-          @outputToNewFile(output);
-        else
-          @outputToPanel(output);
+    else if (@config.outputTarget == "panel")
+      @outputToPanel(output);
+    else if (@config.outputTarget == "file")
+      @outputToFile(output);
 
   openNewFile: (text) ->
     @creatingNewFile = true;
@@ -284,12 +269,6 @@ class ProcessController
       # It's possible for the text editor to open only after the process has stopped.
       if @process == null
         @cleanUpNewFileAfterProcess();
-
-  cleanUpNewFileAfterProcess: ->
-    if !@config.reuseOutputTarget
-      @newFile = null;
-      @newFileDisposable?.dispose();
-      @newFileDisposable = null;
 
   newFileDestroyed: ->
     @newFile = null;

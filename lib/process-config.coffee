@@ -11,7 +11,6 @@ class ProcessConfig
     @keystroke = null;
     @stream = false;
     @outputTarget = 'panel';
-    @reuseOutputTarget = true;
     @maxCompleted = 1;
     # @maxRunning = null;
     @successOutput = '{stdout}';
