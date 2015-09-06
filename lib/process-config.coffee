@@ -27,6 +27,10 @@ class ProcessConfig
     if @outputTarget not in ["panel", "editor", "file", "clipboard", "console", "void"]
       @outputTarget = "void";
 
+    # Do not allow streaming to the clipboard.
+    if @outputTarget == "clipboard"
+      @stream = false;
+
     if !@arguments
       @arguments = [];
 
