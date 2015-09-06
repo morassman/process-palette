@@ -46,8 +46,17 @@ class ButtonView extends View
       @configController.removeProcessController(@processController);
 
   showOutputButtonPressed: ->
-    if !@showOutputButton.hasClass("selected")
+    if @showOutputButton.hasClass("selected")
+      return;
+
+    outputTarget = @configController.config.outputTarget;
+
+    if (outputTarget == "panel")
       @main.showProcessOutput(@processController);
+    else if (outputTarget == "console")
+      atom.openDevTools();
+    else if (outputTarget == "file")
+      @processController.showNewFile();
 
   highlight: ->
     @showOutputButton.addClass("btn-primary selected");

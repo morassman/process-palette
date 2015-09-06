@@ -334,6 +334,9 @@ class ProcessController
     @newFileDisposable?.dispose();
     @newFileDisposable = null;
 
+    if @process == null
+      @configController.removeProcessController(@);
+
   outputToNewFile: (text) ->
     if @creatingNewFile
       return;
@@ -345,3 +348,10 @@ class ProcessController
 
   outputToPanel: (text) ->
     @outputView.outputToPanel(text);
+
+  showNewFile: ->
+    if @newFile == null
+      return;
+
+    pane = atom.workspace.paneForItem(@newFile);
+    pane?.activateItem(@newFile);

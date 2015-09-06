@@ -86,5 +86,8 @@ class ConfigController
     @removeOldest();
     _.invoke(_.clone(@listeners), "processStopped", processController);
 
+    if @config.outputTarget != "panel" and @config.outputTarget != "file"
+      @removeProcessController(processController);
+
   notifyProcessControllerRemoved: (processController) ->
     _.invoke(_.clone(@listeners), "processControllerRemoved", processController);
