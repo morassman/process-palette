@@ -1,5 +1,5 @@
 ButtonView = require './button-view'
-{$$, View} = require 'atom-space-pen-views'
+{$, $$, View} = require 'atom-space-pen-views'
 
 module.exports =
 class ButtonsView extends View
@@ -60,8 +60,9 @@ class ButtonsView extends View
       @buttonViews.splice(index, 1);
 
     buttonViewParent = buttonView.parent();
-    buttonView.destroy();
-    buttonViewParent.remove();
+    $(buttonViewParent).fadeOut 200, =>
+      buttonView.destroy();
+      buttonViewParent.remove();
 
   getButtonView: (processController) ->
     for buttonView in @buttonViews
