@@ -38,7 +38,6 @@ class ProcessController
     @replaceRegExp = new RegExp('{.*?}','g');
     @fields = {};
     @output = '';
-    @scrollLocked = false;
     @newFile = null;
     @creatingNewFile = false;
     @newFileDisposable = null;

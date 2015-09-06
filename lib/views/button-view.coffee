@@ -46,7 +46,8 @@ class ButtonView extends View
       @configController.removeProcessController(@processController);
 
   showOutputButtonPressed: ->
-    @main.showProcessOutput(@processController);
+    if !@showOutputButton.hasClass("selected")
+      @main.showProcessOutput(@processController);
 
   highlight: ->
     @showOutputButton.addClass("btn-primary selected");

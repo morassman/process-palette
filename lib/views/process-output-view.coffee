@@ -9,6 +9,7 @@ class ProcessOutputView extends View
   constructor: (@main, @processController) ->
     super(@main, @processController);
     @lastScrollTop = 0;
+    @scrollLocked = false;
     @addProcessDetails();
 
   @content: (main, processController) ->
@@ -104,10 +105,10 @@ class ProcessOutputView extends View
   processStopped: =>
 
   setScrollLockEnabled: (enabled) ->
-    if @processController.scrollLocked == enabled
+    if @scrollLocked == enabled
       return;
 
-    @processController.scrollLocked = enabled;
+    @scrollLocked = enabled;
     @refreshScrollLockButton();
 
   showListView: ->
@@ -117,12 +118,12 @@ class ProcessOutputView extends View
     @processController.configController.runProcess();
 
   toggleScrollLock: ->
-    @setScrollLockEnabled(!@processController.scrollLocked);
+    @setScrollLockEnabled(!@scrollLocked);
 
   refreshScrollLockButton: ->
     @scrollLockButton.removeClass("btn-warning");
 
-    if @processController.scrollLocked
+    if @scrollLocked
       @scrollLockButton.addClass("btn-warning");
 
   streamOutput: (output) =>
@@ -136,7 +137,7 @@ class ProcessOutputView extends View
   outputChanged: ->
     @calculateHeight();
 
-    if @processController.scrollLocked
+    if @scrollLocked
       @outputPanel.scrollTop(@lastScrollTop);
     else
       @outputPanel.scrollTop(@outputPanel.get(0).scrollHeight);
