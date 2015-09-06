@@ -37,7 +37,6 @@ class ProcessController
     @processCallbacks = [];
     @replaceRegExp = new RegExp('{.*?}','g');
     @fields = {};
-    @output = '';
     @newFile = null;
     @creatingNewFile = false;
     @newFileDisposable = null;
@@ -79,7 +78,6 @@ class ProcessController
     @newFileDisposable?.dispose();
     @outputView?.destroy();
 
-
   runProcess: =>
     editor = atom.workspace.getActiveTextEditor();
 
@@ -94,7 +92,6 @@ class ProcessController
 
     @fields = {};
     options = {};
-    @output = '';
 
     @fields.clipboard = atom.clipboard.read();
     @fields.configDirAbsPath = @configController.projectPath;
@@ -295,11 +292,7 @@ class ProcessController
       if editor?
         editor.insertText(output);
     else if (@config.outputTarget == 'clipboard')
-      if stream
-        @output += output;
-        atom.clipboard.write(@output);
-      else
-        atom.clipboard.write(output);
+      atom.clipboard.write(output);
     else if (@config.outputTarget == 'console')
       console.log(output);
     else if ((@config.outputTarget == 'panel') or (@config.outputTarget == 'file'))
@@ -308,15 +301,13 @@ class ProcessController
           @outputToNewFile(output);
         else
           @outputToPanel(output);
-        # @output += output;
       else
-        @output = output;
         if @config.outputTarget == 'file'
-          @outputToNewFile(@output);
+          @outputToNewFile(output);
         else
           @outputToPanel(output);
 
-  openNewFile: ->
+  openNewFile: (text) ->
     @creatingNewFile = true;
 
     atom.workspace.open().then (textEditor) =>
@@ -326,9 +317,9 @@ class ProcessController
       @newFileDisposable = @newFile.onDidDestroy =>
         @newFileDestroyed();
 
-      @outputToNewFile(@output);
+      @outputToNewFile(text);
 
-      # It's possible for the text editor to open only after to process has stopped.
+      # It's possible for the text editor to open only after the process has stopped.
       if @process == null
         @cleanUpNewFileAfterProcess();
 
@@ -348,7 +339,7 @@ class ProcessController
       return;
 
     if @newFile == null
-      @openNewFile();
+      @openNewFile(text);
     else
       @newFile.insertText(text);
 
