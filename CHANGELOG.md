@@ -1,6 +1,8 @@
-## v0.4.13 (6 September 2015)
+## v0.4.13 (8 September 2015)
 - Added `file` output target for writing output to a new file.
 - Added support for running multiple instances of a process.
+- Added `autoShowOutput` property for automatically showing the output panel.
+- Added `maxCompleted` property to limit number of completed processes.
 
 ## v0.4.12 (28 August 2015)
 - Added ability to resize panel.
