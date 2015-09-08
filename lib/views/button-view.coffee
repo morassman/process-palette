@@ -1,3 +1,4 @@
+{CompositeDisposable} = require 'atom'
 {View} = require 'atom-space-pen-views'
 
 module.exports =
@@ -12,10 +13,12 @@ class ButtonView extends View
 
   @content: (main, configController, processController) ->
     @span {class: "process-palette-button-view btn-group btn-group-sm inline-block-tight"}, =>
-      @button {class: "btn icon-x", outlet: "killButton", click: "killButtonPressed"}
+      @button {class: "btn icon-primitive-square", outlet: "killButton", click: "killButtonPressed"}
       @button "#{processController.getProcessID()}", {class: "btn", outlet: "showOutputButton", click: "showOutputButtonPressed"}
 
   initialize: ->
+    @disposables = new CompositeDisposable();
+    
     # Prevent the button from getting focus.
     @killButton.on 'mousedown', (e) ->
       e.preventDefault();
@@ -23,7 +26,11 @@ class ButtonView extends View
     @showOutputButton.on 'mousedown', (e) ->
       e.preventDefault();
 
+    @disposables.add(atom.tooltips.add(@killButton, {title: "Stop/Discard"}));
+    @disposables.add(atom.tooltips.add(@showOutputButton, {title: "Show output"}));
+
   destroy: ->
+    @disposables.dispose();
     @processController.removeProcessCallback(@);
     @element.remove();
 
@@ -36,8 +43,8 @@ class ButtonView extends View
     @showTrashIcon();
 
   showTrashIcon: ->
-    @killButton.removeClass('icon-x');
-    @killButton.addClass('icon-zap');
+    @killButton.removeClass('icon-primitive-square');
+    @killButton.addClass('icon-x');
 
   killButtonPressed: ->
     if @processController.process != null

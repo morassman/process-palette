@@ -1,6 +1,7 @@
 HelpView = require './help-view'
 ProcessListView = require './process-list-view'
 {$, View} = require 'atom-space-pen-views'
+{CompositeDisposable} = require 'atom'
 
 module.exports =
 class MainView extends View
@@ -16,13 +17,17 @@ class MainView extends View
       @div class: "process-palette-resize-handle"
       @div {class: "button-group"}, =>
         @button {class:"btn btn-xs icon-question inline-block-tight", outlet: "helpButton", click: "toggleHelpView"}
-        @button {class:"btn btn-xs icon-chevron-down inline-block-tight", click: "closePressed"}
+        @button {class:"btn btn-xs icon-chevron-down inline-block-tight", outlet: "hideButton", click: "closePressed"}
       @div {class: "main-content", outlet: "mainContent"}, =>
         @subview "helpView", new HelpView(main)
         @subview "listView", new ProcessListView(main)
         @div {outlet: "outputViewContainer"}
 
   initialize: ->
+    @disposables = new CompositeDisposable();
+    @disposables.add(atom.tooltips.add(@helpButton, {title: "Toggle help"}));
+    @disposables.add(atom.tooltips.add(@hideButton, {title: "Hide"}));
+
     @on 'mousedown', '.process-palette-resize-handle', (e) => @resizeStarted(e);
 
   resizeStarted: =>
@@ -117,6 +122,7 @@ class MainView extends View
   destroy: ->
     @listView.destroy();
     @helpView.destroy();
+    @disposables.dispose();
     @element.remove();
 
   getElement: ->

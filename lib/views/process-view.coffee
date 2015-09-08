@@ -1,4 +1,5 @@
 _ = require 'underscore-plus'
+{CompositeDisposable} = require 'atom'
 {View} = require 'atom-space-pen-views'
 ButtonsView = require './buttons-view'
 
@@ -50,6 +51,9 @@ class ProcessView extends View
             @td "#{configController.config.successOutput}", outputValueArgs
 
   initialize: ->
+    @disposables = new CompositeDisposable();
+    @disposables.add(atom.tooltips.add(@runButton, {title: 'Run process'}));
+
     # Prevent the button from getting focus.
     @runButton.on 'mousedown', (e) ->
       e.preventDefault();
@@ -75,6 +79,7 @@ class ProcessView extends View
     @configController.runProcess();
 
   destroy: ->
+    @disposables.dispose();
     @configController.removeListener(@);
     @buttonsView.destroy();
     @element.remove();

@@ -1,6 +1,5 @@
 ProcessView = require './process-view'
 ProcessOutputView = require './process-output-view'
-{CompositeDisposable} = require 'atom'
 {$$, View} = require 'atom-space-pen-views'
 
 module.exports =
