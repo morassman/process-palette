@@ -181,10 +181,11 @@ The `outputTarget` property specifies where the output produced by the process s
 Target|Description
 ---|---
 void|The output will not be captured at all.
-panel|The output will be shown in the Process Palette's panel. Running a command that outputs to the panel will automatically open it.
+panel|The output will be shown in Process Palette's panel. Running a command that outputs to the panel will automatically open it.
 clipboard|The output will be stored on the clipboard.
 editor|The output will be inserted into the open editor at the current cursor position. If an editor is not open the output is lost.
 console|The output will be appended to the developer console.
+file|The output will be written to a new file that will be opened in the Atom workspace.
 
 The default value of `outputTarget` is "panel". If it is overridden with `null` then it will default to "void".
 

@@ -64,7 +64,7 @@ class ProcessController
     options = {};
 
     @fields.clipboard = atom.clipboard.read();
-    @fields.configDirAbsPath = @configController.projectPath;
+    @fields.configDirAbsPath = @configController.projectController.projectPath;
     @fields.stdout = "";
     @fields.stderr = "";
 

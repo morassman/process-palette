@@ -29,11 +29,15 @@ class ProcessView extends View
       outputTitleArgs.class = 'table-title';
 
     outputTarget = configController.config.outputTarget;
+    successOutput = configController.config.successOutput;
 
     if outputTarget == "panel"
       outputTarget = "";
     else
       outputTarget = " (#{outputTarget})";
+
+    if configController.config.stream
+      successOutput = "stream";
 
     @div class:"process-palette-process", =>
       @button {class:'btn btn-xs icon-playback-play inline-block-tight', outlet:'runButton', click:'runButtonPressed'}
@@ -48,7 +52,7 @@ class ProcessView extends View
             @td "#{configController.config.getFullCommand()}"
           @tr =>
             @td "Output#{outputTarget}", outputTitleArgs
-            @td "#{configController.config.successOutput}", outputValueArgs
+            @td "#{successOutput}", outputValueArgs
 
   initialize: ->
     @disposables = new CompositeDisposable();
