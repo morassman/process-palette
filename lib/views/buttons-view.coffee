@@ -31,7 +31,7 @@ class ButtonsView extends View
   processStarted: (processController) ->
     @addButton(processController);
 
-    if processController.config.outputTarget == "panel"
+    if processController.config.outputTarget == "panel" and processController.config.autoShowOutput
       @main.showProcessOutput(processController);
 
   addButton: (processController) ->

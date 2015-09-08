@@ -123,21 +123,27 @@ After reloading the configuration the `Ant: Default` command can be run by press
 ## User Interface
 ### Process Palette Panel
 Process Palette has a small panel that lists all the commands that are configured. It can be toggled by pressing `Ctrl-Alt-P` or from the menu `Packages|Process Palette|Toggle`.
-From here one can see all the commands and even run them.
+From here one can see all the commands and also run them.
 
 ![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/panel-basic.png?raw=true)
 
 Pressing the down arrow in the top right corner will hide the panel.
 
-If the command is configured to output to the Process Palette panel then clicking on the name of the command will cause the panel to switch to showing the output that was produced by the command when it was executed.
+### Process Instances
+Multiple instances of a process can run at a time. The process ID of each instance is shown on the right in the form of a button. Pressing the button will show that process' output. The process can be manually terminated by pressing the square stop button next to the process ID.
+
+### Process Output Panel
+If the command is configured to output to the Process Palette panel then clicking on the process ID button will cause the panel to switch to showing the output of that process.
 
 ![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/panel-output-basic.png?raw=true)
 
-From here one can return to the list by pressing the button in the top left corner.
+The other process instances will still be shown, but the selected one will be highlighted.
 
-Scroll lock can be toggled with the lock button. Scroll lock will also enable when one starts to scroll or clicks on the output while the process is running. It will automatically disable when one scrolls to the bottom.
+Scroll lock can be toggled with the lock button. Scroll lock will also enable when one starts to scroll or clicks on the output. It will automatically disable when one scrolls to the bottom.
 
 The output can be cleared by pressing the trash can button.
+
+From here one can return to the list by pressing the button in the top left corner.
 
 ### Notifications
 Each time a process is executed a message will be shown in the top right hand corner. A successful execution with an exit status code of 0 will show a success message. Anything other than 0 will show a warning. If the process could not be executed at all then a fatal message is shown. What these messages display can be configured or even disabled completely as will be seen in the Advanced Configuration section.
@@ -155,7 +161,7 @@ arguments|An array of strings to pass as arguments to the command. Since v0.4.10
 cwd|The working directory from which to execute the command. It doesn't have a default value, but one is automatically determined when the command is executed. If projects are open then the first project's folder is used. If there aren't any projects open then the folder of the `process-palette.json` file is used.|null
 keystroke|A string describing the shortcut to associate with this command. It can be any combination of `ctrl`, `alt`, `shift` and `cmd` separated with `-` characters.|null
 env|A map of environment variables. These will be made available in addition to the ones that are already defined in `process.env`|{ }
-
+maxCompleted|The maximum number of completed processes whose output to keep at a time. It used to automatically discard the oldest completed process in order to prevent them from piling up. This property only applies when the `outputTarget` is set to `panel`. It can be disabled by setting the value to `null`.|1
 
 The following properties relate to the output produced by the process. The output can be redirected to a particular target. It can also be formatted depending on whether the process executed successfully or not. Giving any of these a value of `null` will prevent that output from being shown.
 
@@ -166,6 +172,7 @@ successOutput|The format of the output when the process returned with an exit st
 errorOutput|The format of the output when the process returned with a non-0 exit status.|"{stderr}"
 fatalOutput|The format of the output when the command could not be executed at all.|"Failed to execute : {fullCommand}\n{stdout}\n{stderr}"
 stream|Indicate whether the output should be streamed. If this is false then the output will be formatted and sent to the target only after the process completes. If it is true then the output, both standard and error, will be streamed to the target without any formatting applied.|false
+autoShowOutput|Indicate if the panel should automatically be made visible when the process produces output. At the moment this only applies when the `outputTarget` is set to `panel`.|true
 
 The following properties relate to the messages shown after a command is executed. Giving any of these a value of `null` will prevent that message from being shown.
 

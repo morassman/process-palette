@@ -13,6 +13,7 @@ class ProcessConfig
     @outputTarget = 'panel';
     @maxCompleted = 1;
     # @maxRunning = null;
+    @autoShowOutput = true;
     @successOutput = '{stdout}';
     @errorOutput = '{stderr}';
     @fatalOutput = 'Failed to execute : {fullCommand}\n{stdout}\n{stderr}';
