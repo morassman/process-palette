@@ -63,7 +63,10 @@ class ProcessView extends View
       e.preventDefault();
 
   showProcessOutput: =>
-    # @main.showProcessOutput(@processController);
+    processController = @configController.getFirstProcessController();
+
+    if processController != null
+      @main.showProcessOutput(processController);
 
   processStarted: =>
     # @runKillButton.removeClass('icon-playback-play');

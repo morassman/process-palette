@@ -3,6 +3,9 @@
 - Added support for running multiple instances of a process.
 - Added `autoShowOutput` property for automatically showing the output panel.
 - Added `maxCompleted` property to limit number of completed processes.
+- Made warning notification dismissible.
+- Changed output processing to buffer output even when streaming.
+- Added `outputBufferSize` property to set maximum size of output buffer.
 
 ## v0.4.12 (28 August 2015)
 - Added ability to resize panel.

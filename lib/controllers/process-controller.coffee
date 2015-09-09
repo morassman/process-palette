@@ -4,6 +4,7 @@ shell = require 'shelljs'
 {$$} = require 'atom-space-pen-views'
 ProcessConfig = require '../process-config'
 ProcessOutputView = require '../views/process-output-view'
+Buffer = require './buffer'
 
 # Fields :
 # stdout : Standard output.
@@ -42,8 +43,8 @@ class ProcessController
     @newFileDisposable = null;
     @endTime = null;
     @outputView = null;
-    @stdoutArray = [];
-    @stderrArray = [];
+    @stdoutBuffer = new Buffer(@config.outputBufferSize);
+    @stderrBuffer = new Buffer(@config.outputBufferSize);
 
     if (@config.outputTarget == "panel")
       @outputView = new ProcessOutputView(@configController.getMain(), @);
@@ -142,16 +143,14 @@ class ProcessController
     @processID = @process.pid;
 
     @process.stdout.on "data", (data) =>
+      @stdoutBuffer.push(data);
       if @config.stream
         @streamOutput(data);
-      else
-        @stdoutArray.push(data);
 
     @process.stderr.on "data", (data) =>
+      @stderrBuffer.push(data);
       if @config.stream
         @streamOutput(data);
-      else
-        @stderrArray.push(data);
 
     @processStarted();
 
@@ -199,10 +198,12 @@ class ProcessController
     @endTime = Date.now();
     output = "";
     messageTitle = _.humanizeEventName(@config.getCommandName());
-    @fields.stdout = @stdoutArray.join("");
-    @fields.stderr = @stderrArray.join("");
-    @stdoutArray = [];
-    @stderrArray = [];
+    @fields.stdout = @stdoutBuffer.toString();
+    @fields.stderr = @stderrBuffer.toString();
+
+    @stdoutBuffer.clear();
+    @stderrBuffer.clear();
+
     options = {};
 
     if !killed
@@ -212,6 +213,7 @@ class ProcessController
           atom.notifications.addSuccess(messageTitle, options);
       else
         if @config.errorMessage?
+          options["dismissable"] = true;
           options["detail"] = @insertFields(@config.errorMessage);
           atom.notifications.addWarning(messageTitle, options);
 

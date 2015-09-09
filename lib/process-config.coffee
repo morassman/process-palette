@@ -11,6 +11,7 @@ class ProcessConfig
     @keystroke = null;
     @stream = false;
     @outputTarget = 'panel';
+    @outputBufferSize = 65536;
     @maxCompleted = 1;
     # @maxRunning = null;
     @autoShowOutput = true;
