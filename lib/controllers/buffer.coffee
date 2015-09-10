@@ -22,8 +22,6 @@ class Buffer
         discard = @array.shift();
         @size -= discard.length;
 
-    console.log(@size);
-
   clear: ->
     @size = 0;
     @array = [];

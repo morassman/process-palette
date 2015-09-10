@@ -1,10 +1,12 @@
 _ = require 'underscore-plus'
+psTree = require 'ps-tree'
 shell = require 'shelljs'
 {Directory, File} = require 'atom'
 {$$} = require 'atom-space-pen-views'
 ProcessConfig = require '../process-config'
 ProcessOutputView = require '../views/process-output-view'
 Buffer = require './buffer'
+cp = require('child_process')
 
 # Fields :
 # stdout : Standard output.
@@ -179,9 +181,40 @@ class ProcessController
       @processCallbacks.splice(index, 1);
 
   killProcess:  ->
-    if @process != null
+    if @process == null
+      return;
+
+    try
+      if process.platform == "win32"
+        @killWindowsProcess();
+      else
+        @killLinuxProcess();
+    catch err
       @process.kill();
-      # @processStopped(false, true);
+      console.log(err);
+
+  killWindowsProcess: ->
+    parentProcess = @process;
+    killProcess = cp.spawn("taskkill /PID " + @process.pid + " /T /F");
+    
+    killProcess.on "error", (err) =>
+      parentProcess.kill();
+      console.log(err);
+
+    killProcess.on "close", =>
+      parentProcess.kill();
+
+  killLinuxProcess: ->
+    psTree @process.pid, (err, children) =>
+      parentProcess = @process;
+      killProcess = cp.spawn("kill", ["-9"].concat(children.map((p) -> return p.PID)));
+
+      killProcess.on "error", (err) =>
+        parentProcess.kill();
+        console.log(err);
+
+      killProcess.on "close", =>
+        parentProcess.kill();
 
   streamOutput: (output) ->
     @outputToTarget(output, true);
@@ -195,6 +228,7 @@ class ProcessController
     _.invoke(_.clone(@processCallbacks), "processStarted");
 
   processStopped: (killed) =>
+    @process = null;
     @endTime = Date.now();
     output = "";
     messageTitle = _.humanizeEventName(@config.getCommandName());
@@ -235,7 +269,6 @@ class ProcessController
 
     shell.cd(@pwdBackup);
 
-    @process = null;
     @fields = {};
 
     @configController.notifyProcessStopped(@);
