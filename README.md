@@ -20,7 +20,7 @@ Install Process Palette and then either generate or download a configuration fil
 
 These example configurations define a command that will echo a message to standard output. It can be run by choosing `Process Palette: Echo Example` from the command palette. This will open the Process Palette panel and show the output. The panel can also be opened directly by pressing `Ctrl-Alt-P` or running `Process Palette: Toggle` from the command palette.
 
-It also contains an example called `Ping Example` to show the direct stream ability. When streaming is enabled the output is written directly to the target without being formatted.
+It also contains an example called `Stream Example` to show the direct stream ability. When streaming is enabled the output is written directly to the target without being formatted.
 
 ### Next Steps
 1. Poke around in the configuration file a bit. Just remember to run the `Process Palette: Reload Configuration` command after making changes.
@@ -146,10 +146,12 @@ The output can be cleared by pressing the trash can button.
 From here one can return to the list by pressing the button in the top left corner.
 
 ### Notifications
-Each time a process is executed a message will be shown in the top right hand corner. A successful execution with an exit status code of 0 will show a success message. Anything other than 0 will show a warning. If the process could not be executed at all then a fatal message is shown. What these messages display can be configured or even disabled completely as will be seen in the Advanced Configuration section.
+Each time a process is executed a message will be shown in the top right hand corner. A successful execution with an exit status code of 0 will show a success message. Anything other than 0 will show a warning. What these messages display can be configured or even disabled completely as will be seen in the Advanced Configuration section.
 
 ## Advanced Configuration
-The `namespace`, `action`, `command` and `keystroke` aren't the only properties that can be configured. Of these only the `action` and `command` are required, some are optional and some have default values. Many of the properties can also be parameterized with variables from the environment. The following two sections describe the configurable properties and also the variables that can be used to parameterize them.
+The `namespace`, `action`, `command` and `keystroke` aren't the only properties that can be configured. Of these only the `action` and `command` are required. The rest are optional and have default values.
+
+Many of the properties can be parameterized with variables from the environment. The following two sections describe the configurable properties and also the variables that can be used to parameterize them.
 
 ### Properties
 Property|Description|Default
@@ -159,23 +161,23 @@ action (required)|The name of the action. This, together with the namespace, giv
 command (required)|A string with the name and arguments of the command to execute.|null
 arguments|An array of strings to pass as arguments to the command. Since v0.4.10 arguments can be added directly to the `command` property's value, however this approach can still be used.|[ ]
 cwd|The working directory from which to execute the command. It doesn't have a default value, but one is automatically determined when the command is executed. If projects are open then the first project's folder is used. If there aren't any projects open then the folder of the `process-palette.json` file is used.|null
-keystroke|A string describing the shortcut to associate with this command. It can be any combination of `ctrl`, `alt`, `shift` and `cmd` separated with `-` characters.|null
+keystroke|A string describing the shortcut to associate with this command. It can be any combination of `ctrl`, `alt`, `shift` and `cmd` followed by another key separated with `-` characters.|null
 env|A map of environment variables. These will be made available in addition to the ones that are already defined in `process.env`|{ }
-maxCompleted|The maximum number of completed processes whose output to keep at a time. It is used to automatically discard the oldest completed process in order to prevent them from piling up. This property only applies when the `outputTarget` is set to `panel`. It can be disabled by setting the value to `null` in which case all panels will have to be discarded manually.|1
-outputBufferSize|The maximum number of characters to accumulate from standard output and error. When the buffer size is reached the oldest output is discarded. This doesn't apply to streamed output, but only to the output accumulated in the `stdout` and `stderr` variables. This limit can be disabled by setting it to `null`, but should be done with caution for long running processes.|80000
 
-The following properties relate to the output produced by the process. The output can be redirected to a particular target. It can also be formatted depending on whether the process executed successfully or not. Giving any of these a value of `null` will prevent that output from being shown.
+The following properties relate to the output produced by the process. The output can be redirected to a particular target. It can also be formatted depending on whether the process executed successfully or not. Giving any of the `xxxOutput` properties a value of `null` will prevent that output from being shown.
 
 Property|Description|Default
 ---|---|---
 outputTarget|Where the output produced by the process should be directed to. It can have one of the following  values: "panel", "editor", "clipboard", "console" or "void". If the value is overridden with `null` then it will default to "void". More on this below.|"panel"
 successOutput|The format of the output when the process returned with an exit status of 0.|"{stdout}"
-errorOutput|The format of the output when the process returned with a non-0 exit status.|"{stderr}"
+errorOutput|The format of the output when the process returned with a non-0 exit status.|"{stdout}\n{stderr}"
 fatalOutput|The format of the output when the command could not be executed at all.|"Failed to execute : {fullCommand}\n{stdout}\n{stderr}"
 stream|Indicate whether the output should be streamed. If this is false then the output will be formatted and sent to the target only after the process completes. If it is true then the output, both standard and error, will be streamed to the target without any formatting applied.|false
 autoShowOutput|Indicate if the panel should automatically be made visible when the process produces output. At the moment this only applies when the `outputTarget` is set to `panel`.|true
+maxCompleted|The maximum number of completed processes whose output to keep at a time. It is used to automatically discard the oldest completed process in order to prevent them from piling up. This property only applies when the `outputTarget` is set to `panel`. It can be disabled by setting the value to `null` in which case all panels will have to be discarded manually.|3
+outputBufferSize|The maximum number of characters to accumulate from standard output and error. When the buffer size is reached the oldest output is discarded. This is not applied to the output target, but only to the output accumulated in the `stdout` and `stderr` variables. This limit can be disabled by setting it to `null`, but should be done with caution for long running processes.|80000
 
-The following properties relate to the messages shown after a command is executed. Giving any of these a value of `null` will prevent that message from being shown.
+The following properties relate to the messages shown after a command is executed. Giving any of the `xxxMessage` properties a value of `null` will prevent that message from being shown.
 
 Property|Description|Default
 ---|---|---
@@ -189,8 +191,8 @@ The `outputTarget` property specifies where the output produced by the process s
 Target|Description
 ---|---
 void|The output will not be captured at all.
-panel|The output will be shown in Process Palette's panel. Running a command that outputs to the panel will automatically open it.
-clipboard|The output will be stored on the clipboard.
+panel|The output will be shown in Process Palette's panel. Running a command that outputs to the panel will automatically open it if `autoShowOutput` is `true`.
+clipboard|The output will be stored on the clipboard. Streaming to the clipboard is not supported. If `stream` is `true` when the output target is `clipboard` then streaming will be disabled.
 editor|The output will be inserted into the open editor at the current cursor position. If an editor is not open the output is lost.
 console|The output will be appended to the developer console.
 file|The output will be written to a new file that will be opened in the Atom workspace.
@@ -198,7 +200,9 @@ file|The output will be written to a new file that will be opened in the Atom wo
 The default value of `outputTarget` is "panel". If it is overridden with `null` then it will default to "void".
 
 ### Variables
-Some of the properties can be parameterized with variables. Variables are added by enclosing the name of the variable in braces : `{` and `}`. The default values of some of the properties are already parameterized as can be seen in the tables above. There are two types of variables : input and output. Input variables are available before the process executes and output variables are available after it has executed.
+Some of the properties can be parameterized with variables. Variables are added by enclosing the name of the variable in braces : `{` and `}`. The default values of some of the properties are already parameterized as can be seen in the tables above.
+
+There are two types of variables : input and output. Input variables are available before the process executes and output variables are available after it has executed.
 
 The following tables list the input and output variables:
 
@@ -233,9 +237,9 @@ These variables are only available after the process has executed. They can ther
 
 Variable|Description
 ---|---
-stdout | Standard output produced by process.
-stderr | Standard error output produced by process.
-exitStatus | Exit status code returned by process.
+stdout | Standard output produced by the process.
+stderr | Standard error output produced by the process.
+exitStatus | Exit status code returned by the process.
 
 ### Applying Variables To Properties
 The table below shows which properties support input variables and/or output variables:
@@ -269,10 +273,16 @@ A useful way of seeing the values of the variables is to add them to one of the 
 
 will show the values of `filePath` and `projectPath` respectively.
 
-Keep in mind that the `arguments` property is an array of strings. Adding variables to arguments should therefore be done such as
+Another way is to simply `echo` them as shown in the [example][2f6a8e37].
+
+Keep in mind that the `arguments` property is an array of strings. Adding variables to arguments should therefore be done as such:
 
 ```json
 "arguments" : ["{fileNameExt}", "{selection}"]
 ```
 
-in order to pass the file name and the currently selected text as arguments to the command.
+## Known Issues
+### Background Processes
+Process Palette considers its process to be completed only when all commands have finished executing. For instance, if a command is executed with an `&` appended then Process Palette will continue to handle the output produced by it until the child process spawned by that command exits.
+
+This in itself is not a major problem. The issue is that Process Palette currently cannot kill child processes that are executed in this way. If the command executed with `&` opens a window then closing the window will allow the parent process to complete, but if it doesn't then one will have to kill the process by whatever means your OS allows.

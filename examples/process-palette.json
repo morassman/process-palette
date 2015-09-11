@@ -1,6 +1,10 @@
 {
   "commands" : [
     {
+      "action" : "Defaults Example",
+      "command" : "echo 'This command uses all the defaults.'"
+    },
+    {
       "namespace" : "Process Palette",
       "action" : "Echo Example",
       "command" : "echo",
@@ -9,11 +13,14 @@
         "CUSTOM_VAR" : "Atom"
       },
       "cwd" : "{projectPath}",
-      "keystroke" : "ctrl-alt-l",
+      "keystroke" : "ctrl-alt-e",
       "stream" : false,
       "outputTarget" : "panel",
+      "autoShowOutput" : true,
+      "maxCompleted" : 1,
+      "outputBufferSize" : 100,
       "successOutput" : "{stdout}",
-      "errorOutput" : "{stderr}",
+      "errorOutput" : "{stdout}\n{stderr}",
       "fatalOutput" : "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
       "successMessage" : "Executed : {fullCommand}",
       "errorMessage" : "Executed : {fullCommand}\nReturned with code {exitStatus}\n{stderr}",
@@ -21,12 +28,12 @@
     },
     {
       "namespace" : "Process Palette",
-      "action" : "Ping Example",
+      "action" : "Stream Example",
       "command" : "ping localhost",
       "stream" : true,
       "outputTarget" : "panel",
       "successOutput" : "{stdout}",
-      "errorOutput" : "{stderr}",
+      "errorOutput" : "{stdout}\n{stderr}",
       "fatalOutput" : "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
       "successMessage" : "Executed : {fullCommand}",
       "errorMessage" : "Executed : {fullCommand}\nReturned with code {exitStatus}\n{stderr}",

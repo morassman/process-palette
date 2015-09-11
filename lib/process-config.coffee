@@ -16,7 +16,7 @@ class ProcessConfig
     # @maxRunning = null;
     @autoShowOutput = true;
     @successOutput = '{stdout}';
-    @errorOutput = '{stderr}';
+    @errorOutput = '{stdout}\n{stderr}';
     @fatalOutput = 'Failed to execute : {fullCommand}\n{stdout}\n{stderr}';
     @successMessage = 'Executed : {fullCommand}';
     @errorMessage = 'Executed : {fullCommand}\nReturned with code {exitStatus}\n{stderr}';

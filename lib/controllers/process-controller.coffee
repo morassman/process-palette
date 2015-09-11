@@ -196,7 +196,7 @@ class ProcessController
   killWindowsProcess: ->
     parentProcess = @process;
     killProcess = cp.spawn("taskkill /PID " + @process.pid + " /T /F");
-    
+
     killProcess.on "error", (err) =>
       parentProcess.kill();
       console.log(err);
@@ -287,7 +287,7 @@ class ProcessController
     else if (@config.outputTarget == "panel")
       @outputToPanel(output);
     else if (@config.outputTarget == "file")
-      @outputToFile(output);
+      @outputToNewFile(output);
 
   openNewFile: (text) ->
     @creatingNewFile = true;

@@ -1,4 +1,4 @@
-## v0.4.13 (8 September 2015)
+## v0.5.0 (11 September 2015)
 - Added `file` output target for writing output to a new file.
 - Added support for running multiple instances of a process.
 - Added `autoShowOutput` property for automatically showing the output panel.
@@ -6,6 +6,7 @@
 - Made warning notification dismissible.
 - Changed output processing to buffer output even when streaming.
 - Added `outputBufferSize` property to set maximum size of output buffer.
+- Changed the default value of `errorOutput` to include `{stdout}`.
 
 ## v0.4.12 (28 August 2015)
 - Added ability to resize panel.
