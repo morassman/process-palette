@@ -24,7 +24,7 @@ class ProcessOutputView extends View
           @button {class:'btn btn-xs icon-trashcan', style:'margin-left:15px', outlet:'clearButton', click:'clearOutput'}
           @button {class:'btn btn-xs icon-lock', style:'margin-right:15px', outlet:'scrollLockButton', click:'toggleScrollLock'}
         @subview "buttonsView", new ButtonsView(main, processController.configController, processController);
-      @div {class:"process-palette-scrollable native-key-bindings", tabindex: -1, outlet:'outputPanel'}
+      @div {class:"process-palette-output-panel native-key-bindings", tabindex: -1, outlet:'outputPanel'}
 
   initialize: ->
     @disposables = new CompositeDisposable();
