@@ -11,6 +11,7 @@ class ProcessOutputView extends View
     @lastScrollTop = 0;
     @scrollLocked = false;
     @addProcessDetails();
+    @setScrollLockEnabled(@processController.config.scrollLockEnabled);
 
   @content: (main, processController) ->
     @div =>

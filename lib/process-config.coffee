@@ -15,6 +15,7 @@ class ProcessConfig
     @maxCompleted = 3;
     # @maxRunning = null;
     @autoShowOutput = true;
+    @scrollLockEnabled = false;
     @successOutput = '{stdout}';
     @errorOutput = '{stdout}\n{stderr}';
     @fatalOutput = 'Failed to execute : {fullCommand}\n{stdout}\n{stderr}';

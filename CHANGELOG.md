@@ -1,3 +1,6 @@
+## v0.5.1 (20 September 2015)
+- Added `scrollLockEnabled` property.
+
 ## v0.5.0 (11 September 2015)
 - Added `file` output target for writing output to a new file.
 - Added support for running multiple instances of a process.
