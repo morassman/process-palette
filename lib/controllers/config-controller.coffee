@@ -104,10 +104,28 @@ class ConfigController
     if oldest != null
       @removeProcessController(oldest);
 
+  autoHideOutput: (processController) ->
+    # Check to see if autoHideOutput is true.
+    if !processController.config.autoHideOutput
+      return;
+
+    main = @projectController.getMain();
+
+    # Only hide if this process' output is being shown.
+    if !main.isProcessOutputShown(processController)
+      return;
+
+    # Only hide if the process wasn't killed and exited successfully.
+    if processController.isKilled() or (processController.getExitStatus() != 0)
+      return;
+
+    main.hidePanel();
+
   notifyProcessStarted: (processController) ->
     _.invoke(_.clone(@listeners), "processStarted", processController);
 
   notifyProcessStopped: (processController) ->
+    @autoHideOutput(processController);
     @removeOldest();
     _.invoke(_.clone(@listeners), "processStopped", processController);
 

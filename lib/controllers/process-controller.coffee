@@ -47,12 +47,20 @@ class ProcessController
     @outputView = null;
     @stdoutBuffer = new Buffer(@config.outputBufferSize);
     @stderrBuffer = new Buffer(@config.outputBufferSize);
+    @killed = false;
+    @exitStatus = null;
 
     if (@config.outputTarget == "panel")
       @outputView = new ProcessOutputView(@configController.getMain(), @);
 
   getProcessID: ->
     return @processID;
+
+  isKilled: ->
+    return @killed;
+
+  getExitStatus: ->
+    return @exitStatus;
 
   dispose: ->
     # TODO : The key binding should preferably be removed, but atom.keymaps.findKeyBindings throws an error.
@@ -230,6 +238,8 @@ class ProcessController
   processStopped: (killed) =>
     @process = null;
     @endTime = Date.now();
+    @killed = killed;
+    @exitStatus = @fields.exitStatus;
     output = "";
     messageTitle = _.humanizeEventName(@config.getCommandName());
     @fields.stdout = @stdoutBuffer.toString();

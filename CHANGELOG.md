@@ -1,3 +1,6 @@
+## v0.5.2 (21 October 2015)
+- Added `autoHideOutput` property.
+
 ## v0.5.1 (20 September 2015)
 - Added `scrollLockEnabled` property.
 - Changed white space format in output panel.

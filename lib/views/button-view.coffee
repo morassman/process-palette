@@ -18,7 +18,7 @@ class ButtonView extends View
 
   initialize: ->
     @disposables = new CompositeDisposable();
-    
+
     # Prevent the button from getting focus.
     @killButton.on 'mousedown', (e) ->
       e.preventDefault();
@@ -53,7 +53,7 @@ class ButtonView extends View
       @configController.removeProcessController(@processController);
 
   showOutputButtonPressed: ->
-    if @showOutputButton.hasClass("selected")
+    if @isHighlighted()
       return;
 
     outputTarget = @configController.config.outputTarget;
@@ -67,3 +67,6 @@ class ButtonView extends View
 
   highlight: ->
     @showOutputButton.addClass("btn-primary selected");
+
+  isHighlighted: ->
+    return @showOutputButton.hasClass("selected");

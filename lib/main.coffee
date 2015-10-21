@@ -91,6 +91,9 @@ module.exports = ProcessPalette =
     @showPanel();
     @mainView.showProcessOutput(processController);
 
+  isProcessOutputShown: (processController) ->
+    return @mainView.isProcessOutputShown(processController);
+
   processControllerRemoved: (processController) ->
     @mainView.processControllerRemoved(processController);
 

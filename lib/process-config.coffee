@@ -15,6 +15,7 @@ class ProcessConfig
     @maxCompleted = 3;
     # @maxRunning = null;
     @autoShowOutput = true;
+    @autoHideOutput = false;
     @scrollLockEnabled = false;
     @successOutput = '{stdout}';
     @errorOutput = '{stdout}\n{stderr}';

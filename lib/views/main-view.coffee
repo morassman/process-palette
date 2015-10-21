@@ -89,6 +89,15 @@ class MainView extends View
     @outputViewContainer.append(@outputView);
     @showOutputView();
 
+  isProcessOutputShown: (processController) ->
+    if !@isOutputViewVisible()
+      return false;
+
+    if @outputView == null
+      return false;
+
+    return @outputView == processController.outputView;
+
   isOutputViewVisible: =>
     return @outputViewContainer.isVisible();
 
