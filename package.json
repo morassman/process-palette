@@ -20,6 +20,8 @@
     "minimatch": "^2.0.10",
     "shelljs": "0.5.3",
     "path": "^0.11.14",
-    "ps-tree": "1.0.0"
+    "ps-tree": "1.0.0",
+    "underscore.string": "~3.2",
+    "ansi-to-html": "~0.3"
   }
 }
