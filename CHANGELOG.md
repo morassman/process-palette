@@ -1,3 +1,6 @@
+## v0.5.3 (20 November 2015)
+- Escape HTML and convert ANSI escape sequences. `@toddmazierski`
+
 ## v0.5.2 (21 October 2015)
 - Added `autoHideOutput` property.
 
