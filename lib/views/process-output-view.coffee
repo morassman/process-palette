@@ -3,7 +3,7 @@ _ = require 'underscore-plus'
 {CompositeDisposable} = require 'atom'
 ButtonsView = require './buttons-view'
 escapeHTML = require 'underscore.string/escapeHTML'
-ANSIConvert = new (require 'ansi-to-html')
+AnsiToHtml = require 'ansi-to-html'
 
 module.exports =
 class ProcessOutputView extends View
@@ -12,6 +12,8 @@ class ProcessOutputView extends View
     super(@main, @processController);
     @lastScrollTop = 0;
     @scrollLocked = false;
+    @ansiConvert = new AnsiToHtml({stream:true});
+
     @addProcessDetails();
     @setScrollLockEnabled(@processController.config.scrollLockEnabled);
 
@@ -148,7 +150,7 @@ class ProcessOutputView extends View
     @refreshScrollLockButton();
 
   outputToPanel: (text) ->
-    text = sanitizeOutput(text);
+    text = @sanitizeOutput(text);
     addNewLine = false;
 
     for line in text.split('\n')
@@ -170,10 +172,10 @@ class ProcessOutputView extends View
   getElement: ->
     return @element;
 
-  sanitizeOutput = (output) ->
+  sanitizeOutput: (output) ->
     # Prevent HTML in output from being parsed as HTML
     output = escapeHTML(output);
     # Convert ANSI escape sequences (ex. colors) to HTML
-    output = ANSIConvert.toHtml(output);
+    output = @ansiConvert.toHtml(output);
 
-    return output
+    return output;
