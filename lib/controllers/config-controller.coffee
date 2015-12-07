@@ -65,10 +65,10 @@ class ConfigController
 
   runProcess: =>
     filePath = null;
-    editor = atom.workspace.getActiveTextEditor();
+    pane = atom.workspace.getActivePaneItem();
 
-    if editor?
-      filePath = editor.getPath();
+    if pane?
+      filePath = pane.getPath();
 
     @runProcessWithFile(filePath);
 
