@@ -40,6 +40,7 @@ class ProcessController
     @processCallbacks = [];
     @replaceRegExp = new RegExp("{.*?}","g");
     @fields = {};
+    @options = {};
     @newFile = null;
     @creatingNewFile = false;
     @newFileDisposable = null;
@@ -72,7 +73,7 @@ class ProcessController
       return;
 
     @fields = {};
-    options = {};
+    @options = {};
 
     @fields.clipboard = atom.clipboard.read();
     @fields.configDirAbsPath = @configController.projectController.projectPath;
@@ -120,9 +121,9 @@ class ProcessController
       @fields.selection = "";
 
     if @config.cwd
-      options.cwd = @insertFields(@config.cwd);
+      @options.cwd = @insertFields(@config.cwd);
     else
-      options.cwd = @fields.projectPath;
+      @options.cwd = @fields.projectPath;
 
     command = @insertFields(@config.command);
 
@@ -144,7 +145,7 @@ class ProcessController
         @envBackup[key] = shell.env[key];
         shell.env[key] = @insertFields(val);
 
-    shell.cd(options.cwd);
+    shell.cd(@options.cwd);
 
     @process = shell.exec @fields.fullCommand, {silent:true, async:true}, (code) =>
       @fields.exitStatus = code;
@@ -163,6 +164,9 @@ class ProcessController
         @streamOutput(data);
 
     @processStarted();
+
+  getCwd: ->
+    return @options.cwd;
 
   splitFileName: (fileNameExt) ->
     index = fileNameExt.lastIndexOf(".");
@@ -248,18 +252,18 @@ class ProcessController
     @stdoutBuffer.clear();
     @stderrBuffer.clear();
 
-    options = {};
+    notifOptions = {};
 
     if !killed
       if @fields.exitStatus == 0
         if @config.successMessage?
-          options["detail"] = @insertFields(@config.successMessage);
-          atom.notifications.addSuccess(messageTitle, options);
+          notifOptions["detail"] = @insertFields(@config.successMessage);
+          atom.notifications.addSuccess(messageTitle, notifOptions);
       else
         if @config.errorMessage?
-          options["dismissable"] = true;
-          options["detail"] = @insertFields(@config.errorMessage);
-          atom.notifications.addWarning(messageTitle, options);
+          notifOptions["dismissable"] = true;
+          notifOptions["detail"] = @insertFields(@config.errorMessage);
+          atom.notifications.addWarning(messageTitle, notifOptions);
 
     if !@config.stream
       if @fields.exitStatus == 0

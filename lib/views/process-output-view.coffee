@@ -2,6 +2,7 @@ _ = require 'underscore-plus'
 {$$, View} = require 'atom-space-pen-views'
 {CompositeDisposable} = require 'atom'
 ButtonsView = require './buttons-view'
+PathView = require './path-view'
 escapeHTML = require 'underscore.string/escapeHTML'
 AnsiToHtml = require 'ansi-to-html'
 
@@ -13,6 +14,8 @@ class ProcessOutputView extends View
     @lastScrollTop = 0;
     @scrollLocked = false;
     @ansiConvert = new AnsiToHtml({stream:true});
+    @lineIndex = 0;
+    @patterns = @processController.configController.patterns;
 
     @addProcessDetails();
     @setScrollLockEnabled(@processController.config.scrollLockEnabled);
@@ -156,9 +159,27 @@ class ProcessOutputView extends View
     for line in text.split('\n')
       if addNewLine
         @outputPanel.append("<br>");
-
-      @outputPanel.append(line);
+        @lineIndex++;
+      @appendLine(line);
       addNewLine = true;
+
+  appendLine: (line) ->
+    if @patterns.length == 0
+      @outputPanel.append(line);
+      return;
+
+    for pattern in @patterns
+      match = pattern.match(line);
+
+      if match?
+        cwd = @processController.getCwd();
+        pathView = new PathView(cwd, match);
+        @outputPanel.append $$ ->
+          @span =>
+            @subview "#{@lineIndex}", pathView
+        return;
+
+    @outputPanel.append(line);
 
   # Tear down any state and detach
   destroy: ->

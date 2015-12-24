@@ -14,6 +14,9 @@ module.exports = ProcessPalette =
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:toggle': => @togglePanel()
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:edit-configuration': => @editConfiguration()
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:reload-configuration': => @reloadConfiguration()
+    @subscriptions.add atom.commands.add 'atom-workspace',
+      'core:cancel': => @hidePanel()
+      'core:close': => @hidePanel()
 
     # TODO : Enable this again later to support 'on-save' behavior.
     # @subscriptions.add atom.workspace.observeTextEditors (editor) =>

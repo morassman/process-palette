@@ -10,6 +10,8 @@ class ConfigController
   constructor: (@projectController, @config) ->
     @processControllers = [];
     @listeners = [];
+    @patterns = @projectController.getPatterns(@config.patterns);
+
     cssSelector = 'atom-workspace';
 
     if (@config.outputTarget == 'editor')
