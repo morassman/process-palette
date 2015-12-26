@@ -1,4 +1,13 @@
 {
+  "patterns" : {
+    "P1" : {
+      "expression" : "(path):(line)"
+      },
+    "P2" : {
+      "expression" : "(path)\\s+(line)",
+      "path" : "(?:\\/[\\w\\.\\-]+)+"
+    }
+  },
   "commands" : [
     {
       "action" : "Defaults Example",

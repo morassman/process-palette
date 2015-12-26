@@ -15,7 +15,7 @@ class PathView extends View
       @span pathPattern.post
 
   clicked: ->
-    path = @pathPattern.path;
+    path = fsp.normalize(@pathPattern.path);
 
     if !fsp.isFileSync(path)
       path = PathUtil.join(@cwd, @pathPattern.path);

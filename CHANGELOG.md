@@ -1,3 +1,8 @@
+## v0.5.4
+- Changed output colors to white on black.
+- Added separate commands for showing and hiding panel.
+- Added ability to detect paths and open files from output.
+
 ## v0.5.3 (20 November 2015)
 - Escape HTML and convert ANSI escape sequences. `@toddmazierski`
 

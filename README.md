@@ -283,6 +283,72 @@ Keep in mind that the `arguments` property is an array of strings. Adding variab
 "arguments" : ["{fileNameExt}", "{selection}"]
 ```
 
+## Detect Paths and Line Numbers
+Commands that write to the output panel can be configured to detect file paths and optionally line numbers.
+
+![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/pattern.png?raw=true)
+
+Detected paths will be underlined. Clicking it will open the file and if a line number is detected jump to it.
+
+All commands will detect file paths by default. If line numbers are required then additional configuration is necessary.
+
+### Patterns
+Patterns are used to detect paths and line numbers. Process Palette has one built in pattern for detecting paths and all commands use this pattern by default.
+
+Custom patterns can be added to the configuration file. Commands can then be configured to detect any of these patterns. The following example shows two custom patterns. The one pattern (P1) detects a path followed by a `:` and then the line number, whereas the other (P2) has whitespace between the path and line number.
+
+```json
+"patterns" : {
+  "P1" : {
+    "expression" : "(path):(line)"
+    },
+  "P2" : {
+    "expression" : "(path)\\s+(line)"
+  }
+},
+"commands" : [
+  {
+    "patterns" : ["P1", "P2"]
+  }
+]
+```
+Notice the following:
+- `patterns` is an object and is defined on the same level as `commands`.
+- Each pattern has a name. `P1` and `P2` in this case.
+- Each pattern has a JS regular expression called `expression`.
+- `(path)` and `(line)` are special placeholders. These are substituted with regular expressions for matching each respectively.
+- Everything around `(path)` and `(line)` should be valid regular expressions.
+
+With this configuration the command will be able to match `P1` and `P2` patterns. This overrides the default configuration that matches only paths. The built-in pattern for matching paths is called `default`. To match the default pattern as well, simply add it to the list:
+
+```json
+"patterns" : ["P1", "P2", "default"]
+```
+
+**Order matters!**
+Patterns are evaluated in the order they are given. This means that if `default` was first in the list then it will be matched, but never any of the line numbers.
+
+To disable pattern matching simply set the value of `patterns` to `null`.
+
+### Custom Path Expression
+In the previous example the `(path)` and `(line)` placeholders were used to quickly create an expression. In the background these are replaced with appropriate regular expressions. The `(path)` placeholder, in particular, will be replaced with an expression that is appropriate for the platform.
+
+It may be that the built in expression is not sufficient for detecting paths in your command's output. If that is the case then you can overwrite it with your own. The following example shows how.
+
+```json
+"patterns" : {
+  "P1" : {
+    "expression" : "(path):(line)",
+    "path" : "(?:\\/[\\w\\.\\-]+)+"
+  }
+}
+```
+
+In this case the given expression for `path` will be used instead.
+
+**Important note about groups**<br>
+Groups are enclosed in round brackets. `path` and `line` each forms a group and in this order they are at index 1 and 2 respectively. In this example the `path` expression is being overwritten, but this expression defines a group of its own. What's important to notice is the `?:` at the start of the group, which ensures that the group is not counted. The only groups that are allowed to be counted are for `path` and `line`, but neglecting to exclude other groups will interfere with their indexes.
+
 ## Known Issues
 ### Background Processes
 Process Palette considers its process to be completed only when all commands have finished executing. For instance, if a command is executed with an `&` appended then Process Palette will continue to handle the output produced by it until the child process spawned by that command exits.

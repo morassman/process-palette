@@ -17,6 +17,7 @@ class ProcessConfig
     @autoShowOutput = true;
     @autoHideOutput = false;
     @scrollLockEnabled = false;
+    @patterns = ["default"];
     @successOutput = '{stdout}';
     @errorOutput = '{stdout}\n{stderr}';
     @fatalOutput = 'Failed to execute : {fullCommand}\n{stdout}\n{stderr}';

@@ -58,6 +58,8 @@ class ProjectController
     commands = processConfigs.commands;
     saveCommands = processConfigs.saveCommands;
 
+    @addDefaultPattern();
+
     if patterns?
       for key, value of patterns
         @addPattern(key, value);
@@ -87,64 +89,47 @@ class ProjectController
 
     return result;
 
+  addDefaultPattern: ->
+    config = {};
+    config.expression = "(path)";
+
+    @addPattern("default", config);
+
   addPattern: (name, config) ->
-    if !config.type?
-      config.type = "regexp";
-
-    pattern = null;
-
-    if config.type == "regexp"
-      pattern = @createRegExpPattern(name, config);
-    else
-      console.error("Pattern #{name} has an invalid type #{config.type}.")
-      return;
+    pattern = @createRegExpPattern(name, config);
 
     if pattern != null
       @patterns[name] = pattern;
 
   createRegExpPattern: (name, config) ->
-    if !config.pattern?
-      console.error("Pattern #{name} has not value for pattern.")
+    if !config.expression?
+      console.error("Pattern #{name} doesn't have an expression.")
       return null;
 
     if !config.flags?
       config.flags = "i";
 
-    if config.pattern.indexOf("(path)") > -1
-      return @createNativePattern(name, config);
+    if config.expression.indexOf("(path)") == -1
+      console.error("Pattern #{name} doesn't have (path) in its expression.");
+      return null;
 
-    try
-      return new RegExpPattern(config);
-    catch err
-      console.error("Pattern #{name} could not be created.");
-      console.error(err);
+    pathIndex = config.expression.indexOf("(path)");
+    lineIndex = config.expression.indexOf("(line)");
 
-    return null;
-
-  createNativePattern: (name, config) ->
-    pathIndex = config.pattern.indexOf("(path)");
-    lineIndex = config.pattern.indexOf("(line)");
-
-    config.path = 1;
+    config.pathIndex = 1;
 
     if lineIndex > -1
-      config.pattern = config.pattern.replace("(line)", "(\\d+)");
       if pathIndex < lineIndex
-        config.line = 2;
+        config.lineIndex = 2;
       else
-        config.line = 1;
-        config.path = 2;
+        config.lineIndex = 1;
+        config.pathIndex = 2;
 
-    if config.line?
-      if os.platform == "win32"
-        config.pattern = config.pattern.replace("(path)", "((?:[a-z]:\\\\|\\\\)?[\\w\\.\\-]+[\\\\[\\w\\.\\-]+]*)")
-      else
-        config.pattern = config.pattern.replace("(path)", "(\\/?[\\w\\.\\-]+[\\/[\\w\\.\\-]+]*)")
-    else
-      if os.platform == "win32"
-        config.pattern = config.pattern.replace("(path)", "((?:[a-z]:\\\\|\\\\)?(?:[\\w\\.\\-]+\\\\)+[\\w\\.\\-]+)")
-      else
-        config.pattern = config.pattern.replace("(path)", "(\\/?(?:[\\w\\.\\-]+\\/)+[\\w\\.\\-]+)")
+    if !config.path?
+      config.path = @getPathExpression(lineIndex > -1);
+
+    config.expression = config.expression.replace("(path)", "("+config.path+")");
+    config.expression = config.expression.replace("(line)", "(\\d+)");
 
     try
       return new RegExpPattern(config);
@@ -153,6 +138,18 @@ class ProjectController
       console.error(err);
 
     return null;
+
+  getPathExpression: (hasLine) ->
+    if hasLine
+      if os.platform == "win32"
+        return "(?:[a-z]:\\\\|\\\\)?[\\w\\.\\-]+[\\\\[\\w\\.\\-]+]*";
+      else
+        return "(?:~\\/|\\/?)[\\w\\.\\-]+[\\/[\\w\\.\\-]+]*";
+
+    if os.platform == "win32"
+      return "(?:[a-z]:\\\\|\\\\)?(?:[\\w\\.\\-]+\\\\)+[\\w\\.\\-]+";
+
+    return "(?:~\\/|\\/?)(?:[\\w\\.\\-]+\\/)+[\\w\\.\\-]+";
 
   editConfiguration: ->
     if (@configurationFile.isFile() and @configurationFile.existsSync())
