@@ -11,6 +11,8 @@ module.exports = ProcessPalette =
     @mainView = new MainView(@)
     @bottomPanel = atom.workspace.addBottomPanel(item: @mainView.getElement(), visible: false);
 
+    @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:show': => @showPanel()
+    @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:hide': => @hidePanel()
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:toggle': => @togglePanel()
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:edit-configuration': => @editConfiguration()
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:reload-configuration': => @reloadConfiguration()
