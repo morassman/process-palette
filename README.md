@@ -163,6 +163,7 @@ arguments|An array of strings to pass as arguments to the command. Since v0.4.10
 cwd|The working directory from which to execute the command. It doesn't have a default value, but one is automatically determined when the command is executed. If projects are open then the first project's folder is used. If there aren't any projects open then the folder of the `process-palette.json` file is used.|null
 keystroke|A string describing the shortcut to associate with this command. It can be any combination of `ctrl`, `alt`, `shift` and `cmd` followed by another key separated with `-` characters.|null
 env|A map of environment variables. These will be made available in addition to the ones that are already defined in `process.env`|{ }
+patterns|Array of pattern names to match.|["default"]
 
 The following properties relate to the output produced by the process. The output can be redirected to a particular target. It can also be formatted depending on whether the process executed successfully or not. Giving any of the `xxxOutput` properties a value of `null` will prevent that output from being shown.
 
