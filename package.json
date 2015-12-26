@@ -1,7 +1,7 @@
 {
   "name": "process-palette",
   "main": "./lib/main",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "description": "Run any shell command via the command palette.",
   "keywords": [
     "run",
@@ -23,6 +23,6 @@
     "ps-tree": "1.0.0",
     "underscore.string": "~3.2",
     "ansi-to-html": "~0.3",
-    "fs-plus" : "^2.8.0"
+    "fs-plus": "^2.8.0"
   }
 }
