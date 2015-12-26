@@ -1,4 +1,4 @@
-## v0.5.4
+## v0.5.5 (26 December 2015)
 - Changed output colors to white on black.
 - Added separate commands for showing and hiding panel.
 - Added ability to detect paths and open files from output.
