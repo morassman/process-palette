@@ -164,6 +164,7 @@ cwd|The working directory from which to execute the command. It doesn't have a d
 keystroke|A string describing the shortcut to associate with this command. It can be any combination of `ctrl`, `alt`, `shift` and `cmd` followed by another key separated with `-` characters.|null
 env|A map of environment variables. These will be made available in addition to the ones that are already defined in `process.env`|{ }
 patterns|Array of pattern names to match.|["default"]
+inputDialogs|Input dialogs to open in order to get input from the user which can then be used with variables.|[]
 
 The following properties relate to the output produced by the process. The output can be redirected to a particular target. It can also be formatted depending on whether the process executed successfully or not. Giving any of the `xxxOutput` properties a value of `null` will prevent that output from being shown.
 
@@ -233,6 +234,30 @@ fileAbsPath | Absolute path of file.
 fileDirAbsPath | Absolute path of file's directory.
 selection | Currently selected text.
 fileProjectPath | Absolute path of file's project folder.
+
+**Input from user**
+
+The `inputDialogs` property is an array of objects, each defining an input dialog that will be opened in order to take input from the user. Every dialog must specify the `variableName` that can then be used just like any other variable. Dialogs can be customized with a different `message` and `initialInput`.
+
+Property|Description
+---|---
+name (required)|Name of the variable that can then be used in other properties.
+message|Message to display with the input dialog.
+initialInput|Initial text in the input dialog.
+
+Here is an example of one such dialog:
+
+```json
+"inputDialogs" : [
+    {
+        "variableName": "userInput",
+        "message": "Foo?",
+        "initialInput": "Bar!"
+    }
+]
+```
+
+![Screenshot](resources/input-dialog.png)
 
 **Output**
 
