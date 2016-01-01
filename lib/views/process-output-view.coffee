@@ -174,9 +174,11 @@ class ProcessOutputView extends View
       if match?
         cwd = @processController.getCwd();
         pathView = new PathView(cwd, match);
+        @outputPanel.append(match.pre);
         @outputPanel.append $$ ->
           @span =>
             @subview "#{@lineIndex}", pathView
+        @outputPanel.append(match.post);
         return;
 
     @outputPanel.append(line);
