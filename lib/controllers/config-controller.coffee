@@ -69,7 +69,7 @@ class ConfigController
     filePath = null;
     pane = atom.workspace.getActivePaneItem();
 
-    if pane?
+    if typeof pane?.getPath is "function"
       filePath = pane.getPath();
 
     @runProcessWithFile(filePath);
