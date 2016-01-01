@@ -5,6 +5,7 @@ shell = require 'shelljs'
 {$$} = require 'atom-space-pen-views'
 ProcessConfig = require '../process-config'
 ProcessOutputView = require '../views/process-output-view'
+InputDialogView = require '../views/input-dialog-view'
 Buffer = require './buffer'
 cp = require('child_process')
 
@@ -120,6 +121,20 @@ class ProcessController
       @fields.fileProjectPath = "";
       @fields.selection = "";
 
+    @takeUserInput(@config.inputDialogs);
+
+  takeUserInput: (inputDialogs) ->
+    if inputDialogs.length > 0
+      inputDialogParams = inputDialogs[0];
+      new InputDialogView @insertFields(inputDialogParams.message ? ""),
+        @insertFields(inputDialogParams.initialInput ? ""), (inputText) =>
+          @fields[inputDialogParams.variableName] = inputText;
+          @takeUserInput(inputDialogs[1..]);
+      return;
+
+    @runProcessAfterInput();
+
+  runProcessAfterInput: ->
     if @config.cwd
       @options.cwd = @insertFields(@config.cwd);
     else
