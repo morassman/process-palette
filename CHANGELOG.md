@@ -1,3 +1,8 @@
+## v0.6.0 (2 January 2016)
+- Added user input dialogs for variables. `@toi333`
+- Allow `filePath` to be acquired from non-editor panes. `@nalcorso`
+- Fixed output of formatted text when a file path is detected.
+
 ## v0.5.5 (26 December 2015)
 - Changed output colors to white on black.
 - Added separate commands for showing and hiding panel.
