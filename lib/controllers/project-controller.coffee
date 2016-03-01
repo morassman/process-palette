@@ -49,7 +49,12 @@ class ProjectController
       @parseFile(resolve);
 
   parseFile: (content) ->
-    processConfigs = JSON.parse(content);
+    try
+      processConfigs = JSON.parse(content);
+    catch err
+      console.log("error");
+      console.log(err.lineNumber);
+      return;
 
     if !processConfigs?
       return;

@@ -109,3 +109,42 @@
   cursor: pointer;
   cursor: hand;
 }
+
+.process-palette-command-edit-view {
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+  background-color: @tool-panel-background-color;
+
+  .first-column {
+    padding-left: 20px;
+  }
+
+  .top-label {
+    vertical-align: top;
+  }
+
+  .multi-line-editor {
+    border: 1px solid @input-border-color;
+    background-color: @input-background-color;
+    min-height: 4.5em;
+  }
+
+  .check-label {
+    padding-left: 10px;
+  }
+  // h1 {
+  //   color: red;
+  // }
+
+  table {
+    width: 50%;
+    font-size: larger;
+
+    td {
+      padding-top: 5px;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+  }
+}

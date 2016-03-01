@@ -257,7 +257,7 @@ Here is an example of one such dialog:
 ]
 ```
 
-![Screenshot](resources/input-dialog.png)
+![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/input-dialog.png?raw=true)
 
 **Output**
 

@@ -1,7 +1,9 @@
 _ = require 'underscore-plus'
 MainView = require './views/main-view'
+CommandEditView = require './views/edit/command-edit-view'
 ProjectController = require './controllers/project-controller'
 {File, CompositeDisposable} = require 'atom'
+path = require 'path'
 
 module.exports = ProcessPalette =
 
@@ -16,6 +18,7 @@ module.exports = ProcessPalette =
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:toggle': => @togglePanel()
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:edit-configuration': => @editConfiguration()
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:reload-configuration': => @reloadConfiguration()
+    @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:gui-edit-configuration': => @guiEditConfiguration()
     @subscriptions.add atom.commands.add 'atom-workspace',
       'core:cancel': => @hidePanel()
       'core:close': => @hidePanel()
@@ -109,6 +112,17 @@ module.exports = ProcessPalette =
   editConfiguration: ->
     for projectController in @projectControllers
       projectController.editConfiguration();
+
+  guiEditConfiguration: ->
+    packagePath = atom.packages.getActivePackage('process-palette').path
+    file = new File(path.join(packagePath, 'examples', 'process-palette.json'));
+
+    file.read(false).then (content) =>
+      config = JSON.parse(content);
+      view = new CommandEditView(config, 1);
+      pane = atom.workspace.getActivePane();
+      item = pane.addItem(view, 0);
+      pane.activateItem(item);
 
   getConfigController: (namespace, action) ->
     for projectController in @projectControllers
