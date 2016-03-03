@@ -1,5 +1,7 @@
 {CompositeDisposable} = require 'atom'
 {View, TextEditorView} = require 'atom-space-pen-views'
+PatternChooseView = require './pattern-choose-view'
+TableEditView = require './table-edit-view'
 
 module.exports =
 class CommandEditView extends View
@@ -7,7 +9,7 @@ class CommandEditView extends View
   constructor: (@config, @commandIndex) ->
     super(@config);
 
-  @content: ->
+  @content: (config) ->
     @div =>
       @div {class:'process-palette-command-edit-view'}, =>
         @table =>
@@ -48,28 +50,34 @@ class CommandEditView extends View
                 @select {class: 'form-control', outlet: 'targetSelect'}, =>
                   @option 'Panel', {value: 'panel'}
                   @option 'Clipboard', {value: 'clipboard'}
-                  @option 'Console', {value: 'console'}
+                  @option 'Developer console', {value: 'console'}
                   @option 'Editor', {value: 'editor'}
-                  @option 'File', {value: 'file'}
+                  @option 'New file', {value: 'file'}
                   @option 'Void', {value: 'void'}
             @tr =>
               @td 'Buffer Size:', {class: 'text-highlight first-column'}
               @td =>
                 @subview 'bufferSizeEditor', new TextEditorView(mini: true)
             @tr =>
-              @td 'Success Output Format:', {class: 'text-highlight top-label first-column'}
+              @td =>
+                @h3 'Target Format', {class: 'text-highlight'}
+            @tr =>
+              @td 'Success:', {class: 'text-highlight top-label first-column'}
               @td =>
                 @subview 'successOutputEditor', new TextEditorView()
             @tr =>
-              @td 'Error Output Format:', {class: 'text-highlight top-label first-column'}
+              @td 'Error:', {class: 'text-highlight top-label first-column'}
               @td =>
                 @subview 'errorOutputEditor', new TextEditorView()
             @tr =>
-              @td 'Success Message Format:', {class: 'text-highlight top-label first-column'}
+              @td =>
+                @h3 'Message Format', {class: 'text-highlight'}
+            @tr =>
+              @td 'Success:', {class: 'text-highlight top-label first-column'}
               @td =>
                 @subview 'successMessageEditor', new TextEditorView()
             @tr =>
-              @td 'Error Message Format:', {class: 'text-highlight top-label first-column'}
+              @td 'Error:', {class: 'text-highlight top-label first-column'}
               @td =>
                 @subview 'errorMessageEditor', new TextEditorView()
             @tr =>
@@ -91,6 +99,24 @@ class CommandEditView extends View
               @td 'Maximum Completed:', {class: 'text-highlight first-column'}
               @td =>
                 @subview 'maxCompletedEditor', new TextEditorView(mini: true)
+            @tr =>
+              @td =>
+                @h2 'Patterns', {class: 'text-highlight'}
+            @tr =>
+              @td {class: 'first-column', colspan: 2}, =>
+                @subview 'patternChooseView', new PatternChooseView(config.patterns)
+            @tr =>
+              @td =>
+                @h2 'Environment Variables', {class: 'text-highlight'}
+            @tr =>
+              @td {class: 'first-column', colspan: 2}, =>
+                @subview 'envVarsView', new TableEditView(['Name', 'Value'])
+            @tr =>
+              @td =>
+                @h2 'Input Dialogs', {class: 'text-highlight'}
+            @tr =>
+              @td {class: 'first-column', colspan: 2}, =>
+                @subview 'inputDialogsView', new TableEditView(['Name', 'Message', 'Default value'])
 
   getTitle: ->
     return 'CommandEditView';
@@ -125,7 +151,7 @@ class CommandEditView extends View
   # Populates the view with the config.
   showConfig: ->
     command = @config.commands[@commandIndex];
-    # console.log(command);
+
     @namespaceEditor.getModel().setText(command.namespace);
     @actionEditor.getModel().setText(command.action);
     @commandEditor.getModel().setText(command.command);
@@ -142,6 +168,15 @@ class CommandEditView extends View
     @setMultiLineEditorText(@errorOutputEditor, command.errorOutput);
     @setMultiLineEditorText(@successMessageEditor, command.successMessage);
     @setMultiLineEditorText(@errorMessageEditor, command.errorMessage);
+    @patternChooseView.selectPatterns(command.patterns);
+
+    if command.env?
+      for name, value of command.env
+        @envVarsView.addRow([name, value]);
+
+    if command.inputDialogs?
+      for inputDialog in command.inputDialogs
+        @inputDialogsView.addRow([inputDialog.variableName, inputDialog.message, inputDialog.initialInput]);
 
   setChecked: (checkBox, checked) ->
     if !checked?
