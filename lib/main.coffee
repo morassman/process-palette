@@ -1,6 +1,6 @@
 _ = require 'underscore-plus'
 MainView = require './views/main-view'
-CommandEditView = require './views/edit/command-edit-view'
+MainEditView = require './views/edit/main-edit-view'
 ProjectController = require './controllers/project-controller'
 {File, CompositeDisposable} = require 'atom'
 path = require 'path'
@@ -115,11 +115,11 @@ module.exports = ProcessPalette =
 
   guiEditConfiguration: ->
     packagePath = atom.packages.getActivePackage('process-palette').path
-    file = new File(path.join(packagePath, 'examples', 'process-palette.json'));
+    file = new File(path.join(packagePath, 'examples', 'process-palette2.json'));
 
     file.read(false).then (content) =>
       config = JSON.parse(content);
-      view = new CommandEditView(config, 1);
+      view = new MainEditView(config);
       pane = atom.workspace.getActivePane();
       item = pane.addItem(view, 0);
       pane.activateItem(item);

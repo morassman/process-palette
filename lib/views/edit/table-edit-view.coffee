@@ -30,6 +30,10 @@ class TableEditView extends View
   initialize: ->
     @addButton.on 'mousedown', (e) -> e.preventDefault();
 
+  reset: ->
+    while @rowViews.length > 0
+      @removeRowView(@rowViews[0]);
+
   addRow: (row) ->
     rowView = @addEmptyRow();
     rowView.setValues(row);
@@ -44,6 +48,14 @@ class TableEditView extends View
   removeRowView: (rowView) ->
     @rowViews.splice(@rowViews.indexOf(rowView), 1);
     @tableBody[0].removeChild(rowView);
+
+  getRows: ->
+    rows = [];
+
+    for rowView in @rowViews
+      rows.push(rowView.getValues());
+
+    return rows;
 
   getColumnCount: ->
     return @columns.length;

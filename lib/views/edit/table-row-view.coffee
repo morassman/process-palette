@@ -4,7 +4,6 @@ module.exports =
 class TableRowView extends HTMLElement
 
   initialize: (@tableView, @columnCount) ->
-    console.log("TableRowView.initialize : "+@columnCount);
     @editors = [];
 
     deleteElement = document.createElement("td");
@@ -31,5 +30,13 @@ class TableRowView extends HTMLElement
   setValues: (values) ->
     for i in [0 ... values.length]
       @editors[i].getModel().setText(values[i]);
+
+  getValues: ->
+    values = [];
+
+    for editor in @editors
+      values.push(editor.getModel().getText());
+
+    return values;
 
 module.exports = document.registerElement("table-row-view", prototype: TableRowView.prototype, extends: "tr")

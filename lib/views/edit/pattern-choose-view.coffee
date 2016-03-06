@@ -4,7 +4,7 @@ PatternItemView = require './pattern-item-view'
 module.exports =
 class PatternChooseView extends View
 
-  constructor: (@patterns) ->
+  constructor: ->
     super();
     @itemViews = [];
 
@@ -12,6 +12,16 @@ class PatternChooseView extends View
     @div =>
       @div {class: 'process-palette-pattern-choose-view'}, =>
         @ul {class: 'list-group', outlet: 'list'}
+
+  setPatterns: (@patterns, selectedPatternNames) ->
+    @reset();
+    @selectPatterns(selectedPatternNames);
+
+  reset: ->
+    for itemView in @itemViews
+      @list[0].removeChild(itemView);
+
+    @itemViews = [];
 
   addRow: (name, value, select=false) ->
     itemView = new PatternItemView();
@@ -36,18 +46,23 @@ class PatternChooseView extends View
 
   selectPatterns: (patternNames) ->
     if !patternNames?
-      patterns = [];
+      patternName = [];
+
+    overrideDefault = @patterns['default']?;
 
     for patternName in patternNames
-      value = @patterns[patternName];
-      if value?
-        @addRow(patternName, value, true);
+      if !overrideDefault and patternName == 'default'
+        @addRow('default', {expression:'(path)'}, true);
+      else
+        value = @patterns[patternName];
+        if value?
+          @addRow(patternName, value, true);
 
     for name, value of @patterns
       if patternNames.indexOf(name) == -1
         @addRow(name, value);
 
-    if patternNames.indexOf('default') == -1
+    if !overrideDefault and patternNames.indexOf('default') == -1
       @addRow('default', {expression:'(path)'});
 
   setChecked: (checkBox, checked) ->
@@ -58,3 +73,12 @@ class PatternChooseView extends View
 
   isChecked: (checkBox) ->
     return checkBox.is(":checked");
+
+  getSelectedPatterns: ->
+    result = [];
+
+    for itemView in @itemViews
+      if itemView.isChecked()
+        result.push(itemView.getName());
+
+    return result;
