@@ -29,7 +29,12 @@ class TableRowView extends HTMLElement
 
   setValues: (values) ->
     for i in [0 ... values.length]
-      @editors[i].getModel().setText(values[i]);
+      value = values[i];
+
+      if !value?
+        value = '';
+
+      @editors[i].getModel().setText(value);
 
   getValues: ->
     values = [];

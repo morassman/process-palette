@@ -229,8 +229,6 @@ class CommandEditView extends View
     editor.getModel().setText(text);
 
   persistChanges: ->
-    console.log("persistChanges");
-
     @command.command = @commandEditor.getModel().getText().trim();
     @command.arguments = [];
     @command.stream = @isChecked(@streamCheck);
@@ -249,8 +247,6 @@ class CommandEditView extends View
     @persistIntegerNullIfNaN('maxCompleted', @maxCompletedEditor.getModel().getText());
     @persistEnv();
     @persistInputDialogs();
-
-    console.log(@command);
 
   persistStringNullIfEmpty: (name, value) ->
     if value.trim().length == 0

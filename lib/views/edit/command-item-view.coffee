@@ -1,11 +1,9 @@
 {$, $$} = require 'atom-space-pen-views'
-ProcessConfig = require '../../process-config'
 
 module.exports =
 class CommandItemView extends HTMLElement
 
   initialize: (@commandChooseView, @command) ->
-    @command = new ProcessConfig(@command);
     @.classList.add('item-view');
 
     button = $$ ->
@@ -40,6 +38,6 @@ class CommandItemView extends HTMLElement
       @nameSpan.removeClass('highlighted');
 
   delete: ->
-    console.log('delete');
+    @commandChooseView.deleteCommandItemView(@);
 
 module.exports = document.registerElement("command-item-view", prototype: CommandItemView.prototype, extends: "li")

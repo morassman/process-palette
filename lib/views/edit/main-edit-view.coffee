@@ -33,22 +33,28 @@ class MainEditView extends View
     if @currentRightView instanceof PatternEditView
       return;
 
+    @persistCurrentView();
     @commandChooseView.commandItemViewSelected(null);
 
-    view = new PatternEditView();
+    view = new PatternEditView(@config);
     @setRightView(view);
 
   commandItemViewSelected: (itemView) ->
+    @persistCurrentView();
+
     if itemView == null
       @setRightView(@emptyView);
     else
       view = new CommandEditView(@config, itemView);
       @setRightView(view);
 
-  setRightView: (view) ->
+  persistCurrentView: ->
     if @currentRightView?.persistChanges?
       @currentRightView.persistChanges();
 
+    # console.log(JSON.stringify(@config));
+
+  setRightView: (view) ->
     @currentRightView = view;
     @rightView.empty();
     @rightView.append(@currentRightView);

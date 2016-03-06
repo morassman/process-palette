@@ -1,4 +1,5 @@
 {View} = require 'atom-space-pen-views'
+ProcessConfig = require '../../process-config'
 CommandItemView = require './command-item-view'
 
 module.exports =
@@ -18,17 +19,27 @@ class CommandChooseView extends View
   initialize: ->
     @addButton.on 'mousedown', (e) -> e.preventDefault();
     @itemViews = [];
+    sanitized = [];
 
     for command in @commands
-      @addCommand(command);
+      command = new ProcessConfig(command);
+      sanitized.push(command);
+      @addCommandItemView(command);
+
+    @commands.splice(0, @commands.length);
+
+    for command in sanitized
+      @commands.push(command);
 
   setMainEditView: (@mainEditView) ->
 
   addNewCommand: ->
-    itemView = @addCommand({});
+    command = new ProcessConfig({});
+    @commands.push(command);
+    itemView = @addCommandItemView(command);
     @commandItemViewSelected(itemView);
 
-  addCommand: (command) ->
+  addCommandItemView: (command) ->
     itemView = new CommandItemView();
     itemView.initialize(@, command);
     @itemViews.push(itemView);
@@ -40,3 +51,11 @@ class CommandChooseView extends View
     @mainEditView.commandItemViewSelected(itemView);
     @selectedItemView = itemView;
     @selectedItemView?.setHighlighted(true);
+
+  deleteCommandItemView: (itemView) ->
+    @list[0].removeChild(itemView);
+    @itemViews.splice(@itemViews.indexOf(itemView), 1);
+    @commands.splice(@commands.indexOf(itemView.getCommand()), 1);
+
+    if @selectedItemView == itemView
+      @commandItemViewSelected(null);
