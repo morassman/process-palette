@@ -1,3 +1,4 @@
+{File} = require 'atom'
 {View} = require 'atom-space-pen-views'
 CommandChooseView = require './command-choose-view'
 CommandEditView = require './command-edit-view'
@@ -6,10 +7,10 @@ PatternEditView = require './pattern-edit-view'
 module.exports =
 class MainEditView extends View
 
-  constructor: (@config) ->
-    super(@config);
+  constructor: (@title, @filePath, @config) ->
+    super(@title, @filePath, @config);
 
-  @content: (config) ->
+  @content: (title, filePath, config) ->
     @div =>
       @div {class: 'process-palette-main-edit-view'}, =>
         @div {class: 'left-view'}, =>
@@ -22,7 +23,7 @@ class MainEditView extends View
             @li 'Choose to edit commands or patterns on the left'
 
   getTitle: ->
-    return 'MainEditView';
+    return 'process-palette.json';
 
   initialize: ->
     @currentRightView = null;
@@ -52,9 +53,11 @@ class MainEditView extends View
     if @currentRightView?.persistChanges?
       @currentRightView.persistChanges();
 
-    # console.log(JSON.stringify(@config));
-
   setRightView: (view) ->
     @currentRightView = view;
     @rightView.empty();
     @rightView.append(@currentRightView);
+
+  destroy: ->
+    file = new File(@filePath);
+    file.writeSync(JSON.stringify(@config, null, '  '));

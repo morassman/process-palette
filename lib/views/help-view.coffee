@@ -34,12 +34,10 @@ class HelpView extends View
 
   createGlobalConfigurationFile: ->
     configFile = new File(atom.config.getUserConfigPath());
-    configFolder = configFile.getParent();
-    @createConfigurationFile(configFolder);
+    @main.guiEditConfiguration(true, configFile.getParent().getRealPathSync());
 
   createProjectConfigurationFile: ->
-    for projectPath in atom.project.getPaths()
-      @createConfigurationFile(new Directory(projectPath));
+    @main.editConfiguration(false);
 
   createConfigurationFile: (configFolder) ->
     configFile = configFolder.getFile("process-palette.json");

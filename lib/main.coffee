@@ -1,9 +1,10 @@
-_ = require 'underscore-plus'
 MainView = require './views/main-view'
+ConfigsView = require './views/configs-view'
 MainEditView = require './views/edit/main-edit-view'
 ProjectController = require './controllers/project-controller'
-{File, CompositeDisposable} = require 'atom'
 path = require 'path'
+_ = require 'underscore-plus'
+{File, CompositeDisposable} = require 'atom'
 
 module.exports = ProcessPalette =
 
@@ -109,20 +110,55 @@ module.exports = ProcessPalette =
     projectController = new ProjectController(@, projectPath);
     @projectControllers.push(projectController);
 
-  editConfiguration: ->
-    for projectController in @projectControllers
-      projectController.editConfiguration();
+  editConfiguration: (showGlobal = true) ->
+    view = new ConfigsView(@, showGlobal);
+    # for projectController in @projectControllers
+    #   projectController.editConfiguration();
 
-  guiEditConfiguration: ->
-    packagePath = atom.packages.getActivePackage('process-palette').path
-    file = new File(path.join(packagePath, 'examples', 'process-palette2.json'));
+  guiEditConfiguration: (global, title, folderPath) ->
+    if global
+      title = 'Global';
+
+    # If there is a process-palette.json file then open it. If not then
+    # create a new file and load the example into it.
+    file = new File(path.join(folderPath, 'process-palette.json'));
+
+    if !file.existsSync()
+      packagePath = atom.packages.getActivePackage('process-palette').path
+      exampleFile = new File(path.join(packagePath, 'examples', 'process-palette.json'));
+
+      exampleFile.read(false).then (content) =>
+        file.create().then =>
+          file.writeSync(content);
+          @guiOpenFile(file);
+    else
+      @guiOpenFile(title, file);
+
+  guiOpenFile: (title, file) ->
+    # If the file is already open then active its pane.
+    filePath = file.getRealPathSync();
+    paneItem = @getPaneItem(filePath);
+    pane = atom.workspace.getActivePane();
+
+    if paneItem != null
+      pane.activateItem(paneItem);
+      return;
 
     file.read(false).then (content) =>
       config = JSON.parse(content);
-      view = new MainEditView(config);
-      pane = atom.workspace.getActivePane();
-      item = pane.addItem(view, 0);
-      pane.activateItem(item);
+      view = new MainEditView(title, filePath, config);
+      paneItem = pane.addItem(view, 0);
+      pane.activateItem(paneItem);
+
+  getPaneItem: (filePath) ->
+    paneItems = atom.workspace.getPaneItems();
+
+    for paneItem in paneItems
+      if paneItem instanceof MainEditView
+        if paneItem.filePath == filePath
+          return paneItem;
+
+    return null;
 
   getConfigController: (namespace, action) ->
     for projectController in @projectControllers
