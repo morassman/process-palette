@@ -7,7 +7,7 @@ PatternEditView = require './pattern-edit-view'
 module.exports =
 class MainEditView extends View
 
-  constructor: (@title, @filePath, @config) ->
+  constructor: (@main, @title, @filePath, @config) ->
     super(@title, @filePath, @config);
 
   @content: (title, filePath, config) ->
@@ -59,5 +59,7 @@ class MainEditView extends View
     @rightView.append(@currentRightView);
 
   destroy: ->
+    @persistCurrentView();
     file = new File(@filePath);
     file.writeSync(JSON.stringify(@config, null, '  '));
+    @main.reloadConfiguration();

@@ -32,8 +32,9 @@ class MainView extends View
     @disposables.add(atom.tooltips.add(@reloadButton, {title: "Reload configurations"}));
     @disposables.add(atom.tooltips.add(@hideButton, {title: "Hide"}));
 
-    @helpButton.on 'mousedown', (e) -> e.preventDefault();
     @editButton.on 'mousedown', (e) -> e.preventDefault();
+    @reloadButton.on 'mousedown', (e) -> e.preventDefault();
+    @helpButton.on 'mousedown', (e) -> e.preventDefault();
     @hideButton.on 'mousedown', (e) -> e.preventDefault();
 
     @on 'mousedown', '.process-palette-resize-handle', (e) => @resizeStarted(e);

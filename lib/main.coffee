@@ -146,9 +146,11 @@ module.exports = ProcessPalette =
       pane.activateItem(paneItem);
       return;
 
+    main = @;
+
     file.read(false).then (content) =>
       config = JSON.parse(content);
-      view = new MainEditView(title, filePath, config);
+      view = new MainEditView(main, title, filePath, config);
       paneItem = pane.addItem(view, 0);
       pane.activateItem(paneItem);
 
