@@ -16,7 +16,7 @@ class CommandEditView extends View
         @table =>
           @tbody =>
             @tr =>
-              @td =>
+              @td {colspan: 2}, =>
                 @h2 'General', {class: 'text-highlight'}
             @tr =>
               @td 'Namespace:', {class: 'text-highlight first-column'}
@@ -27,24 +27,43 @@ class CommandEditView extends View
               @td =>
                 @subview 'actionEditor', new TextEditorView(mini: true)
             @tr =>
+              @td ' '
+              @td =>
+                @span 'The namespace and action name together forms the identifier in the command palette.' , {class: 'text-smaller text-subtle'}
+            @tr =>
               @td 'Shell Command:', {class: 'text-highlight first-column'}
               @td =>
                 @subview 'commandEditor', new TextEditorView(mini: true)
+            @tr =>
+              @td ' '
+              @td =>
+                @span 'Command with arguments to run. Any of the input variables can be used.', {class: 'text-smaller text-subtle'}
             @tr =>
               @td 'Working Directory:', {class: 'text-highlight first-column'}
               @td =>
                 @subview 'cwdEditor', new TextEditorView(mini: true)
             @tr =>
+              @td ' '
+              @td =>
+                @span 'Working directory when running command. Any of the input variables can be used.', {class: 'text-smaller text-subtle'}
+            @tr =>
               @td 'Keystroke:', {class: 'text-highlight first-column'}
               @td =>
                 @subview 'keystrokeEditor', new TextEditorView(mini: true)
             @tr =>
+              @td ' '
               @td =>
+                @span 'Shortcut key. Combine shift, ctrl, cmd and alt with other keys, like ctrl-alt-r', {class: 'text-smaller text-subtle'}
+            @tr =>
+              @td {colspan: 2}, =>
                 @h2 'Output', {class: 'text-highlight'}
             @tr =>
               @td {class: 'first-column', colspan: 2}, =>
                 @input {type: 'checkbox', outlet: 'streamCheck'}
                 @span 'Stream output to target', {class: 'check-label'}
+            @tr =>
+              @td {class: 'first-column', colspan: 2}, =>
+                @span 'Select to stream output to target as it is produced. The target format is not applied when streaming.' , {class: 'text-smaller text-subtle'}
             @tr =>
               @td 'Target:', {class: 'text-highlight first-column'}
               @td =>
@@ -52,7 +71,7 @@ class CommandEditView extends View
                   @option 'Panel', {value: 'panel'}
                   @option 'Clipboard', {value: 'clipboard'}
                   @option 'Developer console', {value: 'console'}
-                  @option 'Editor', {value: 'editor'}
+                  @option 'Active editor', {value: 'editor'}
                   @option 'New file', {value: 'file'}
                   @option 'Void', {value: 'void'}
             @tr =>
@@ -60,8 +79,15 @@ class CommandEditView extends View
               @td =>
                 @subview 'bufferSizeEditor', new TextEditorView(mini: true)
             @tr =>
+              @td ' '
               @td =>
+                @span 'The maximum number of characters to keep in memory. Leave unspecified to disable the limit.' , {class: 'text-smaller text-subtle'}
+            @tr =>
+              @td {colspan: 2}, =>
                 @h3 'Target Format', {class: 'text-highlight'}
+            @tr =>
+              @td {colspan: 2}, =>
+                @span 'Format of output when written to the target. Any variable can be used here.' , {class: 'text-smaller text-subtle'}
             @tr =>
               @td 'Success:', {class: 'text-highlight top-label first-column'}
               @td =>
@@ -71,8 +97,11 @@ class CommandEditView extends View
               @td =>
                 @subview 'errorOutputEditor', new TextEditorView()
             @tr =>
-              @td =>
+              @td {colspan: 2}, =>
                 @h3 'Notification Format', {class: 'text-highlight'}
+            @tr =>
+              @td {colspan: 2}, =>
+                @span 'Format of output when creating a notification. Any variable can be used here. Leave empty to disable notification.' , {class: 'text-smaller text-subtle'}
             @tr =>
               @td 'Success:', {class: 'text-highlight top-label first-column'}
               @td =>
@@ -82,7 +111,7 @@ class CommandEditView extends View
               @td =>
                 @subview 'errorMessageEditor', new TextEditorView()
             @tr =>
-              @td =>
+              @td {colspan: 2}, =>
                 @h2 'Panel', {class: 'text-highlight'}
             @tr =>
               @td {class: 'first-column', colspan: 2}, =>
@@ -101,25 +130,104 @@ class CommandEditView extends View
               @td =>
                 @subview 'maxCompletedEditor', new TextEditorView(mini: true)
             @tr =>
+              @td ' '
               @td =>
+                @span 'The maximum number of panels of completed processes to keep. Leave unspecified to disable the limit.' , {class: 'text-smaller text-subtle'}
+            @tr =>
+              @td {colspan: 2}, =>
                 @h2 'Patterns', {class: 'text-highlight'}
+            @tr =>
+              @td {class: 'first-column', colspan: 2}, =>
+                @span 'Choose which patterns should be applied when detecting file paths. Patterns are applied from top to bottom.' , {class: 'text-smaller text-subtle'}
             @tr =>
               @td {class: 'first-column', colspan: 2}, =>
                 @subview 'patternChooseView', new PatternChooseView()
             @tr =>
-              @td =>
+              @td {colspan: 2}, =>
                 @h2 'Environment Variables', {class: 'text-highlight'}
+            @tr =>
+              @td {colspan: 2}, =>
+                @span 'Add additional environment variables. Any of the input variables can be used in the value.' , {class: 'text-smaller text-subtle'}
             @tr =>
               @td {class: 'first-column', colspan: 2}, =>
                 @div {class: 'bordered'}, =>
                   @subview 'envVarsView', new TableEditView(['Name', 'Value'])
             @tr =>
-              @td =>
+              @td {colspan: 2}, =>
                 @h2 'Input Dialogs', {class: 'text-highlight'}
+            @tr =>
+              @td {colspan: 2}, =>
+                @span 'Configure dialogs to prompt for values of user defined input variables.' , {class: 'text-smaller text-subtle'}
             @tr =>
               @td {class: 'first-column', colspan: 2}, =>
                 @div {class: 'bordered'}, =>
                   @subview 'inputDialogsView', new TableEditView(['Name', 'Message', 'Default value'])
+            @tr =>
+              @td {colspan: 2}, =>
+                @h2 'Variables', {class: 'text-highlight'}
+            @tr =>
+              @td {colspan: 2}, =>
+                @span 'Variables can be used in many of the fields. These should be surrounded with curly brackets when referenced.' , {class: 'text-smaller text-subtle'}
+            @tr =>
+              @td {colspan: 2}, =>
+                @h3 'Input Variables', {class: 'text-highlight'}
+            @tr =>
+              @td 'clipboard', {class: 'text-highlight first-column'}
+              @td 'Text currently on clipboard.'
+            @tr =>
+              @td 'fullCommand', {class: 'text-highlight first-column'}
+              @td 'The full command along with its arguments. Both the command and arguments will have their variables resolved.'
+            @tr =>
+              @td 'configDirAbsPath', {class: 'text-highlight first-column'}
+              @td 'Absolute path of folder where the process-palette.json configuration file is that defines this command.'
+            @tr =>
+              @td 'projectPath', {class: 'text-highlight first-column'}
+              @td 'If projects are open then the first project\'s folder will be used. If there aren\'t any projects open then the path of the folder containing the process-palette.json file is used.'
+            @tr =>
+              @td {colspan: 2}, =>
+                @h3 'Input Variables From Editor', {class: 'text-highlight'}
+            @tr =>
+              @td 'fileExt', {class: 'text-highlight first-column'}
+              @td 'Extension of file.'
+            @tr =>
+              @td 'fileName', {class: 'text-highlight first-column'}
+              @td 'Name of file without extension.'
+            @tr =>
+              @td 'fileNameExt', {class: 'text-highlight first-column'}
+              @td 'Name of file with extension.'
+            @tr =>
+              @td 'filePath', {class: 'text-highlight first-column'}
+              @td 'Path of file relative to project.'
+            @tr =>
+              @td 'fileDirPath', {class: 'text-highlight first-column'}
+              @td 'Path of file\'s directory relative to project.'
+            @tr =>
+              @td 'fileAbsPath', {class: 'text-highlight first-column'}
+              @td 'Absolute path of file.'
+            @tr =>
+              @td 'fileDirAbsPath', {class: 'text-highlight first-column'}
+              @td 'Absolute path of file\'s directory.'
+            @tr =>
+              @td 'selection', {class: 'text-highlight first-column'}
+              @td 'Currently selected text.'
+            @tr =>
+              @td 'fileProjectPath', {class: 'text-highlight first-column'}
+              @td 'Absolute path of file\'s project folder.'
+            @tr =>
+              @td {colspan: 2}, =>
+                @h3 'Output Variables', {class: 'text-highlight'}
+            @tr =>
+              @td {colspan: 2}, =>
+                @span 'Output variables are only available after the command has run and can therefore only be used in the target and notification formats.' , {class: 'text-smaller text-subtle'}
+            @tr =>
+              @td 'stdout', {class: 'text-highlight first-column'}
+              @td 'Standard output produced by the process.'
+            @tr =>
+              @td 'stderr', {class: 'text-highlight first-column'}
+              @td 'Standard error output produced by the process.'
+            @tr =>
+              @td 'exitStatus', {class: 'text-highlight first-column'}
+              @td 'Exit status code returned by the process.'
 
   initialize: ->
     @command = @commandItemView.getCommand();
