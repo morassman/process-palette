@@ -115,9 +115,11 @@ module.exports = ProcessPalette =
     # for projectController in @projectControllers
     #   projectController.editConfiguration();
 
-  guiEditConfiguration: (global, title, folderPath) ->
+  guiEditConfiguration: (global, projectName, folderPath) ->
     if global
-      title = 'Global';
+      title = 'Global Commands';
+    else
+      title = 'Project Commands: '+projectName;
 
     # If there is a process-palette.json file then open it. If not then
     # create a new file and load the example into it.
@@ -130,12 +132,12 @@ module.exports = ProcessPalette =
       exampleFile.read(false).then (content) =>
         file.create().then =>
           file.writeSync(content);
-          @guiOpenFile(file);
+          @guiOpenFile(title, file);
     else
       @guiOpenFile(title, file);
 
   guiOpenFile: (title, file) ->
-    # If the file is already open then active its pane.
+    # If the file is already open then activate its pane.
     filePath = file.getRealPathSync();
     paneItem = @getPaneItem(filePath);
     pane = atom.workspace.getActivePane();

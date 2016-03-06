@@ -35,6 +35,7 @@ class ConfigsView extends SelectListView
       item = {};
       item.global = true;
       item.title = 'Global Configuration';
+      item.projectName = '';
       item.path = configFile.getParent().getRealPathSync();
       items.push(item);
 
@@ -43,6 +44,7 @@ class ConfigsView extends SelectListView
       item = {};
       item.false = true;
       item.title = 'Project: '+dir.getBaseName();
+      item.projectName = dir.getBaseName();
       item.path = projectPath;
       items.push(item);
 
@@ -61,7 +63,7 @@ class ConfigsView extends SelectListView
     # return "<li><span class='badge badge-info'>#{item.bookmark.name}</span> #{item.bookmark.path}</li>";
 
   openItem: (item) ->
-    @main.guiEditConfiguration(item.global, item.title, item.path);
+    @main.guiEditConfiguration(item.global, item.projectName, item.path);
 
   confirmed: (item) ->
     @cancel();

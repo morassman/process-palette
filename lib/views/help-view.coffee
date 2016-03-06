@@ -24,17 +24,21 @@ class HelpView extends View
             @span "Your "
             @span "#{configFolder}", {class: "text-info"}
             @span " folder for global commands "
-            @button "Do it!", {class:'btn btn-sm inline-block-tight', click:'createGlobalConfigurationFile'}
+            @button "Do it!", {class:'btn btn-sm inline-block-tight', outlet: 'globalButton', click:'createGlobalConfigurationFile'}
           @li =>
             @span "The root of any of your project folders for project specific commands "
-            @button "Do it!", {class:'btn btn-sm inline-block-tight', click:'createProjectConfigurationFile'}
+            @button "Do it!", {class:'btn btn-sm inline-block-tight', outlet: 'projectButton', click:'createProjectConfigurationFile'}
         @span "Once you've created a configuration file, run "
         @span "Process Palette: Reload Configuration", {class: "btn btn-sm inline-block-tight", click:'reloadConfiguration'}
         @span "to load it."
 
+  initialize: ->
+    @globalButton.on 'mousedown', (e) -> e.preventDefault();
+    @projectButton.on 'mousedown', (e) -> e.preventDefault();
+
   createGlobalConfigurationFile: ->
     configFile = new File(atom.config.getUserConfigPath());
-    @main.guiEditConfiguration(true, configFile.getParent().getRealPathSync());
+    @main.guiEditConfiguration(true, '', configFile.getParent().getRealPathSync());
 
   createProjectConfigurationFile: ->
     @main.editConfiguration(false);

@@ -14,7 +14,7 @@ class MainEditView extends View
     @div =>
       @div {class: 'process-palette-main-edit-view'}, =>
         @div {class: 'left-view'}, =>
-          @div 'Commands', {class: 'panel-heading text-highlight'}
+          @div title, {class: 'panel-heading text-highlight'}
           @div {class: 'panel-body'}, =>
             @subview 'commandChooseView', new CommandChooseView(config.commands)
           @button 'Edit Patterns', {class: 'btn btn-sm edit-patterns-button', outlet: 'editPatternsButton', click: 'editPatterns'}

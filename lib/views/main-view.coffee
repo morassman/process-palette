@@ -17,6 +17,7 @@ class MainView extends View
       @div class: "process-palette-resize-handle"
       @div {class: "button-group"}, =>
         @button {class:"btn btn-xs icon-pencil inline-block-tight", outlet: "editButton", click: "editPressed"}
+        @button {class:"btn btn-xs icon-sync inline-block-tight", outlet: "reloadButton", click: "reloadPressed"}
         @button {class:"btn btn-xs icon-question inline-block-tight", outlet: "helpButton", click: "toggleHelpView"}
         @button {class:"btn btn-xs icon-chevron-down inline-block-tight", outlet: "hideButton", click: "closePressed"}
       @div {class: "main-content", outlet: "mainContent"}, =>
@@ -28,6 +29,7 @@ class MainView extends View
     @disposables = new CompositeDisposable();
     @disposables.add(atom.tooltips.add(@helpButton, {title: "Toggle help"}));
     @disposables.add(atom.tooltips.add(@editButton, {title: "Edit configuration"}));
+    @disposables.add(atom.tooltips.add(@reloadButton, {title: "Reload configurations"}));
     @disposables.add(atom.tooltips.add(@hideButton, {title: "Hide"}));
 
     @helpButton.on 'mousedown', (e) -> e.preventDefault();
@@ -109,6 +111,9 @@ class MainView extends View
 
   editPressed: =>
     @main.editConfiguration();
+
+  reloadPressed: =>
+    @main.reloadConfiguration();
 
   closePressed: =>
     @main.hidePanel();
