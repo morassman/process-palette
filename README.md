@@ -9,7 +9,7 @@ Install Process Palette and then either generate or download a configuration fil
 ### Generate Configuration
 1. Open the Process Palette panel by choosing `Packages|Process Palette|Toggle` from the menu or `Process Palette: Toggle` from the command palette. The following panel will appear:
 ![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/help.png?raw=true)
-2. Create a global configuration or a project specific configuration with the respective `Do it!` buttons.
+2. Create a global configuration or a project specific configuration with the respective `Do it!` buttons. If a project specific configuration is created and more than one project is open then one can be chosen from the dialog box that will appear.
 3. Either of the `Do it!` buttons will create an example configuration file and open it in the graphical editor.
 4. Configuration files can be edited graphically by choosing `Packages|Process Palette|Edit Configuration` from the menu or `Process Palette: Edit Configuration` from the command palette. Closing the editor will automatically reload the configuration. The `process-palette.json` file can also be edited directly, but then it needs to be reloaded by running `Process Palette: Reload Configuration`.
 
