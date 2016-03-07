@@ -9,7 +9,25 @@ class PatternEditView extends View
 
   @content: ->
     @div =>
-      @div {class: 'process-palette-pattern-choose-view'}, =>
+      @div {class: 'process-palette-pattern-edit-view'}, =>
+        @div {class: 'header'}, =>
+          @h1 'Edit Patterns'
+        @span 'Patterns are used to detect file paths and line number in the output when shown in the '
+        @span 'panel', {class: 'text-highlight'}
+        @span ' target. Each command can have its own patterns configured.'
+        @tag 'p'
+        @span ' The '
+        @span 'Expression', {class: 'text-highlight'}
+        @span ' column can contain any regular expression. The groups '
+        @span '(path)', {class: 'text-highlight'}
+        @span ' and '
+        @span '(line)', {class: 'text-highlight'}
+        @span ' are used to match file paths and line numbers respectively.'
+        @span ' The '
+        @span 'Path RegEx', {class: 'text-highlight'}
+        @span ' column is optional. If it is left out then the built-in expression will be used for the path, '
+        @span 'but a custom expression can be specified in case the built-in one isn\'t sufficient.'
+        @tag 'p'
         @subview 'tableView', new TableEditView(['Name', 'Expression', 'Path RegEx'])
 
   initialize: ->

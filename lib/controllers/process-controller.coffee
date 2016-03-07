@@ -166,6 +166,13 @@ class ProcessController
       @fields.exitStatus = code;
       @processStopped(!code?);
 
+    if !@process?
+      notifOptions = {};
+      notifOptions["dismissable"] = true;
+      notifOptions["detail"] = "Could not execute command '#{@fields.fullCommand}'";
+      atom.notifications.addWarning("Error executing #{@config.namespace}: #{@config.action}", notifOptions);
+      return;
+
     @processID = @process.pid;
 
     @process.stdout.on "data", (data) =>

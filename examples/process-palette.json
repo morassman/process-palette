@@ -34,14 +34,7 @@
       "successMessage" : "Executed : {fullCommand}",
       "errorMessage" : "Executed : {fullCommand}\nReturned with code {exitStatus}\n{stderr}",
       "fatalMessage" : "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
-      "patterns" : ["P1"],
-      "inputDialogs" : [
-          {
-              "variableName": "userInput",
-              "message": "Foo?",
-              "initialInput": "Bar!"
-          }
-      ]
+      "patterns" : ["P1"]
     },
     {
       "namespace" : "Process Palette",

@@ -57,6 +57,15 @@ class ProcessConfig
     @checkInputDialogs();
     @checkPatterns();
 
+  isValid: ->
+    if @namespace.trim().length == 0
+      return false;
+    if @action.trim().length == 0
+      return false;
+    if @command.trim().length == 0
+      return false;
+    return true;
+
   requireString: (name, defaultValue, allowNull) ->
     value = @[name];
 

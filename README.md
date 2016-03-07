@@ -9,8 +9,9 @@ Install Process Palette and then either generate or download a configuration fil
 ### Generate Configuration
 1. Open the Process Palette panel by choosing `Packages|Process Palette|Toggle` from the menu or `Process Palette: Toggle` from the command palette. The following panel will appear:
 ![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/help.png?raw=true)
-2. Create a global configuration or project specific configuration with the respective `Do it!` buttons.
-3. Load the new configuration files by choosing `Packages|Process Palette|Reload Configuration` from the menu, `Process Palette: Reload Configuration` from the command palette or simply pressing the reload button at the bottom.
+2. Create a global configuration or a project specific configuration with the respective `Do it!` buttons.
+3. Either of the `Do it!` buttons will create an example configuration file and open it in the graphical editor.
+4. Configuration files can be edited graphically by choosing `Packages|Process Palette|Edit Configuration` from the menu or `Process Palette: Edit Configuration` from the command palette. Closing the editor will automatically reload the configuration. The `process-palette.json` file can also be edited directly, but then it needs to be reloaded by running `Process Palette: Reload Configuration`.
 
 ### Download Configuration
 1. Download the example [process-palette.json][2f6a8e37] configuration file and place it in the root of your project folder.
@@ -27,6 +28,10 @@ It also contains an example called `Stream Example` to show the direct stream ab
 2. Read the rest of this document. Especially the **Properties** and **Variables** sections for extra flexibility.
 
 ## Configuration
+The graphical editor makes it easier to edit the configuration files. It can be used by choosing `Process Palette: Edit Configuration` from the command palette. A dialog will pop up from where you can choose to edit either the global configuration or a project specific configuration.
+
+The configuration files can also be edited by hand. The remainder of the document will describe how to do this.
+
 Commands are specified with a configuration file in JSON format. The name of the file must be `process-palette.json` and should be in the root of your project folder. If you have multiple project folders, each with its own configuration file, then their configurations will be merged.
 
 A `process-palette.json` file can also be placed in your `~/.atom` folder. If that is the case then it will be loaded first and any project specific files will be loaded afterwards.
@@ -53,7 +58,6 @@ Each entry in the array is an object that describes one command. The most basic 
 
 **Tip!** :
 All `process-palette.json` configuration files can be reloaded by running the `Process Palette: Reload Configuration` command. It can be found in the `Command Palette` or in the `Packages|Process Palette` menu.
-
 
 The new command will cause an entry to be added to the command palette called `Process Palette: Ant default`.
 

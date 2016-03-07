@@ -71,9 +71,11 @@ class ProjectController
 
     if commands?
       for command in commands
-        configController = new ConfigController(@, new ProcessConfig(command));
-        @configControllers.push(configController);
-        @main.mainView.addConfigController(configController);
+        command = new ProcessConfig(command);
+        if command.isValid()
+          configController = new ConfigController(@, command);
+          @configControllers.push(configController);
+          @main.mainView.addConfigController(configController);
 
     if saveCommands?
       for saveCommand in saveCommands
