@@ -42,6 +42,7 @@
       "command" : "ping localhost",
       "stream" : true,
       "outputTarget" : "panel",
+      "outputBufferSize": null,
       "successOutput" : "{stdout}",
       "errorOutput" : "{stdout}\n{stderr}",
       "fatalOutput" : "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",

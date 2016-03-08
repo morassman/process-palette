@@ -24,12 +24,19 @@ These example configurations define a command that will echo a message to standa
 It also contains an example called `Stream Example` to show the direct stream ability. When streaming is enabled the output is written directly to the target without being formatted.
 
 ### Next Steps
-1. Poke around in the configuration file a bit. Just remember to run the `Process Palette: Reload Configuration` command after making changes.
+1. Play with the graphical editor or poke around in the configuration file a bit. Just remember to run the `Process Palette: Reload Configuration` command after making changes.
 2. Read the rest of this document. Especially the **Properties** and **Variables** sections for extra flexibility.
 
-## Configuration
-The graphical editor makes it easier to edit the configuration files. It can be used by choosing `Process Palette: Edit Configuration` from the command palette. A dialog will pop up from where you can choose to edit either the global configuration or a project specific configuration.
+## Graphical Editor
+The graphical editor makes it easier to edit the configuration files. It can be used by choosing `Process Palette: Edit Configuration` from the command palette. A dialog will pop up from where you can choose to edit either the global configuration or a project specific configuration. The following is a screenshot of the graphical editor.
 
+![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/editor.png?raw=true)
+
+The commands are listed on the left. Selecting one will show its details on the right. Pressing the `Edit Patterns` button allows you to define custom patterns for recognizing file paths and line numbers when writing output to the panel, although the default built-in pattern ought to be sufficient in most cases.
+
+The configuration file will be saved and automatically reloaded when closed.
+
+## Configuration Files
 The configuration files can also be edited by hand. The remainder of the document will describe how to do this.
 
 Commands are specified with a configuration file in JSON format. The name of the file must be `process-palette.json` and should be in the root of your project folder. If you have multiple project folders, each with its own configuration file, then their configurations will be merged.

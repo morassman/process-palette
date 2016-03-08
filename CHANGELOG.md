@@ -1,3 +1,6 @@
+## v0.7.0 (7 March 2016)
+- Added graphical editor for configuration files.
+
 ## v0.6.0 (2 January 2016)
 - Added user input dialogs for variables. `@toi333`
 - Allow `filePath` to be acquired from non-editor panes. `@nalcorso`

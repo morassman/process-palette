@@ -63,7 +63,7 @@ class CommandEditView extends View
                 @span 'Stream output to target', {class: 'check-label'}
             @tr =>
               @td {class: 'first-column', colspan: 2}, =>
-                @span 'Select to stream output to target as it is produced. The target format is not applied when streaming.' , {class: 'text-smaller text-subtle'}
+                @span 'Select to stream output to target as it is produced. If not selected then the output will be accumulated and sent to the target when the process ends.' , {class: 'text-smaller text-subtle'}
             @tr =>
               @td 'Target:', {class: 'text-highlight first-column'}
               @td =>
@@ -87,7 +87,7 @@ class CommandEditView extends View
                 @h3 'Target Format', {class: 'text-highlight'}
             @tr =>
               @td {colspan: 2}, =>
-                @span 'Format of output when written to the target. Any variable can be used here.' , {class: 'text-smaller text-subtle'}
+                @span 'Format of output when written to the target. Any variable can be used here. The target format will not be applied if streaming is enabled.' , {class: 'text-smaller text-subtle'}
             @tr =>
               @td 'Success:', {class: 'text-highlight top-label first-column'}
               @td =>
@@ -157,11 +157,13 @@ class CommandEditView extends View
                 @h2 'Input Dialogs', {class: 'text-highlight'}
             @tr =>
               @td {colspan: 2}, =>
-                @span 'Configure dialogs to prompt for values of user defined input variables.' , {class: 'text-smaller text-subtle'}
+                @span 'Input dialogs are used to define custom input variables.' , {class: 'text-smaller text-subtle'}
+                @span ' When running a command you will be prompted to enter a value for each.' , {class: 'text-smaller text-subtle'}
+                @span ' These input variables can be used like any of the others.' , {class: 'text-smaller text-subtle'}
             @tr =>
               @td {class: 'first-column', colspan: 2}, =>
                 @div {class: 'bordered'}, =>
-                  @subview 'inputDialogsView', new TableEditView(['Name', 'Message', 'Default value'])
+                  @subview 'inputDialogsView', new TableEditView(['Name', 'Message (optional)', 'Default value (optional)'])
             @tr =>
               @td {colspan: 2}, =>
                 @h2 'Variables', {class: 'text-highlight'}

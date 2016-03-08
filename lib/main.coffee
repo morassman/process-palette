@@ -150,6 +150,10 @@ module.exports = ProcessPalette =
 
     file.read(false).then (content) =>
       config = JSON.parse(content);
+      if !_.isObject(config.patterns)
+        config.patterns = {};
+      if !_.isArray(config.commands)
+        config.commands = [];
       view = new MainEditView(main, title, filePath, config);
       paneItem = pane.addItem(view, 0);
       pane.activateItem(paneItem);
