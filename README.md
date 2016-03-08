@@ -64,7 +64,7 @@ Each entry in the array is an object that describes one command. The most basic 
 ```
 
 **Tip!** :
-All `process-palette.json` configuration files can be reloaded by running the `Process Palette: Reload Configuration` command. It can be found in the `Command Palette` or in the `Packages|Process Palette` menu.
+All `process-palette.json` configuration files can be reloaded by running the `Process Palette: Reload Configuration` command. It can be found in the `Command Palette` or in the `Packages|Process Palette` menu. There is also a reload button in the top right of the Process Palette panel.
 
 The new command will cause an entry to be added to the command palette called `Process Palette: Ant default`.
 
