@@ -1,3 +1,6 @@
+## v0.7.1 (31 March 2016)
+- Added buttons for inserting variables.
+
 ## v0.7.0 (7 March 2016)
 - Added graphical editor for configuration files.
 

@@ -1,7 +1,8 @@
 {CompositeDisposable} = require 'atom'
 {View, TextEditorView} = require 'atom-space-pen-views'
-PatternChooseView = require './pattern-choose-view'
 TableEditView = require './table-edit-view'
+PatternChooseView = require './pattern-choose-view'
+InsertVariableView = require './insert-variable-view'
 _ = require 'underscore-plus'
 
 module.exports =
@@ -34,6 +35,8 @@ class CommandEditView extends View
               @td 'Shell Command:', {class: 'text-highlight first-column'}
               @td =>
                 @subview 'commandEditor', new TextEditorView(mini: true)
+              @td {class: 'variable-button'}, =>
+                @button 'Insert Variable', {class: 'btn btn-sm', click: 'commandInsertVariable'}
             @tr =>
               @td ' '
               @td =>
@@ -42,6 +45,8 @@ class CommandEditView extends View
               @td 'Working Directory:', {class: 'text-highlight first-column'}
               @td =>
                 @subview 'cwdEditor', new TextEditorView(mini: true)
+              @td {class: 'variable-button'}, =>
+                @button 'Insert Variable', {class: 'btn btn-sm', click: 'cwdInsertVariable'}
             @tr =>
               @td ' '
               @td =>
@@ -92,10 +97,14 @@ class CommandEditView extends View
               @td 'Success:', {class: 'text-highlight top-label first-column'}
               @td =>
                 @subview 'successOutputEditor', new TextEditorView()
+              @td {class: 'variable-button'}, =>
+                @button 'Insert Variable', {class: 'btn btn-sm', click: 'successOutputInsertVariable'}
             @tr =>
               @td 'Error:', {class: 'text-highlight top-label first-column'}
               @td =>
                 @subview 'errorOutputEditor', new TextEditorView()
+              @td {class: 'variable-button'}, =>
+                @button 'Insert Variable', {class: 'btn btn-sm', click: 'errorOutputInsertVariable'}
             @tr =>
               @td {colspan: 2}, =>
                 @h3 'Notification Format', {class: 'text-highlight'}
@@ -106,10 +115,14 @@ class CommandEditView extends View
               @td 'Success:', {class: 'text-highlight top-label first-column'}
               @td =>
                 @subview 'successMessageEditor', new TextEditorView()
+              @td {class: 'variable-button'}, =>
+                @button 'Insert Variable', {class: 'btn btn-sm', click: 'successMessageInsertVariable'}
             @tr =>
               @td 'Error:', {class: 'text-highlight top-label first-column'}
               @td =>
                 @subview 'errorMessageEditor', new TextEditorView()
+              @td {class: 'variable-button'}, =>
+                @button 'Insert Variable', {class: 'btn btn-sm', click: 'errorMessageInsertVariable'}
             @tr =>
               @td {colspan: 2}, =>
                 @h2 'Panel', {class: 'text-highlight'}
@@ -337,6 +350,24 @@ class CommandEditView extends View
   setMultiLineEditorText: (editor, text) ->
     text = text.replace('\\n', '\n');
     editor.getModel().setText(text);
+
+  commandInsertVariable: ->
+    new InsertVariableView(@commandEditor);
+
+  cwdInsertVariable: ->
+    new InsertVariableView(@cwdEditor);
+
+  successOutputInsertVariable: ->
+    new InsertVariableView(@successOutputEditor, true);
+
+  errorOutputInsertVariable: ->
+    new InsertVariableView(@errorOutputEditor, true);
+
+  successMessageInsertVariable: ->
+    new InsertVariableView(@successMessageEditor, true);
+
+  errorMessageInsertVariable: ->
+    new InsertVariableView(@errorMessageEditor, true);
 
   persistChanges: ->
     @command.command = @commandEditor.getModel().getText().trim();

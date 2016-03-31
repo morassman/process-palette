@@ -51,7 +51,7 @@ class ConfigsView extends SelectListView
     return items;
 
   getFilterKey: ->
-    return "text";
+    return "title";
 
   viewForItem: (item) ->
     return """
