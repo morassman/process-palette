@@ -49,17 +49,20 @@ class MainEditView extends View
       view = new CommandEditView(@config, itemView);
       @setRightView(view);
 
-  persistCurrentView: ->
-    if @currentRightView?.persistChanges?
-      @currentRightView.persistChanges();
-
   setRightView: (view) ->
     @currentRightView = view;
     @rightView.empty();
     @rightView.append(@currentRightView);
 
-  destroy: ->
+  persistCurrentView: ->
+    if @currentRightView?.persistChanges?
+      @currentRightView.persistChanges();
+
+  saveChanges: ->
     @persistCurrentView();
     file = new File(@filePath);
     file.writeSync(JSON.stringify(@config, null, '  '));
+
+  destroy: ->
+    @saveChanges();
     @main.reloadConfiguration();

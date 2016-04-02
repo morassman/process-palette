@@ -19,7 +19,6 @@ module.exports = ProcessPalette =
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:toggle': => @togglePanel()
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:edit-configuration': => @editConfiguration()
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:reload-configuration': => @reloadConfiguration()
-    @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:gui-edit-configuration': => @guiEditConfiguration()
     @subscriptions.add atom.commands.add 'atom-workspace',
       'core:cancel': => @hidePanel()
       'core:close': => @hidePanel()
@@ -60,6 +59,9 @@ module.exports = ProcessPalette =
       projectController.fileSaved(path);
 
   load: ->
+    # Remove all key bindings.
+    atom.keymaps.removeBindingsFromSource('process-palette');
+
     configFile = new File(atom.config.getUserConfigPath());
     @addProjectPath(configFile.getParent().getRealPathSync());
 
@@ -67,6 +69,8 @@ module.exports = ProcessPalette =
       @addProjectPath(projectPath);
 
   reloadConfiguration: ->
+    @saveEditors();
+
     if @mainView.isOutputViewVisible()
       @mainView.showListView();
 
@@ -157,6 +161,13 @@ module.exports = ProcessPalette =
       view = new MainEditView(main, title, filePath, config);
       paneItem = pane.addItem(view, 0);
       pane.activateItem(paneItem);
+
+  saveEditors: ->
+    paneItems = atom.workspace.getPaneItems();
+
+    for paneItem in paneItems
+      if paneItem instanceof MainEditView
+        paneItem.saveChanges();
 
   getPaneItem: (filePath) ->
     paneItems = atom.workspace.getPaneItems();

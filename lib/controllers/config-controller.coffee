@@ -24,17 +24,6 @@ class ConfigController
       bindings = {};
       binding[@config.keystroke] = @config.getCommandName();
       bindings[cssSelector] = binding;
-
-      # params = {};
-      # params.keystrokes = @config.keystroke;
-      # params.command = @config.getCommandName();
-      # params.target = cssSelector;
-      #
-      # try
-      #   console.log(atom.keymaps.findKeyBindings(params));
-      # catch error
-      #   console.log(error);
-
       atom.keymaps.add('process-palette', bindings);
 
   getMain: ->
