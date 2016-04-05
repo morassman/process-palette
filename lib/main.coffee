@@ -120,6 +120,7 @@ module.exports = ProcessPalette =
     #   projectController.editConfiguration();
 
   guiEditConfiguration: (global, projectName, folderPath) ->
+
     if global
       title = 'Global Commands';
     else

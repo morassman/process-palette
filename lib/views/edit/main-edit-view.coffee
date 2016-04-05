@@ -1,5 +1,6 @@
 {File} = require 'atom'
-{View} = require 'atom-space-pen-views'
+{$$, View} = require 'atom-space-pen-views'
+SplitView = require '../split-view'
 CommandChooseView = require './command-choose-view'
 CommandEditView = require './command-edit-view'
 PatternEditView = require './pattern-edit-view'
@@ -13,7 +14,8 @@ class MainEditView extends View
   @content: (title, filePath, config) ->
     @div =>
       @div {class: 'process-palette-main-edit-view'}, =>
-        @div {class: 'left-view'}, =>
+        @subview 'splitView', new SplitView();
+        @div {class: 'left-view', outlet: 'leftView'}, =>
           @div title, {class: 'panel-heading text-highlight'}
           @div {class: 'panel-body'}, =>
             @subview 'commandChooseView', new CommandChooseView(config.commands)
@@ -28,6 +30,13 @@ class MainEditView extends View
   initialize: ->
     @currentRightView = null;
     @commandChooseView.setMainEditView(@);
+
+    @leftView.detach();
+    @rightView.detach();
+
+    @splitView.setLeftView(@leftView);
+    @splitView.setRightView(@rightView);
+
     @editPatternsButton.on 'mousedown', (e) -> e.preventDefault();
 
   editPatterns: ->
@@ -49,10 +58,8 @@ class MainEditView extends View
       view = new CommandEditView(@config, itemView);
       @setRightView(view);
 
-  setRightView: (view) ->
-    @currentRightView = view;
-    @rightView.empty();
-    @rightView.append(@currentRightView);
+  setRightView: (@currentRightView) ->
+    @splitView.setRightView(@currentRightView);
 
   persistCurrentView: ->
     if @currentRightView?.persistChanges?
