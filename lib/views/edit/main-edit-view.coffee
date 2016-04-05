@@ -1,4 +1,4 @@
-{File} = require 'atom'
+{File, CompositeDisposable} = require 'atom'
 {$$, View} = require 'atom-space-pen-views'
 SplitView = require '../split-view'
 CommandChooseView = require './command-choose-view'
@@ -16,7 +16,8 @@ class MainEditView extends View
       @div {class: 'process-palette-main-edit-view'}, =>
         @subview 'splitView', new SplitView();
         @div {class: 'left-view', outlet: 'leftView'}, =>
-          @div title, {class: 'panel-heading text-highlight'}
+          @span title, {class: 'title text-highlight'}
+          @button {class:"btn btn-xs icon-sync inline-block-tight reload-button", outlet: "reloadButton", click: "reloadPressed"}
           @div {class: 'panel-body'}, =>
             @subview 'commandChooseView', new CommandChooseView(config.commands)
           @button 'Edit Patterns', {class: 'btn btn-sm edit-patterns-button', outlet: 'editPatternsButton', click: 'editPatterns'}
@@ -28,6 +29,12 @@ class MainEditView extends View
     return 'process-palette.json';
 
   initialize: ->
+    @disposables = new CompositeDisposable();
+    @disposables.add(atom.tooltips.add(@reloadButton, {title: "Apply and reload"}));
+    @disposables.add atom.workspace.onWillDestroyPaneItem (e) => @willDestroy(e);
+
+    @reloadButton.on 'mousedown', (e) -> e.preventDefault();
+
     @currentRightView = null;
     @commandChooseView.setMainEditView(@);
 
@@ -38,6 +45,31 @@ class MainEditView extends View
     @splitView.setRightView(@rightView);
 
     @editPatternsButton.on 'mousedown', (e) -> e.preventDefault();
+    @saved = JSON.stringify(@config, null, '  ');
+
+  willDestroy: (e) ->
+    if e.item isnt @
+      return;
+
+    @persistCurrentView();
+    memory = JSON.stringify(@config, null, '  ');
+
+    if memory == @saved
+      return;
+
+    options = {};
+    options.message = 'Configuration changed';
+    options.detailedMessage = 'Save and apply new configuration?';
+    options.buttons = ['Yes', 'No'];
+
+    choice = atom.confirm(options);
+
+    if choice == 0
+      @saveToFile(memory);
+      @main.reloadConfiguration(false);
+
+  reloadPressed: ->
+    @main.reloadConfiguration();
 
   editPatterns: ->
     if @currentRightView instanceof PatternEditView
@@ -67,9 +99,12 @@ class MainEditView extends View
 
   saveChanges: ->
     @persistCurrentView();
+    @saveToFile(JSON.stringify(@config, null, '  '));
+
+  saveToFile: (text) ->
     file = new File(@filePath);
-    file.writeSync(JSON.stringify(@config, null, '  '));
+    file.writeSync(text);
+    @saved = text;
 
   destroy: ->
-    @saveChanges();
-    @main.reloadConfiguration();
+    @disposables?.dispose();

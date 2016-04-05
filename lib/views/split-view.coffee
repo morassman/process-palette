@@ -3,7 +3,7 @@
 module.exports =
 class SplitView extends View
 
-  constructor: (@position = 200, @leftMin = 0, @rightMin = 0, @leftMax = undefined) ->
+  constructor: (@position = 250, @leftMin = 0, @rightMin = 0, @leftMax = undefined) ->
     super();
     if !@leftMax
       @leftMax = Number.MAX_SAFE_INTEGER;

@@ -68,8 +68,9 @@ module.exports = ProcessPalette =
     for projectPath in atom.project.getPaths()
       @addProjectPath(projectPath);
 
-  reloadConfiguration: ->
-    @saveEditors();
+  reloadConfiguration: (saveEditors = true)->
+    if saveEditors
+      @saveEditors();
 
     if @mainView.isOutputViewVisible()
       @mainView.showListView();
@@ -123,7 +124,7 @@ module.exports = ProcessPalette =
     if global
       title = 'Global Commands';
     else
-      title = 'Project Commands: '+projectName;
+      title = 'Project: '+projectName;
 
     # If there is a process-palette.json file then open it. If not then
     # create a new file and load the example into it.
