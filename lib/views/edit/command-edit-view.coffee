@@ -148,6 +148,13 @@ class CommandEditView extends View
                 @span 'The maximum number of panels of completed processes to keep. Leave unspecified to disable the limit.' , {class: 'text-smaller text-subtle'}
             @tr =>
               @td {colspan: 2}, =>
+                @h2 'Processes', {class: 'text-highlight'}
+            @tr =>
+              @td {class: 'first-column', colspan: 2}, =>
+                @input {type: 'checkbox', outlet: 'singularCheck'}
+                @span 'Terminate running process before running a new instance', {class: 'check-label'}
+            @tr =>
+              @td {colspan: 2}, =>
                 @h2 'Patterns', {class: 'text-highlight'}
             @tr =>
               @td {class: 'first-column', colspan: 2}, =>
@@ -308,6 +315,7 @@ class CommandEditView extends View
     @bufferSizeEditor.getModel().setText(@emptyString(@command.outputBufferSize));
     @setChecked(@streamCheck, @command.stream);
     @targetSelect.val(@command.outputTarget);
+    @setChecked(@singularCheck, @command.singular);
     @setChecked(@scrollLockCheck, @command.scrollLockEnabled);
     @setChecked(@autoShowCheck, @command.autoShowOutput);
     @setChecked(@autoHideCheck, @command.autoHideOutput);
@@ -373,6 +381,7 @@ class CommandEditView extends View
     @command.command = @commandEditor.getModel().getText().trim();
     @command.arguments = [];
     @command.stream = @isChecked(@streamCheck);
+    @command.singular = @isChecked(@singularCheck);
     @command.autoShowOutput = @isChecked(@autoShowCheck);
     @command.autoHideOutput = @isChecked(@autoHideCheck);
     @command.scrollLockEnabled = @isChecked(@scrollLockCheck);

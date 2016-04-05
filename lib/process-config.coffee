@@ -19,6 +19,7 @@ class ProcessConfig
     @autoShowOutput = true;
     @autoHideOutput = false;
     @scrollLockEnabled = false;
+    @singular = false;
     @patterns = ['default'];
     @successOutput = '{stdout}';
     @errorOutput = '{stdout}\n{stderr}';

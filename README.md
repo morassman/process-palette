@@ -191,6 +191,7 @@ autoHideOutput|If the panel should automatically be hidden when the process term
 scrollLockEnabled|If scroll lock should automatically be enabled. This only applies when `outputTarget` is set to `panel`.|false
 maxCompleted|The maximum number of completed processes whose output to keep at a time. It is used to automatically discard the oldest completed process in order to prevent them from piling up. This property only applies when the `outputTarget` is set to `panel`. It can be disabled by setting the value to `null` in which case all panels will have to be discarded manually.|3
 outputBufferSize|The maximum number of characters to accumulate from standard output and error. When the buffer size is reached the oldest output is discarded. This is not applied to the output target, but only to the output accumulated in the `stdout` and `stderr` variables. This limit can be disabled by setting it to `null`, but should be done with caution for long running processes.|80000
+singular|Set to `true` to terminate the running process before running a new instance.|false
 
 The following properties relate to the messages shown after a command is executed. Giving any of the `xxxMessage` properties a value of `null` will prevent that message from being shown.
 

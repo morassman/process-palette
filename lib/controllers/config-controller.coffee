@@ -64,9 +64,17 @@ class ConfigController
     @runProcessWithFile(filePath);
 
   runProcessWithFile: (filePath) ->
+    if @config.singular
+      @killRunningProcesses();
+
     processController = new ProcessController(@, @config);
     @processControllers.push(processController);
     processController.runProcessWithFile(filePath);
+
+  killRunningProcesses: ->
+    clone = @processControllers.slice(0);
+    for pc in clone
+      pc.killProcess();
 
   removeProcessController: (processController) ->
     processController.dispose();

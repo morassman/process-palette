@@ -1,3 +1,9 @@
+## v0.7.2 (5 April 2016)
+- Apply open configurations when reloading.
+- Remove key bindings when reloading configuration.
+- Added ability to run only one instance at a time.
+- Added divider to editor.
+
 ## v0.7.1 (31 March 2016)
 - Added buttons for inserting variables.
 
