@@ -124,7 +124,7 @@ module.exports = ProcessPalette =
     if global
       title = 'Global Commands';
     else
-      title = 'Project: '+projectName;
+      title = projectName;
 
     # If there is a process-palette.json file then open it. If not then
     # create a new file and load the example into it.

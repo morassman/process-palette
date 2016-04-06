@@ -17,12 +17,13 @@ class MainEditView extends View
         @subview 'splitView', new SplitView();
         @div {class: 'left-view', outlet: 'leftView'}, =>
           @span title, {class: 'title text-highlight'}
+          @button {class:"btn btn-xs icon-unfold inline-block-tight reload-button", outlet: "toggleButton", click: "togglePressed"}
           @button {class:"btn btn-xs icon-sync inline-block-tight reload-button", outlet: "reloadButton", click: "reloadPressed"}
           @div {class: 'panel-body'}, =>
             @subview 'commandChooseView', new CommandChooseView(config.commands)
           @button 'Edit Patterns', {class: 'btn btn-sm edit-patterns-button', outlet: 'editPatternsButton', click: 'editPatterns'}
         @div {class: 'right-view', outlet: 'rightView'}, =>
-          @ul {class: 'background-message centered', outlet: 'emptyView'}, =>
+          @ul {class: 'background-message centered'}, =>
             @li 'Choose to edit commands or patterns on the left'
 
   getTitle: ->
@@ -30,9 +31,11 @@ class MainEditView extends View
 
   initialize: ->
     @disposables = new CompositeDisposable();
+    @disposables.add(atom.tooltips.add(@toggleButton, {title: "Toggle panel"}));
     @disposables.add(atom.tooltips.add(@reloadButton, {title: "Apply and reload"}));
     @disposables.add atom.workspace.onWillDestroyPaneItem (e) => @willDestroy(e);
 
+    @toggleButton.on 'mousedown', (e) -> e.preventDefault();
     @reloadButton.on 'mousedown', (e) -> e.preventDefault();
 
     @currentRightView = null;
@@ -68,6 +71,9 @@ class MainEditView extends View
       @saveToFile(memory);
       @main.reloadConfiguration(false);
 
+  togglePressed: ->
+    @main.togglePanel();
+
   reloadPressed: ->
     @main.reloadConfiguration();
 
@@ -85,7 +91,7 @@ class MainEditView extends View
     @persistCurrentView();
 
     if itemView == null
-      @setRightView(@emptyView);
+      @setRightView(@rightView);
     else
       view = new CommandEditView(@config, itemView);
       @setRightView(view);

@@ -1,3 +1,7 @@
+## v0.8.1 (6 April 2016)
+- Added button to editor to toggle panel.
+- Fixed layout issue in editor that caused center panel to expand.
+
 ## v0.8.0 (5 April 2016)
 - Added ability to run only one instance at a time.
 - Added divider and reload button to editor.
