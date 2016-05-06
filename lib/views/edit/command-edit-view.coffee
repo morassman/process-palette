@@ -34,7 +34,7 @@ class CommandEditView extends View
             @tr =>
               @td 'Shell Command:', {class: 'text-highlight first-column'}
               @td =>
-                @subview 'commandEditor', new TextEditorView(mini: true)
+                @subview 'commandEditor', new TextEditorView()
               @td {class: 'variable-button'}, =>
                 @button 'Insert Variable', {class: 'btn btn-sm', click: 'commandInsertVariable'}
             @tr =>
@@ -273,6 +273,10 @@ class CommandEditView extends View
     @bufferSizeEditor.getModel().setPlaceholderText('Unspecified');
     @maxCompletedEditor.getModel().setPlaceholderText('Unspecified');
 
+    @commandEditor.addClass('multi-line-editor');
+    @commandEditor.getModel().setSoftTabs(true);
+    @commandEditor.getModel().setSoftWrapped(true);
+    @commandEditor.getModel().setLineNumberGutterVisible(false);
     @successOutputEditor.addClass('multi-line-editor');
     @successOutputEditor.getModel().setSoftTabs(true);
     @successOutputEditor.getModel().setLineNumberGutterVisible(false);
