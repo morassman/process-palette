@@ -198,12 +198,33 @@ class ProcessController
 
     return [fileNameExt.substr(0, index), fileNameExt.substr(index+1)];
 
-  insertFields: (text) =>
-    return text.replace(@replaceRegExp, @createReplaceCallback(@fields));
+  insertFields: (text) ->
+    return text.replace(@replaceRegExp, @createReplaceCallback());
 
-  createReplaceCallback: (fields) ->
+  createReplaceCallback: ->
     return (text) =>
-      return fields[text.slice(1,-1)];
+      return @pipeField(text.slice(1,-1))
+
+  pipeField: (text) ->
+    parts = text.split('|');
+    fieldName = parts[0].trim();
+    value = @fields[fieldName];
+
+    if !value?
+      value = '';
+
+    if parts.length == 2
+      value = @pipeValue(value, parts[1].trim());
+
+    return value;
+
+  pipeValue: (value, filter) ->
+    if filter == 'posix' or filter == 'unix'
+      return value.split('\\').join('/');
+    else if filter == 'win'
+      return value.split('/').join('\\');
+
+    return value;
 
   addProcessCallback: (callback) ->
     @processCallbacks.push(callback);
