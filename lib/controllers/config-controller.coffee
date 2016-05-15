@@ -11,6 +11,7 @@ class ConfigController
     @processControllers = [];
     @listeners = [];
     @patterns = @projectController.getPatterns(@config.patterns);
+    @lastTime = null;
 
     cssSelector = 'atom-workspace';
 
@@ -28,6 +29,9 @@ class ConfigController
 
   getMain: ->
     return @projectController.getMain();
+
+  getLastTime: ->
+    return @lastTime;
 
   getFirstProcessController: ->
     if @processControllers.length == 0
@@ -70,6 +74,7 @@ class ConfigController
     processController = new ProcessController(@, @config);
     @processControllers.push(processController);
     processController.runProcessWithFile(filePath);
+    @lastTime = new Date().getTime();
 
   killRunningProcesses: ->
     clone = @processControllers.slice(0);

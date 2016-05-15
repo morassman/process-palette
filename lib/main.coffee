@@ -17,6 +17,7 @@ module.exports = ProcessPalette =
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:show': => @showPanel()
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:hide': => @hidePanel()
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:toggle': => @togglePanel()
+    @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:rerun-last': => @runLast()
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:edit-configuration': => @editConfiguration()
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:reload-configuration': => @reloadConfiguration()
     @subscriptions.add atom.commands.add 'atom-workspace',
@@ -96,6 +97,10 @@ module.exports = ProcessPalette =
   hidePanel: ->
     if @bottomPanel.visible
       @bottomPanel.hide();
+
+  runLast: ->
+    configController = @getLastRunConfigController();
+    configController?.runProcess();
 
   showListView: ->
     @showPanel();
@@ -188,3 +193,24 @@ module.exports = ProcessPalette =
         return processController;
 
     return null;
+
+  getLastRunConfigController: ->
+    result = null;
+    configControllers = @getAllConfigControllers();
+
+    for configController in configControllers
+      lastTime = configController.getLastTime();
+
+      if lastTime?
+        if !result? or result.getLastTime() < lastTime
+          result = configController;
+
+    return result;
+
+  getAllConfigControllers: ->
+    result = [];
+
+    for projectController in @projectControllers
+      result = result.concat(projectController.getConfigControllers());
+
+    return result;

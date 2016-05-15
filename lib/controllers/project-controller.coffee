@@ -19,6 +19,9 @@ class ProjectController
   getMain: ->
     return @main;
 
+  getConfigControllers: ->
+    return @configControllers;
+
   dispose: ->
     @clearControllers();
 
