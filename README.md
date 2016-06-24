@@ -321,6 +321,21 @@ Keep in mind that the `arguments` property is an array of strings. Adding variab
 "arguments" : ["{fileNameExt}", "{selection}"]
 ```
 
+### Converting file paths
+It may sometimes be necessary to convert a file path to use separators for a different platform. Any of the variables can be converted by piping it through a transform.
+
+If, for instance, you are running on Linux and need to convert the `filePath` variable to a Windows style path, then you can specify it as `{filePath | win}`. The opposite can also be done with `{filePath | unix}` or `{filePath | posix}` when running on Windows.
+
+## Command Palette
+Command|Description
+---|---
+Hide|Hides the output panel.
+Show|Shows the output panel.
+Toggle|Toggles the output panel's visibility.
+Edit Configuration|Opens graphical configuration editor.
+Reload Configuration|Reloads all configuration files. This is only necessary if a process-palette.json file was directly modified with a text editor.
+Rerun Last|Runs the last command that was executed again.
+
 ## Detect Paths and Line Numbers
 Commands that write to the output panel can be configured to detect file paths and optionally line numbers.
 

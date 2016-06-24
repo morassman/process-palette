@@ -1,3 +1,8 @@
+## v0.8.2 (24 June 2016)
+- Added entry to command palette to rerun last command.
+- Added ability to convert paths between platforms.
+- Changed command text field to a multi-line editor.
+
 ## v0.8.1 (6 April 2016)
 - Added button to editor to toggle panel.
 - Fixed layout issue in editor that caused center panel to expand.
