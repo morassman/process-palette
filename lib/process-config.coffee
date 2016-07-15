@@ -20,8 +20,8 @@ class ProcessConfig
     @autoHideOutput = false;
     @scrollLockEnabled = false;
     @singular = false;
-    @promptToSave = false;
-    # saveOption = [none, all, affected]
+    @promptToSave = true;
+    # saveOption = [none, all, referenced]
     @saveOption = 'none';
     @patterns = ['default'];
     @successOutput = '{stdout}';
@@ -37,6 +37,9 @@ class ProcessConfig
     if @outputTarget not in ["panel", "editor", "file", "clipboard", "console", "void"]
       @outputTarget = "void";
 
+    if @saveOption not in ["none", "all", "referenced"]
+      @saveOption = "none";
+
     # Do not allow streaming to the clipboard.
     if @outputTarget == "clipboard"
       @stream = false;
@@ -51,6 +54,7 @@ class ProcessConfig
     @requireString('errorOutput', '{stdout}\n{stderr}', true);
     @requireString('successMessage', 'Executed : {fullCommand}', true);
     @requireString('errorMessage', 'Executed : {fullCommand}\nReturned with code {exitStatus}\n{stderr}', true);
+    @requireBoolean('promptToSave', true);
     @requireBoolean('stream', false);
     @requireBoolean('autoShowOutput', true);
     @requireBoolean('autoHideOutput', false);

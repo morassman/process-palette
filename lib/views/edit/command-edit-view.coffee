@@ -59,6 +59,24 @@ class CommandEditView extends View
               @td ' '
               @td =>
                 @span 'Shortcut key. Combine shift, ctrl, cmd and alt with other keys, like ctrl-alt-r', {class: 'text-smaller text-subtle'}
+          @tr =>
+            @td {colspan: 2}, =>
+              @h2 'Saving', {class: 'text-highlight'}
+            @tr =>
+              @td {class: 'first-column', colspan: 2}, =>
+                @input {type: 'checkbox', outlet: 'promptToSaveCheck'}
+                @span 'Prompt before saving', {class: 'check-label'}
+            @tr =>
+              @td 'Save:', {class: 'text-highlight first-column'}
+              @td =>
+                @select {class: 'form-control', outlet: 'saveSelect'}, =>
+                  @option 'None', {value: 'none'}
+                  @option 'All', {value: 'all'}
+                  @option 'Referenced', {value: 'referenced'}
+            @tr =>
+              @td ' '
+              @td =>
+                @span 'Specify what needs to be saved before the command is executed.', {class: 'text-smaller text-subtle'}
             @tr =>
               @td {colspan: 2}, =>
                 @h2 'Output', {class: 'text-highlight'}
@@ -317,6 +335,8 @@ class CommandEditView extends View
     @cwdEditor.getModel().setText(@emptyString(@command.cwd));
     @keystrokeEditor.getModel().setText(@emptyString(@command.keystroke));
     @bufferSizeEditor.getModel().setText(@emptyString(@command.outputBufferSize));
+    @setChecked(@promptToSaveCheck, @command.promptToSave);
+    @saveSelect.val(@command.saveOption);
     @setChecked(@streamCheck, @command.stream);
     @targetSelect.val(@command.outputTarget);
     @setChecked(@singularCheck, @command.singular);
@@ -384,6 +404,8 @@ class CommandEditView extends View
   persistChanges: ->
     @command.command = @commandEditor.getModel().getText().trim();
     @command.arguments = [];
+    @command.promptToSave = @isChecked(@promptToSaveCheck);
+    @command.saveOption = @saveSelect.val();
     @command.stream = @isChecked(@streamCheck);
     @command.singular = @isChecked(@singularCheck);
     @command.autoShowOutput = @isChecked(@autoShowCheck);

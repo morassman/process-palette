@@ -129,15 +129,12 @@ class ProcessController
 
 # Return true if the execution should continue. false if the user canceled.
   saveDirtyFiles: ->
-    @config.promptToSave = true;
-    @config.saveOption = 'all';
-
     if @config.saveOption == 'none'
       return true;
     else if @config.saveOption == 'all'
       return @saveEditors(@getAllDirtyEditors());
-    else if @config.saveOption == 'affected'
-      return @saveEditors(@getAffectedDirtyEditors());
+    else if @config.saveOption == 'referenced'
+      return @saveEditors(@getReferencedDirtyEditors());
 
     return true;
 
@@ -150,7 +147,7 @@ class ProcessController
 
     return result;
 
-  getAffectedDirtyEditors: ->
+  getReferencedDirtyEditors: ->
     result = []
 
     if @fields.fileAbsPath.length == 0
@@ -205,9 +202,14 @@ class ProcessController
 
   # Prompt to ask if editors should be saved. Return 'yes', 'no' or 'cancel'
   promptToSave: (editors) ->
+    parts = ['The following files have been modified :\n'];
+    for editor in editors
+      parts.push(' - '+editor.getTitle());
+    parts.push('\nSave changes before running?')
+
     options = {};
-    options.message = 'Save changes?';
-    options.detailedMessage = 'Save modified files?'
+    options.message = 'Save Changes';
+    options.detailedMessage = parts.join('\n');
     options.buttons = ['Yes', 'No', 'Cancel'];
 
     choice = atom.confirm(options);
