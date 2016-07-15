@@ -72,9 +72,9 @@ class ConfigController
       @killRunningProcesses();
 
     processController = new ProcessController(@, @config);
-    @processControllers.push(processController);
-    processController.runProcessWithFile(filePath);
-    @lastTime = new Date().getTime();
+    if processController.runProcessWithFile(filePath)
+      @processControllers.push(processController);
+      @lastTime = new Date().getTime();
 
   killRunningProcesses: ->
     clone = @processControllers.slice(0);

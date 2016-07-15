@@ -321,7 +321,7 @@ Keep in mind that the `arguments` property is an array of strings. Adding variab
 "arguments" : ["{fileNameExt}", "{selection}"]
 ```
 
-### Converting file paths
+### Converting File Paths
 It may sometimes be necessary to convert a file path to use separators for a different platform. Any of the variables can be converted by piping it through a transform.
 
 If, for instance, you are running on Linux and need to convert the `filePath` variable to a Windows style path, then you can specify it as `{filePath | win}`. The opposite can also be done with `{filePath | unix}` or `{filePath | posix}` when running on Windows.

@@ -69,9 +69,10 @@ class ProcessController
     @newFileDisposable?.dispose();
     @outputView?.destroy();
 
+  # Return false if the process didn't start.
   runProcessWithFile: (filePath) ->
     if @process?
-      return;
+      return false;
 
     @fields = {};
     @options = {};
@@ -121,7 +122,96 @@ class ProcessController
       @fields.fileProjectPath = "";
       @fields.selection = "";
 
+    if !@saveDirtyFiles()
+      return false;
+
     @takeUserInput(@config.inputDialogs);
+
+# Return true if the execution should continue. false if the user canceled.
+  saveDirtyFiles: ->
+    @config.promptToSave = true;
+    @config.saveOption = 'all';
+
+    if @config.saveOption == 'none'
+      return true;
+    else if @config.saveOption == 'all'
+      return @saveEditors(@getAllDirtyEditors());
+    else if @config.saveOption == 'affected'
+      return @saveEditors(@getAffectedDirtyEditors());
+
+    return true;
+
+  getAllDirtyEditors: ->
+    result = [];
+
+    for editor in atom.workspace.getTextEditors()
+      if @isEditorDirty(editor)
+        result.push(editor);
+
+    return result;
+
+  getAffectedDirtyEditors: ->
+    result = []
+
+    if @fields.fileAbsPath.length == 0
+      return result;
+
+    if !@commandDependsOnFile()
+      return result;
+
+    editor = @getEditorWithPath(@fields.fileAbsPath);
+
+    if @isEditorDirty(editor)
+      result.push(editor);
+
+    return result;
+
+  # Return true of the command to run references either {filePath} or {fileAbsPath}
+  commandDependsOnFile: ->
+    return @config.command.includes('{filePath}') or @config.command.includes('{fileAbsPath}');
+
+  isEditorDirty: (editor) ->
+    if !editor?
+      return false;
+
+    return editor.isModified() and editor.getTitle() != 'untitled';
+
+  getEditorWithPath: (path) ->
+    relPath = atom.project.relativizePath(path)[1];
+
+    for editor in atom.workspace.getTextEditors()
+      if relPath == atom.project.relativizePath(editor.getPath())[1]
+        return editor;
+
+    return null;
+
+  saveEditors: (editors) ->
+    if editors.length == 0
+      return true;
+
+    option = 'yes';
+
+    if @config.promptToSave
+      option = @promptToSave(editors);
+
+      if option == 'cancel'
+        return false;
+
+    if option == 'yes'
+      for editor in editors
+        editor.save();
+
+    return true;
+
+  # Prompt to ask if editors should be saved. Return 'yes', 'no' or 'cancel'
+  promptToSave: (editors) ->
+    options = {};
+    options.message = 'Save changes?';
+    options.detailedMessage = 'Save modified files?'
+    options.buttons = ['Yes', 'No', 'Cancel'];
+
+    choice = atom.confirm(options);
+    return options.buttons[choice].toLowerCase();
 
   takeUserInput: (inputDialogs) ->
     if inputDialogs.length > 0

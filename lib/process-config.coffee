@@ -20,6 +20,9 @@ class ProcessConfig
     @autoHideOutput = false;
     @scrollLockEnabled = false;
     @singular = false;
+    @promptToSave = false;
+    # saveOption = [none, all, affected]
+    @saveOption = 'none';
     @patterns = ['default'];
     @successOutput = '{stdout}';
     @errorOutput = '{stdout}\n{stderr}';
