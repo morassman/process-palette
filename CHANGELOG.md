@@ -1,3 +1,6 @@
+## v0.8.3 (15 July 2016)
+- Added prompt for saving if files are modified.
+
 ## v0.8.2 (24 June 2016)
 - Added entry to command palette to rerun last command.
 - Added ability to convert paths between platforms.

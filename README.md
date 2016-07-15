@@ -173,6 +173,8 @@ command (required)|A string with the name and arguments of the command to execut
 arguments|An array of strings to pass as arguments to the command. Since v0.4.10 arguments can be added directly to the `command` property's value, however this approach can still be used.|[ ]
 cwd|The working directory from which to execute the command. It doesn't have a default value, but one is automatically determined when the command is executed. If projects are open then the first project's folder is used. If there aren't any projects open then the folder of the `process-palette.json` file is used.|null
 keystroke|A string describing the shortcut to associate with this command. It can be any combination of `ctrl`, `alt`, `shift` and `cmd` followed by another key separated with `-` characters.|null
+promptToSave|Indicates whether the user should be prompted before any files are saved.|true
+saveOption|Specify what should be saved. Either nothing, everything or only the files referenced by the command. Indicate with `none`, `all` and `referenced` respectively.|"none"
 env|A map of environment variables. These will be made available in addition to the ones that are already defined in `process.env`|{ }
 patterns|Array of pattern names to match.|["default"]
 inputDialogs|Input dialogs to open in order to get input from the user which can then be used with variables.|[]
