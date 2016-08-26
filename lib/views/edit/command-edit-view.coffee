@@ -248,11 +248,17 @@ class CommandEditView extends View
               @td 'fileDirAbsPath', {class: 'text-highlight first-column'}
               @td 'Absolute path of file\'s directory.'
             @tr =>
+              @td 'fileProjectPath', {class: 'text-highlight first-column'}
+              @td 'Absolute path of file\'s project folder.'
+            @tr =>
               @td 'selection', {class: 'text-highlight first-column'}
               @td 'Currently selected text.'
             @tr =>
-              @td 'fileProjectPath', {class: 'text-highlight first-column'}
-              @td 'Absolute path of file\'s project folder.'
+              @td 'word', {class: 'text-highlight first-column'}
+              @td 'Word under cursor.'
+            @tr =>
+              @td 'line', {class: 'text-highlight first-column'}
+              @td 'Line at cursor.'
             @tr =>
               @td {colspan: 2}, =>
                 @h3 'Output Variables', {class: 'text-highlight'}
