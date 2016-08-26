@@ -93,6 +93,12 @@ class ProcessController
 
     if editor
       @fields.selection = editor.getSelectedText();
+      @fields.word = editor.getWordUnderCursor();
+      lastCursor = editor.getLastCursor();
+      if lastCursor?
+        @fields.line = lastCursor.getCurrentBufferLine();
+      else
+        @fields.line = '';
 
     if filePath
       file = new File(filePath);
@@ -315,6 +321,8 @@ class ProcessController
       return value.split('\\').join('/');
     else if filter == 'win'
       return value.split('/').join('\\');
+    else if filter == 'trim'
+      return value.trim();
 
     return value;
 

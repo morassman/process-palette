@@ -246,8 +246,10 @@ filePath | Path of file relative to project.
 fileDirPath | Path of file's directory relative to project.
 fileAbsPath | Absolute path of file.
 fileDirAbsPath | Absolute path of file's directory.
-selection | Currently selected text.
 fileProjectPath | Absolute path of file's project folder.
+selection | Currently selected text.
+word | Word under cursor.
+line | Line at cursor.
 
 **Input from user**
 
@@ -322,8 +324,20 @@ Keep in mind that the `arguments` property is an array of strings. Adding variab
 ```json
 "arguments" : ["{fileNameExt}", "{selection}"]
 ```
+## Pipes
+The value of a variable can be modified by piping it through a transform. The syntax is `{variable | transform}`
+
+The following transforms are available:
+
+Transform|Description
+---|---
+unix|Converts a Windows path to a unix path.
+posix|The same as `unix`.
+win|Converts a posix path to a Windows path.
+trim|Trims whitespace.
 
 ### Converting File Paths
+
 It may sometimes be necessary to convert a file path to use separators for a different platform. Any of the variables can be converted by piping it through a transform.
 
 If, for instance, you are running on Linux and need to convert the `filePath` variable to a Windows style path, then you can specify it as `{filePath | win}`. The opposite can also be done with `{filePath | unix}` or `{filePath | posix}` when running on Windows.
