@@ -232,6 +232,7 @@ clipboard | Text currently on clipboard.
 fullCommand | The full command along with its arguments. Both the command and arguments will have their variables resolved.
 configDirAbsPath | Absolute path of folder where the `process-palette.json` configuration file is that defines this command.
 projectPath | If projects are open then the first project's folder will be used. If there aren't any projects open then the path of the folder containing the `process-palette.json` file is used.
+selectProjectPath | Prompts to choose the path of one of the projects in the workspace.
 
 **Input from editor**
 

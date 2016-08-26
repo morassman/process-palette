@@ -72,9 +72,7 @@ class ConfigController
       @killRunningProcesses();
 
     processController = new ProcessController(@, @config);
-    if processController.runProcessWithFile(filePath)
-      @processControllers.push(processController);
-      @lastTime = new Date().getTime();
+    processController.runProcessWithFile(filePath)
 
   killRunningProcesses: ->
     clone = @processControllers.slice(0);
@@ -126,6 +124,8 @@ class ConfigController
     main.hidePanel();
 
   notifyProcessStarted: (processController) ->
+    @processControllers.push(processController);
+    @lastTime = new Date().getTime();
     _.invoke(_.clone(@listeners), "processStarted", processController);
 
   notifyProcessStopped: (processController) ->

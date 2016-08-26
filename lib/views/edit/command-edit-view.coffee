@@ -185,7 +185,7 @@ class CommandEditView extends View
                 @h2 'Environment Variables', {class: 'text-highlight'}
             @tr =>
               @td {colspan: 2}, =>
-                @span 'Add additional environment variables. Any of the input variables can be used in the value.' , {class: 'text-smaller text-subtle'}
+                @span 'Add additional environment variables. Any of the input variables can be used in the value. The environment variable itself is referenced in the command with a $ followed by the variable name.' , {class: 'text-smaller text-subtle'}
             @tr =>
               @td {class: 'first-column', colspan: 2}, =>
                 @div {class: 'bordered'}, =>
@@ -223,6 +223,9 @@ class CommandEditView extends View
             @tr =>
               @td 'projectPath', {class: 'text-highlight first-column'}
               @td 'If projects are open then the first project\'s folder will be used. If there aren\'t any projects open then the path of the folder containing the process-palette.json file is used.'
+            @tr =>
+              @td 'selectProjectPath', {class: 'text-highlight first-column'}
+              @td 'Prompts to choose the path of one of the projects in the workspace.'
             @tr =>
               @td {colspan: 2}, =>
                 @h3 'Input Variables From Editor', {class: 'text-highlight'}

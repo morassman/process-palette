@@ -1,5 +1,6 @@
 ## v0.9.0 (26 August 2016)
 - Added `word` and `line` variables.
+- Added `selectProjectPath` variable.
 - Added `trim` transform.
 
 ## v0.8.3 (15 July 2016)

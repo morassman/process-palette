@@ -39,6 +39,7 @@ class InsertVariableView extends SelectListView
     items.push({name:'line',description:'Line at cursor.'});
     items.push({name:'fullCommand',description:'The full command along with its arguments.'});
     items.push({name:'projectPath',description:'Path of the first project\'s folder.'});
+    items.push({name:'selectProjectPath',description:'Prompts to choose the path of one of the projects in the workspace.'});
     items.push({name:'configDirAbsPath',description:'Absolute path of folder where the configuration file is that defines this command.'});
 
     @setItems(items);

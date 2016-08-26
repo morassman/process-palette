@@ -6,6 +6,7 @@ shell = require 'shelljs'
 ProcessConfig = require '../process-config'
 ProcessOutputView = require '../views/process-output-view'
 InputDialogView = require '../views/input-dialog-view'
+ProjectsView = require '../views/projects-view'
 Buffer = require './buffer'
 cp = require('child_process')
 
@@ -81,6 +82,7 @@ class ProcessController
     @fields.configDirAbsPath = @configController.projectController.projectPath;
     @fields.stdout = "";
     @fields.stderr = "";
+    @fields.selectProjectPath = "";
 
     projectPaths = atom.project.getPaths();
 
@@ -230,9 +232,25 @@ class ProcessController
           @takeUserInput(inputDialogs[1..]);
       return;
 
-    @runProcessAfterInput();
+    @runProcessAfterUserInput();
 
-  runProcessAfterInput: ->
+  runProcessAfterUserInput: ->
+    if @config.command.indexOf("selectProjectPath") != -1
+      @takeProjectInput();
+    else
+      @runProcessAfterProjectInput();
+
+  takeProjectInput: ->
+    callback = (value) => @projectInputCallback(value);
+    new ProjectsView(callback, true);
+
+  projectInputCallback: (value) ->
+    if value?
+      @fields.selectProjectPath = value;
+
+    @runProcessAfterProjectInput();
+
+  runProcessAfterProjectInput: ->
     if @config.cwd
       @options.cwd = @insertFields(@config.cwd);
     else
