@@ -1,3 +1,6 @@
+## v0.9.1 (16 October 2016)
+- Added ability to globally specify shell.
+
 ## v0.9.0 (26 August 2016)
 - Added `word` and `line` variables.
 - Added `selectProjectPath` variable.

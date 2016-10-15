@@ -4,7 +4,7 @@ module.exports =
 class ProcessConfig
 
   constructor: (object={}) ->
-    @namespace = 'Process Palette';
+    @namespace = 'process-palette';
     @action = '';
     @command = '';
     @arguments = [];
@@ -44,7 +44,7 @@ class ProcessConfig
     if @outputTarget == "clipboard"
       @stream = false;
 
-    @requireString('namespace', 'Process Palette', false);
+    @requireString('namespace', 'process-palette', false);
     @requireString('action', '', false);
     @requireString('command', '', false);
     @requireString('cwd', null, true);

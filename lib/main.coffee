@@ -8,6 +8,12 @@ _ = require 'underscore-plus'
 
 module.exports = ProcessPalette =
 
+  config:
+    shell:
+      description: "The shell to run commands with. Leave empty for system default to be used."
+      type: "string"
+      default: ""
+
   activate: (@state) ->
     @subscriptions = new CompositeDisposable
     @projectControllers = []

@@ -10,12 +10,12 @@
   },
   "commands" : [
     {
-      "action" : "Defaults Example",
+      "action" : "defaults-example",
       "command" : "echo 'This command uses all the defaults.'"
     },
     {
-      "namespace" : "Process Palette",
-      "action" : "Echo Example",
+      "namespace" : "process-palette",
+      "action" : "echo-example",
       "command" : "echo",
       "arguments" : ["Hello", "$CUSTOM_VAR", "from", "{configDirAbsPath}"],
       "env" : {
@@ -37,8 +37,8 @@
       "patterns" : ["P1"]
     },
     {
-      "namespace" : "Process Palette",
-      "action" : "Stream Example",
+      "namespace" : "process-palette",
+      "action" : "stream-example",
       "command" : "ping localhost",
       "stream" : true,
       "outputTarget" : "panel",

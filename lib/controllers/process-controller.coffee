@@ -278,7 +278,17 @@ class ProcessController
 
     shell.cd(@options.cwd);
 
-    @process = shell.exec @fields.fullCommand, {silent:true, async:true}, (code) =>
+    pathToShell = atom.config.get("process-palette.shell");
+
+    execOptions = {silent:true, async:true}
+
+    if pathToShell?
+      pathToShell = pathToShell.trim();
+
+      if pathToShell.length > 0
+        execOptions["shell"] = pathToShell;
+
+    @process = shell.exec @fields.fullCommand, execOptions, (code) =>
       @fields.exitStatus = code;
       @processStopped(!code?);
 

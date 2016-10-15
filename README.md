@@ -36,6 +36,13 @@ The commands are listed on the left. Selecting one will show its details on the 
 
 The configuration file will be saved and automatically reloaded when closed.
 
+## Settings
+### Configure shell
+Commands will be executed by the system's default shell, which is `sh` on OSX and Linux and `cmd.exe` on Windows.
+
+If you would like to use a particular shell then you can specify it under Process Palette's settings. This shell will then be used when running any of the commands. Leave the value blank for the system default to be used.
+
+
 ## Configuration Files
 The configuration files can also be edited by hand. The remainder of the document will describe how to do this.
 
@@ -77,11 +84,11 @@ Command line arguments can also be specified in the form of an array of strings.
 {
   "commands" : [
     {
-      "action"  : "Ant default",
+      "action"  : "ant-default",
       "command" : "ant"
     },
     {
-      "action"  : "Ant clean artifacts",
+      "action"  : "ant-clean-artifacts",
       "command" : "ant clean"
     }
   ]
@@ -100,13 +107,13 @@ Let's modify the previous two commands to use a namespace call `Ant`:
 {
   "commands" : [
     {
-      "namespace" : "Ant",
-      "action"    : "Default",
+      "namespace" : "ant",
+      "action"    : "default",
       "command"   : "ant"
     },
     {
-      "namespace" : "Ant",
-      "action"    : "Clean artifacts",
+      "namespace" : "ant",
+      "action"    : "clean-artifacts",
       "command"   : "ant clean",
     }
   ]
@@ -120,8 +127,8 @@ After reloading the configuration file the entries will be:
 Custom shortcut keys can also be associated with commands by adding a `keystroke` entry. Let's add the keystroke `Ctrl-Alt-A` to the `Ant: Default` command:
 ```json
 {
-  "namespace" : "Ant",
-  "action"    : "Default",
+  "namespace" : "ant",
+  "action"    : "default",
   "command"   : "ant",
   "keystroke"  : "ctrl-alt-a"
 }
