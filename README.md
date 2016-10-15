@@ -174,8 +174,8 @@ Many of the properties can be parameterized with variables from the environment.
 ### Properties
 Property|Description|Default
 ---|---|---
-namespace|The namespace under which the command is categorized. This forms part of its identity in the Command Palette.|"Process Palette"
-action (required)|The name of the action. This, together with the namespace, gives the command a unique identifier in the Command Palette.|null
+namespace|The namespace under which the command is categorized. This forms part of its identity in the Command Palette. It should be lowercase and words separated by hyphens. |"process-palette"
+action (required)|The name of the action. This, together with the namespace, gives the command a unique identifier in the Command Palette.  It should be lowercase and words separated by hyphens.|null
 command (required)|A string with the name and arguments of the command to execute.|null
 arguments|An array of strings to pass as arguments to the command. Since v0.4.10 arguments can be added directly to the `command` property's value, however this approach can still be used.|[ ]
 cwd|The working directory from which to execute the command. It doesn't have a default value, but one is automatically determined when the command is executed. If projects are open then the first project's folder is used. If there aren't any projects open then the folder of the `process-palette.json` file is used.|null

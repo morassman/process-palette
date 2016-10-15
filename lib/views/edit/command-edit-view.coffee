@@ -30,7 +30,7 @@ class CommandEditView extends View
             @tr =>
               @td ' '
               @td =>
-                @span 'The namespace and action name together forms the identifier in the command palette.' , {class: 'text-smaller text-subtle'}
+                @span 'The namespace and action name together forms the identifier in the command palette. These should be lowercase and words separated by hyphens.' , {class: 'text-smaller text-subtle'}
             @tr =>
               @td 'Shell Command:', {class: 'text-highlight first-column'}
               @td =>
