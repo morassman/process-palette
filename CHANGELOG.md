@@ -1,4 +1,4 @@
-## v0.9.1 (16 October 2016)
+## v0.9.1 (18 October 2016)
 - Added ability to globally specify shell.
 - Changed code and example to use proper formatting for actions.
 
