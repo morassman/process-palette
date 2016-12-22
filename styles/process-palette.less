@@ -89,6 +89,10 @@
 .process-palette-process {
   background: @tool-panel-background-color;
 
+  table {
+    width: 100%;
+  }
+
   .header {
     color: @text-color-info;
     font-size: 115%;
@@ -102,6 +106,34 @@
     font-weight: 800;
     padding-right: 24px;
     color: @text-color-highlight;
+    white-space: nowrap;
+  }
+
+  .table-value {
+    width: 50%;
+  }
+
+  .table-button {
+    width: 50%;
+    padding-left: 5px;
+  }
+
+  .insert-button {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    vertical-align: text-top;
+  }
+
+  .command-editor {
+    width: 100%;
+    box-shadow: none;
+    border-radius: 0;
+    border-top-style: none;
+    border-left-style: none;
+    border-right-style: none;
+    font-size: inherit;
+    border: 1px solid @input-border-color;
+    background-color: @input-background-color;
   }
 }
 

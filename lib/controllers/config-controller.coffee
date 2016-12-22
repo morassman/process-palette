@@ -33,6 +33,10 @@ class ConfigController
   getLastTime: ->
     return @lastTime;
 
+  # Changes the command to execute. This is called when editing the command from the panel.
+  setCommand: (command) ->
+    @config.command = command;
+
   getFirstProcessController: ->
     if @processControllers.length == 0
       return null;
