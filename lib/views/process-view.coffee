@@ -83,6 +83,7 @@ class ProcessView extends View
     console.log('commandChanged : ' + @initialized);
     if @initialized
       @configController.setCommand(@commandEditor.getModel().getText());
+      @main.setDirty(true);
     else
       @initialized = true;
 

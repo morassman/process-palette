@@ -16,6 +16,7 @@ class MainView extends View
     @div {class: "process-palette process-palette-resizer"}, =>
       @div class: "process-palette-resize-handle"
       @div {class: "button-group"}, =>
+        @button "Save", {class:"btn btn-sm btn-info inline-block-tight", outlet: "saveButton", click: "savePressed"}
         @button {class:"btn btn-xs icon-pencil inline-block-tight", outlet: "editButton", click: "editPressed"}
         @button {class:"btn btn-xs icon-sync inline-block-tight", outlet: "reloadButton", click: "reloadPressed"}
         @button {class:"btn btn-xs icon-question inline-block-tight", outlet: "helpButton", click: "toggleHelpView"}
@@ -27,15 +28,19 @@ class MainView extends View
 
   initialize: ->
     @disposables = new CompositeDisposable();
+    @disposables.add(atom.tooltips.add(@saveButton, {title: "Save changes"}));
     @disposables.add(atom.tooltips.add(@helpButton, {title: "Toggle help"}));
     @disposables.add(atom.tooltips.add(@editButton, {title: "Edit configuration"}));
     @disposables.add(atom.tooltips.add(@reloadButton, {title: "Reload configurations"}));
     @disposables.add(atom.tooltips.add(@hideButton, {title: "Hide"}));
 
+    @saveButton.on 'mousedown', (e) -> e.preventDefault();
     @editButton.on 'mousedown', (e) -> e.preventDefault();
     @reloadButton.on 'mousedown', (e) -> e.preventDefault();
     @helpButton.on 'mousedown', (e) -> e.preventDefault();
     @hideButton.on 'mousedown', (e) -> e.preventDefault();
+
+    @saveButton.hide();
 
     @on 'mousedown', '.process-palette-resize-handle', (e) => @resizeStarted(e);
 
@@ -59,6 +64,12 @@ class MainView extends View
     @viewHeight = @mainContent.height();
     @listView.parentHeightChanged(@viewHeight);
     @outputView?.parentHeightChanged(@viewHeight);
+
+  setSaveButtonVisible: (visible) ->
+    if visible
+      @saveButton.show();
+    else
+      @saveButton.hide();
 
   showListView: =>
     if @listView.isHidden()
@@ -109,6 +120,9 @@ class MainView extends View
 
   isOutputViewVisible: =>
     return @outputViewContainer.isVisible();
+
+  savePressed: =>
+    @main.savePanel();
 
   editPressed: =>
     @main.editConfiguration();

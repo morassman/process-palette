@@ -15,6 +15,7 @@ module.exports = ProcessPalette =
       default: ""
 
   activate: (@state) ->
+    @dirty = false;
     @subscriptions = new CompositeDisposable
     @projectControllers = []
     @mainView = new MainView(@)
@@ -174,12 +175,22 @@ module.exports = ProcessPalette =
       paneItem = pane.addItem(view, 0);
       pane.activateItem(paneItem);
 
+  # Called when the save button was pressed. This saves changes that were made
+  # to the command directly in the panel.
+  savePanel: ->
+    for projectController in @projectControllers
+      projectController.saveFile();
+
+    @setDirty(false);
+
   saveEditors: ->
     paneItems = atom.workspace.getPaneItems();
 
     for paneItem in paneItems
       if paneItem instanceof MainEditView
         paneItem.saveChanges();
+
+    @setDirty(false);
 
   getPaneItem: (filePath) ->
     paneItems = atom.workspace.getPaneItems();
@@ -220,3 +231,8 @@ module.exports = ProcessPalette =
       result = result.concat(projectController.getConfigControllers());
 
     return result;
+
+  setDirty: (dirty) ->
+    if @dirty != dirty
+      @dirty = dirty;
+      @mainView.setSaveButtonVisible(@dirty);
