@@ -90,6 +90,11 @@ module.exports = ProcessPalette =
       if !projectCtrl.isGlobal() and paths.indexOf(projectCtrl.getProjectPath()) < 0
         toRemove.push(projectCtrl);
 
+    if toRemove.length == 0
+      return;
+
+    @showListView();
+
     for projectCtrl in toRemove
       @removeProjectController(projectCtrl);
 

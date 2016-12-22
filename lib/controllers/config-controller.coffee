@@ -63,14 +63,13 @@ class ConfigController
       @listeners.splice(index, 1);
 
   dispose: ->
+    @killRunningProcesses();
     @clearControllers();
     @disposable.dispose();
 
   clearControllers: ->
     for processController in @processControllers
       processController.dispose();
-
-    @processControllers = [];
 
   runProcess: =>
     filePath = null;
