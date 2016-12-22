@@ -81,7 +81,6 @@ class ProcessView extends View
     new InsertVariableView(@commandEditor);
 
   commandChanged: ->
-    console.log('commandChanged : ' + @initialized);
     if @initialized
       @configController.setCommand(@commandEditor.getModel().getText());
       @main.setDirty(true);

@@ -39,6 +39,9 @@ class ProjectController
 
     return @projectName;
 
+  getProjectPath: ->
+    return @projectPath;
+
   getConfigurationFile: ->
     return @configurationFile;
 

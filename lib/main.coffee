@@ -2,7 +2,7 @@ MainView = require './views/main-view'
 ConfigsView = require './views/configs-view'
 MainEditView = require './views/edit/main-edit-view'
 ProjectController = require './controllers/project-controller'
-path = require 'path'
+Path = require 'path'
 _ = require 'underscore-plus'
 {File, CompositeDisposable} = require 'atom'
 
@@ -76,6 +76,30 @@ module.exports = ProcessPalette =
     for projectPath in atom.project.getPaths()
       @addProjectPath(projectPath);
 
+    atom.project.onDidChangePaths (paths) => @projectsChanged(paths)
+
+  projectsChanged: (paths) ->
+    # Add controllers for new project paths.
+    for path in paths
+      if @getProjectControllerWithPath(path) == null
+        @addProjectPath(path);
+
+    # Remove controllers of old project paths.
+    toRemove = [];
+    for projectCtrl in @projectControllers
+      if !projectCtrl.isGlobal() and paths.indexOf(projectCtrl.getProjectPath()) < 0
+        toRemove.push(projectCtrl);
+
+    for projectCtrl in toRemove
+      @removeProjectController(projectCtrl);
+
+  getProjectControllerWithPath: (projectPath) ->
+    for projectController in @projectControllers
+      if projectController.getProjectPath() == projectPath
+        return projectController;
+
+    return null;
+
   reloadConfiguration: (saveEditors = true)->
     if saveEditors
       @saveEditors();
@@ -127,6 +151,15 @@ module.exports = ProcessPalette =
     projectController = new ProjectController(@, projectPath);
     @projectControllers.push(projectController);
 
+  removeProjectController: (projectController) ->
+    index = @projectControllers.indexOf(projectController);
+
+    if index < 0
+      return;
+
+    @projectControllers.splice(index, 1);
+    projectController.dispose();
+
   editConfiguration: (showGlobal = true) ->
     view = new ConfigsView(@, showGlobal);
     # for projectController in @projectControllers
@@ -140,11 +173,11 @@ module.exports = ProcessPalette =
 
     # If there is a process-palette.json file then open it. If not then
     # create a new file and load the example into it.
-    file = new File(path.join(folderPath, 'process-palette.json'));
+    file = new File(Path.join(folderPath, 'process-palette.json'));
 
     if !file.existsSync()
-      packagePath = atom.packages.getActivePackage('process-palette').path
-      exampleFile = new File(path.join(packagePath, 'examples', 'process-palette.json'));
+      packagePath = atom.packages.getActivePackage('process-palette').path;
+      exampleFile = new File(Path.join(packagePath, 'examples', 'process-palette.json'));
 
       exampleFile.read(false).then (content) =>
         file.create().then =>
