@@ -33,9 +33,13 @@ class ConfigController
   getLastTime: ->
     return @lastTime;
 
+  saveFile: ->
+    @projectController.saveFile();
+
   # Changes the command to execute. This is called when editing the command from the panel.
   setCommand: (command) ->
     @config.command = command;
+    @saveFile();
 
   getFirstProcessController: ->
     if @processControllers.length == 0

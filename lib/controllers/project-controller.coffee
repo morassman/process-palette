@@ -14,6 +14,7 @@ class ProjectController
     @saveControllers = [];
     @patterns = {};
     @configurationFile = new Directory(@projectPath).getFile('process-palette.json');
+    @processConfigs = {};
     @loadFile();
 
   getMain: ->
@@ -42,6 +43,10 @@ class ProjectController
 
     @saveControllers = [];
 
+  saveFile: ->
+    text = JSON.stringify(@processConfigs, null, '  ')
+    @configurationFile.writeSync(text);
+
   loadFile: ->
     @clearControllers();
 
@@ -53,35 +58,36 @@ class ProjectController
 
   parseFile: (content) ->
     try
-      processConfigs = JSON.parse(content);
+      @processConfigs = JSON.parse(content);
     catch err
       console.log("error");
       console.log(err.lineNumber);
       return;
 
-    if !processConfigs?
+    if !@processConfigs?
       return;
-
-    patterns = processConfigs.patterns;
-    commands = processConfigs.commands;
-    saveCommands = processConfigs.saveCommands;
 
     @addDefaultPattern();
 
-    if patterns?
-      for key, value of patterns
+    if @processConfigs.patterns?
+      for key, value of @processConfigs.patterns
         @addPattern(key, value);
 
-    if commands?
+    if @processConfigs.commands?
+      commands = @processConfigs.commands.slice();
+      @processConfigs.commands = [];
+
       for command in commands
         command = new ProcessConfig(command);
+        @processConfigs.commands.push(command);
+
         if command.isValid()
           configController = new ConfigController(@, command);
           @configControllers.push(configController);
           @main.mainView.addConfigController(configController);
 
-    if saveCommands?
-      for saveCommand in saveCommands
+    if @processConfigs.saveCommands?
+      for saveCommand in @processConfigs.saveCommands
         saveController = new SaveController(@main, saveCommand);
         @saveControllers.push(saveController);
 
@@ -102,7 +108,6 @@ class ProjectController
   addDefaultPattern: ->
     config = {};
     config.expression = "(path)";
-
     @addPattern("default", config);
 
   addPattern: (name, config) ->
@@ -112,6 +117,9 @@ class ProjectController
       @patterns[name] = pattern;
 
   createRegExpPattern: (name, config) ->
+    # Make a copy so that the original doesn't get modified.
+    config = JSON.parse(JSON.stringify(config));
+
     if !config.expression?
       console.error("Pattern #{name} doesn't have an expression.")
       return null;
