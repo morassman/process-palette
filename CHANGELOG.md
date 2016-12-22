@@ -1,3 +1,6 @@
+## v0.10.1 (23 December 2016)
+- Implemented auto add and remove of project configs.
+
 ## v0.10.0 (22 December 2016)
 - Added ability to edit command directly in panel.
 - Added ability to open config editor with specific command from panel.
