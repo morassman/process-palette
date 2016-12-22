@@ -15,6 +15,8 @@ class ProjectController
     @patterns = {};
     @configurationFile = new Directory(@projectPath).getFile('process-palette.json');
     @processConfigs = {};
+    @global = null;
+    @projectName = null;
     @loadFile();
 
   getMain: ->
@@ -22,6 +24,23 @@ class ProjectController
 
   getConfigControllers: ->
     return @configControllers;
+
+  isGlobal: ->
+    if @global == null
+      configFile = new File(atom.config.getUserConfigPath());
+      @global = @projectPath == configFile.getParent().getRealPathSync();
+
+    return @global;
+
+  getProjectName: ->
+    if @projectName == null
+      dir = new Directory(@projectPath);
+      @projectName = dir.getBaseName();
+
+    return @projectName;
+
+  getConfigurationFile: ->
+    return @configurationFile;
 
   dispose: ->
     @clearControllers();

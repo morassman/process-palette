@@ -8,8 +8,8 @@ PatternEditView = require './pattern-edit-view'
 module.exports =
 class MainEditView extends View
 
-  constructor: (@main, @title, @filePath, @config) ->
-    super(@title, @filePath, @config);
+  constructor: (@main, @title, @filePath, @config, @selectedAction) ->
+    super(@title, @filePath, @config, @selectedAction);
 
   @content: (title, filePath, config) ->
     @div =>
@@ -49,6 +49,9 @@ class MainEditView extends View
 
     @editPatternsButton.on 'mousedown', (e) -> e.preventDefault();
     @saved = JSON.stringify(@config, null, '  ');
+
+    if @selectedAction != null
+      @commandChooseView.selectCommandItemViewWithAction(@selectedAction);
 
   willDestroy: (e) ->
     if e.item isnt @

@@ -28,6 +28,10 @@ class CommandItemView extends HTMLElement
   getCommand: ->
     return @command;
 
+  # return true if this command has the given action.
+  isForAction: (action) ->
+    return @command.action == action;
+
   selected: ->
     @commandChooseView.commandItemViewSelected(@);
 

@@ -59,3 +59,9 @@ class CommandChooseView extends View
 
     if @selectedItemView == itemView
       @commandItemViewSelected(null);
+
+  selectCommandItemViewWithAction: (action) ->
+    for itemView in @itemViews
+      if itemView.isForAction(action)
+        itemView.selected();
+        return;

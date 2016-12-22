@@ -30,6 +30,12 @@ class ConfigController
   getMain: ->
     return @projectController.getMain();
 
+  getProjectController: ->
+    return @projectController;
+
+  getConfig: ->
+    return @config;
+
   getLastTime: ->
     return @lastTime;
 

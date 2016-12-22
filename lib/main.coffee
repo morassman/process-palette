@@ -153,7 +153,19 @@ module.exports = ProcessPalette =
     else
       @guiOpenFile(title, file);
 
-  guiOpenFile: (title, file) ->
+  guiEditCommand: (configController) ->
+    projectController = configController.getProjectController();
+    file = projectController.getConfigurationFile();
+    action = configController.getConfig().action;
+
+    if projectController.isGlobal()
+      title = 'Global Commands';
+    else
+      title = projectController.getProjectName();
+
+    @guiOpenFile(title, file, action);
+
+  guiOpenFile: (title, file, selectedAction = null) ->
     # If the file is already open then activate its pane.
     filePath = file.getRealPathSync();
     paneItem = @getPaneItem(filePath);
@@ -171,7 +183,7 @@ module.exports = ProcessPalette =
         config.patterns = {};
       if !_.isArray(config.commands)
         config.commands = [];
-      view = new MainEditView(main, title, filePath, config);
+      view = new MainEditView(main, title, filePath, config, selectedAction);
       paneItem = pane.addItem(view, 0);
       pane.activateItem(paneItem);
 
