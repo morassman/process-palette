@@ -14,7 +14,7 @@ class ButtonView extends View
   @content: (main, configController, processController) ->
     @span {class: "process-palette-button-view btn-group btn-group-sm inline-block-tight"}, =>
       @button {class: "btn icon-primitive-square", outlet: "killButton", click: "killButtonPressed"}
-      @button "#{processController.getProcessID()}", {class: "btn", outlet: "showOutputButton", click: "showOutputButtonPressed"}
+      @button "#{processController.getProcessID()}", {class: "btn pid", outlet: "showOutputButton", click: "showOutputButtonPressed"}
 
   initialize: ->
     @disposables = new CompositeDisposable();
