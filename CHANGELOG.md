@@ -1,3 +1,7 @@
+## v0.10.0 (22 December 2016)
+- Added ability to edit command directly in panel.
+- Added ability to open config editor with specific command from panel.
+
 ## v0.9.1 (18 October 2016)
 - Added ability to globally specify shell.
 - Changed code and example to use proper formatting for actions.
