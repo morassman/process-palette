@@ -44,8 +44,12 @@ class ProjectController
     @saveControllers = [];
 
   saveFile: ->
-    text = JSON.stringify(@processConfigs, null, '  ')
-    @configurationFile.writeSync(text);
+    # A ProjectController is created for each project, but that doesn't mean that
+    # it has a configuration file. Only save if there is actually a file, otherwise
+    # an empty file will be created.
+    if @configurationFile.existsSync()
+      text = JSON.stringify(@processConfigs, null, '  ')
+      @configurationFile.writeSync(text);
 
   loadFile: ->
     @clearControllers();

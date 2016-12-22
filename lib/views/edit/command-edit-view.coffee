@@ -59,13 +59,13 @@ class CommandEditView extends View
               @td ' '
               @td =>
                 @span 'Shortcut key. Combine shift, ctrl, cmd and alt with other keys, like ctrl-alt-r', {class: 'text-smaller text-subtle'}
-          @tr =>
-            @td {colspan: 2}, =>
-              @h2 'Saving', {class: 'text-highlight'}
             @tr =>
-              @td {class: 'first-column', colspan: 2}, =>
-                @input {type: 'checkbox', outlet: 'promptToSaveCheck'}
-                @span 'Prompt before saving', {class: 'check-label'}
+              @td {colspan: 2}, =>
+                @h2 'Saving', {class: 'text-highlight'}
+            @tr =>
+              @td {colspan: 2, class: 'text-smaller text-subtle'}, =>
+                @span 'It may be necessary to first save edited files before running a command. '
+                @span 'If that is the case then either all files can be saved or only those that are references by the command.'
             @tr =>
               @td 'Save:', {class: 'text-highlight first-column'}
               @td =>
@@ -77,6 +77,10 @@ class CommandEditView extends View
               @td ' '
               @td =>
                 @span 'Specify what needs to be saved before the command is executed.', {class: 'text-smaller text-subtle'}
+            @tr =>
+              @td {class: 'first-column', colspan: 2}, =>
+                @input {type: 'checkbox', outlet: 'promptToSaveCheck'}
+                @span 'Prompt before saving', {class: 'check-label'}
             @tr =>
               @td {colspan: 2}, =>
                 @h2 'Output', {class: 'text-highlight'}
