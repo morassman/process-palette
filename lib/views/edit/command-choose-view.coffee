@@ -35,6 +35,8 @@ class CommandChooseView extends View
 
   addNewCommand: ->
     command = new ProcessConfig({});
+    command.stream = true;
+    command.outputTarget = 'panel';
     @commands.push(command);
     itemView = @addCommandItemView(command);
     @commandItemViewSelected(itemView);
