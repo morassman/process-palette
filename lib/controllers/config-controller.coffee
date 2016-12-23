@@ -136,6 +136,13 @@ class ConfigController
 
     main.hidePanel();
 
+  # Returns a string describing the output target.
+  getTargetDescription: ->
+    if @config.stream
+      return 'Stream to ' + @config.outputTarget;
+
+    return 'Output to ' + @config.outputTarget;
+
   notifyProcessStarted: (processController) ->
     @processControllers.push(processController);
     @lastTime = new Date().getTime();

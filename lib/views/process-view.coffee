@@ -50,17 +50,18 @@ class ProcessView extends View
       @subview 'buttonsView', new ButtonsView(main, configController);
       @table =>
         @tbody =>
-          @tr =>
-            @td 'Command', class:'table-title'
+          @tr {outlet: 'commandRow'}, =>
+            @td 'Command', class: 'table-title'
             @td {class: 'table-value'}, =>
               @subview 'commandEditor', new TextEditorView()
             @td {class: 'table-button'}, =>
               @button 'Insert Variable', {class: 'btn btn-xs insert-button', click: 'insertVariable'}
             # @td {class: 'variable-button'}, =>
             # @td '#{configController.config.getFullCommand()}'
-          @tr =>
+          @tr {outlet: 'outputRow'}, =>
             @td "Output#{outputTarget}", outputTitleArgs
             @td "#{successOutput}", outputValueArgs
+            @td {class: 'table-none'}
 
   initialize: ->
     @disposables = new CompositeDisposable();
@@ -72,10 +73,27 @@ class ProcessView extends View
     @commandEditor.getModel().setSoftWrapped(true);
     @commandEditor.getModel().setLineNumberGutterVisible(false);
     @commandEditor.getModel().onDidStopChanging () => @commandChanged();
+    @applySettings();
 
     # Prevent the button from getting focus.
     @runButton.on 'mousedown', (e) ->
       e.preventDefault();
+
+  applySettings: ->
+    @setCommandVisible(atom.config.get('process-palette.palettePanel.showCommand'));
+    @setOutputTargetVisible(atom.config.get('process-palette.palettePanel.showOutputTarget'));
+
+  setCommandVisible: (visible) ->
+    if visible
+      @commandRow.show();
+    else
+      @commandRow.hide();
+
+  setOutputTargetVisible: (visible) ->
+    if visible
+      @outputRow.show();
+    else
+      @outputRow.hide();
 
   insertVariable: ->
     new InsertVariableView(@commandEditor);

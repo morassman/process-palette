@@ -1,5 +1,6 @@
-## v0.10.1 (23 December 2016)
+## v0.10.1
 - Implemented auto add and remove of project configs.
+- Added settings for command and output target visibility in panel.
 
 ## v0.10.0 (22 December 2016)
 - Added ability to edit command directly in panel.

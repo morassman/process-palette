@@ -13,6 +13,17 @@ module.exports = ProcessPalette =
       description: "The shell to run commands with. Leave empty for system default to be used."
       type: "string"
       default: ""
+    palettePanel:
+      type: "object"
+      properties:
+        showCommand:
+          description: "Show the configured command in the palette panel"
+          type: "boolean"
+          default: true
+        showOutputTarget:
+          description: "Show the configured output target in the palette panel"
+          type: "boolean"
+          default: true
 
   activate: (@state) ->
     @dirty = false;
@@ -43,6 +54,8 @@ module.exports = ProcessPalette =
 
     if @state.visible
       @bottomPanel.show();
+
+
 
   deactivate: ->
     @subscriptions.dispose();
