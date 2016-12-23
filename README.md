@@ -37,6 +37,11 @@ The commands are listed on the left. Selecting one will show its details on the 
 The configuration file will be saved and automatically reloaded when closed.
 
 ## Settings
+### Palette panel
+The palette panel shows the configured command and output targets for each command. The visibility of these can be toggled in the settings.
+
+![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/panel-settings.png?raw=true)
+
 ### Configure shell
 Commands will be executed by the system's default shell, which is `sh` on OSX and Linux and `cmd.exe` on Windows.
 

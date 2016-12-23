@@ -20,12 +20,10 @@ class ProcessListView extends View
 
 
   setCommandVisible: (visible) ->
-    console.log('setCommandVisible : '+visible);
     for processView in @processViews
       processView.setCommandVisible(visible);
 
   setOutputTargetVisible: (visible) ->
-    console.log('setOutputTargetVisible : '+visible);
     for processView in @processViews
       processView.setOutputTargetVisible(visible);
 
