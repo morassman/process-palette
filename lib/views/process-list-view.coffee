@@ -1,7 +1,7 @@
-ProcessView = require './process-view'
-ProcessOutputView = require './process-output-view'
 {$$, View} = require 'atom-space-pen-views'
 {CompositeDisposable} = require 'atom'
+
+ProcessView = null;
 
 module.exports =
 class ProcessListView extends View
@@ -28,6 +28,7 @@ class ProcessListView extends View
       processView.setOutputTargetVisible(visible);
 
   addConfigController: (configController) =>
+    ProcessView ?= require './process-view'
     processView = new ProcessView(@main, configController);
     @processViews.push(processView);
 

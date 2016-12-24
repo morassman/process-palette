@@ -1,10 +1,11 @@
-MainView = require './views/main-view'
-ConfigsView = require './views/configs-view'
-MainEditView = require './views/edit/main-edit-view'
-ProjectController = require './controllers/project-controller'
-Path = require 'path'
 _ = require 'underscore-plus'
 {File, CompositeDisposable} = require 'atom'
+MainView = require './views/main-view'
+
+Path = null
+ConfigsView = null
+MainEditView = null
+ProjectController = null
 
 module.exports = ProcessPalette =
 
@@ -27,9 +28,9 @@ module.exports = ProcessPalette =
 
   activate: (@state) ->
     @dirty = false;
-    @subscriptions = new CompositeDisposable
-    @projectControllers = []
-    @mainView = new MainView(@)
+    @subscriptions = new CompositeDisposable();
+    @projectControllers = [];
+    @mainView = new MainView(@);
     @bottomPanel = atom.workspace.addBottomPanel(item: @mainView.getElement(), visible: false);
 
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:show': => @showPanel()
@@ -47,15 +48,13 @@ module.exports = ProcessPalette =
     #   @subscriptions.add editor.onDidSave (event) =>
     #     @fileSaved(event.path);
 
-    @load();
-
     if _.isNumber(@state.height)
       @mainView.setViewHeight(@state.height);
 
     if @state.visible
       @bottomPanel.show();
 
-
+    process.nextTick () => @load()
 
   deactivate: ->
     @subscriptions.dispose();
@@ -166,6 +165,7 @@ module.exports = ProcessPalette =
     @mainView.processControllerRemoved(processController);
 
   addProjectPath: (projectPath) ->
+    ProjectController ?= require './controllers/project-controller'
     projectController = new ProjectController(@, projectPath);
     @projectControllers.push(projectController);
 
@@ -179,6 +179,7 @@ module.exports = ProcessPalette =
     projectController.dispose();
 
   editConfiguration: (showGlobal = true) ->
+    ConfigsView ?= require './views/configs-view'
     view = new ConfigsView(@, showGlobal);
     # for projectController in @projectControllers
     #   projectController.editConfiguration();
@@ -188,6 +189,8 @@ module.exports = ProcessPalette =
       title = 'Global Commands';
     else
       title = projectName;
+
+    Path ?= require 'path'
 
     # If there is a process-palette.json file then open it. If not then
     # create a new file and load the example into it.
@@ -217,6 +220,8 @@ module.exports = ProcessPalette =
     @guiOpenFile(title, file, action);
 
   guiOpenFile: (title, file, selectedAction = null) ->
+    MainEditView ?= require './views/edit/main-edit-view'
+
     # If the file is already open then activate its pane.
     filePath = file.getRealPathSync();
     paneItem = @getPaneItem(filePath);
@@ -234,6 +239,7 @@ module.exports = ProcessPalette =
         config.patterns = {};
       if !_.isArray(config.commands)
         config.commands = [];
+
       view = new MainEditView(main, title, filePath, config, selectedAction);
       paneItem = pane.addItem(view, 0);
       pane.activateItem(paneItem);
@@ -247,6 +253,7 @@ module.exports = ProcessPalette =
     @setDirty(false);
 
   saveEditors: ->
+    MainEditView ?= require './views/edit/main-edit-view'
     paneItems = atom.workspace.getPaneItems();
 
     for paneItem in paneItems
@@ -256,6 +263,7 @@ module.exports = ProcessPalette =
     @setDirty(false);
 
   getPaneItem: (filePath) ->
+    MainEditView ?= require './views/edit/main-edit-view'
     paneItems = atom.workspace.getPaneItems();
 
     for paneItem in paneItems

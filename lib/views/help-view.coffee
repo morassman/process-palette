@@ -1,6 +1,7 @@
-path = require 'path'
-{Directory, File} = require 'atom'
+{File} = require 'atom'
 {View} = require 'atom-space-pen-views'
+
+Path = null
 
 module.exports =
 class HelpView extends View
@@ -45,10 +46,11 @@ class HelpView extends View
 
   createConfigurationFile: (configFolder) ->
     configFile = configFolder.getFile("process-palette.json");
+    Path ?= require 'path'
 
     if !configFile.existsSync()
       packagePath = atom.packages.getActivePackage('process-palette').path
-      file = new File(path.join(packagePath, 'examples', 'process-palette.json'));
+      file = new File(Path.join(packagePath, 'examples', 'process-palette.json'));
 
       file.read(false).then (content) =>
         configFile.create().then =>

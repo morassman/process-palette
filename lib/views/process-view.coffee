@@ -56,8 +56,6 @@ class ProcessView extends View
               @subview 'commandEditor', new TextEditorView()
             @td {class: 'table-button'}, =>
               @button 'Insert Variable', {class: 'btn btn-xs insert-button', click: 'insertVariable'}
-            # @td {class: 'variable-button'}, =>
-            # @td '#{configController.config.getFullCommand()}'
           @tr {outlet: 'outputRow'}, =>
             @td "Output#{outputTarget}", outputTitleArgs
             @td "#{successOutput}", outputValueArgs
@@ -66,6 +64,7 @@ class ProcessView extends View
   initialize: ->
     @disposables = new CompositeDisposable();
     @disposables.add(atom.tooltips.add(@runButton, {title: 'Run process'}));
+    @disposables.add(atom.tooltips.add(@editButton, {title: 'Edit'}));
     @commandEditor.getModel().setText(@configController.config.getFullCommand());
     @commandEditor.addClass('command-editor');
     @commandEditor.addClass('multi-line-editor');
