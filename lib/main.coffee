@@ -18,10 +18,12 @@ module.exports = ProcessPalette =
       type: "object"
       properties:
         showCommand:
+          title: "Show command"
           description: "Show the configured command in the palette panel"
           type: "boolean"
           default: true
         showOutputTarget:
+          title: "Show output target"
           description: "Show the configured output target in the palette panel"
           type: "boolean"
           default: true
