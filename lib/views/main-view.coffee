@@ -19,6 +19,7 @@ class MainView extends View
         @button "Save", {class:"btn btn-sm btn-info inline-block-tight", outlet: "saveButton", click: "savePressed"}
         @button {class:"btn btn-xs icon-pencil inline-block-tight", outlet: "editButton", click: "editPressed"}
         @button {class:"btn btn-xs icon-sync inline-block-tight", outlet: "reloadButton", click: "reloadPressed"}
+        @button {class:"btn btn-xs icon-gear inline-block-tight", outlet: "settingsButton", click: "settingsPressed"}
         @button {class:"btn btn-xs icon-question inline-block-tight", outlet: "helpButton", click: "toggleHelpView"}
         @button {class:"btn btn-xs icon-chevron-down inline-block-tight", outlet: "hideButton", click: "closePressed"}
       @div {class: "main-content", outlet: "mainContent"}, =>
@@ -32,11 +33,13 @@ class MainView extends View
     @disposables.add(atom.tooltips.add(@helpButton, {title: "Toggle help"}));
     @disposables.add(atom.tooltips.add(@editButton, {title: "Edit configuration"}));
     @disposables.add(atom.tooltips.add(@reloadButton, {title: "Reload configurations"}));
+    @disposables.add(atom.tooltips.add(@settingsButton, {title: "Settings"}));
     @disposables.add(atom.tooltips.add(@hideButton, {title: "Hide"}));
 
     @saveButton.on 'mousedown', (e) -> e.preventDefault();
     @editButton.on 'mousedown', (e) -> e.preventDefault();
     @reloadButton.on 'mousedown', (e) -> e.preventDefault();
+    @settingsButton.on 'mousedown', (e) -> e.preventDefault();
     @helpButton.on 'mousedown', (e) -> e.preventDefault();
     @hideButton.on 'mousedown', (e) -> e.preventDefault();
 
@@ -129,6 +132,9 @@ class MainView extends View
 
   reloadPressed: =>
     @main.reloadConfiguration();
+
+  settingsPressed: =>
+    atom.workspace.open('atom://config/packages/process-palette');
 
   closePressed: =>
     @main.hidePanel();
