@@ -243,7 +243,7 @@ module.exports = ProcessPalette =
         config.commands = [];
 
       view = new MainEditView(main, title, filePath, config, selectedAction);
-      paneItem = pane.addItem(view, 0);
+      paneItem = pane.addItem(view, {index: 0});
       pane.activateItem(paneItem);
 
   # Called when the save button was pressed. This saves changes that were made
