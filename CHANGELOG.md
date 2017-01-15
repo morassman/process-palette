@@ -1,6 +1,10 @@
-## v0.10.1
+## v0.10.1 (15 January 2017)
 - Implemented auto add and remove of project configs.
 - Added settings for command and output target visibility in panel.
+- Automatically kill processes when its associated project is removed.
+- Changed configuration of new commands to stream to panel by default.
+- Added a button to the panel to open the settings with.
+- Lazy-load some dependencies for increased loading time.
 
 ## v0.10.0 (22 December 2016)
 - Added ability to edit command directly in panel.
