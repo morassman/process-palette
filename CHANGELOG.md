@@ -1,3 +1,6 @@
+## v0.10.2 (18 February 2017)
+- Prevent panel from showing when list of projects change.
+
 ## v0.10.1 (15 January 2017)
 - Implemented auto add and remove of project configs.
 - Added settings for command and output target visibility in panel.

@@ -107,8 +107,6 @@ module.exports = ProcessPalette =
     if toRemove.length == 0
       return;
 
-    @showListView();
-
     for projectCtrl in toRemove
       @removeProjectController(projectCtrl);
 
