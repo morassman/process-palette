@@ -1,7 +1,9 @@
 # Process Palette
-With Process Palette you can add custom entries to the command palette to run any command that you typically would from a terminal. This prevents you from having to switch to a terminal each time you need to run something and is especially useful for commands that you use regularly.
+With Process Palette you can add custom entries to the command palette to run any command that you typically would from a terminal. This prevents you from having to switch to a terminal each time you need to run something and is especially useful for shell commands that you use regularly.
 
 See the [changelog](https://github.com/morassman/process-palette/blob/master/CHANGELOG.md) for the latest improvements.
+
+![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/demo.gif?raw=true)
 
 ## Quick Start
 Install Process Palette and then either generate or download a configuration file.
@@ -24,11 +26,11 @@ These example configurations define a command that will echo a message to standa
 It also contains an example called `Stream Example` to show the direct stream ability. When streaming is enabled the output is written directly to the target without being formatted.
 
 ### Next Steps
-1. Play with the graphical editor or poke around in the configuration file a bit. Just remember to run the `Process Palette: Reload Configuration` command after making changes.
+1. Play with the graphical editor or poke around in the configuration file a bit. Just remember to run the `Process Palette: Reload Configuration` command when making changes directly to the `process-palette.json` file.
 2. Read the rest of this document. Especially the **Properties** and **Variables** sections for extra flexibility.
 
 ## Graphical Editor
-The graphical editor makes it easier to edit the configuration files. It can be used by choosing `Process Palette: Edit Configuration` from the command palette. A dialog will pop up from where you can choose to edit either the global configuration or a project specific configuration. The following is a screenshot of the graphical editor.
+The graphical editor makes it easier to edit the configuration files. It can be opened by choosing `Process Palette: Edit Configuration` from the command palette. A dialog will pop up from where you can choose to edit either the global configuration or a project specific configuration. The following is a screenshot of the graphical editor.
 
 ![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/editor.png?raw=true)
 
@@ -47,6 +49,33 @@ Commands will be executed by the system's default shell, which is `sh` on OSX an
 
 If you would like to use a particular shell then you can specify it under Process Palette's settings. This shell will then be used when running any of the commands. Leave the value blank for the system default to be used.
 
+## User Interface
+### Process Palette Panel
+Process Palette has a small panel that lists all the commands that are configured. It can be toggled by pressing `Ctrl-Alt-P` or from the menu `Packages|Process Palette|Toggle`.
+From here one can see all the commands and also run them.
+
+![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/panel-basic.png?raw=true)
+
+Pressing the down arrow in the top right corner will hide the panel.
+
+### Process Instances
+Multiple instances of a process can run at a time. The process ID of each instance is shown on the right in the form of a button. Pressing the button will show that process' output. The process can be manually terminated by pressing the square stop button next to the process ID.
+
+### Process Output Panel
+If the command is configured to output to the Process Palette panel then clicking on the process ID button will cause the panel to switch to showing the output of that process.
+
+![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/panel-output-basic.png?raw=true)
+
+The other process instances will still be shown, but the selected one will be highlighted.
+
+Scroll lock can be toggled with the lock button. Scroll lock will also enable when one starts to scroll or clicks on the output. It will automatically disable when one scrolls to the bottom.
+
+The output can be cleared by pressing the trash can button.
+
+From here one can return to the list by pressing the button in the top left corner.
+
+### Notifications
+Each time a process is executed a message will be shown in the top right hand corner. A successful execution with an exit status code of 0 will show a success message. Anything other than 0 will show a warning. What these messages display can be configured or even disabled completely as will be seen in the Advanced Configuration section.
 
 ## Configuration Files
 The configuration files can also be edited by hand. The remainder of the document will describe how to do this.
@@ -142,34 +171,6 @@ Custom shortcut keys can also be associated with commands by adding a `keystroke
 ![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/command-palette-keystroke.png?raw=true)
 
 After reloading the configuration the `Ant: Default` command can be run by pressing `Ctrl-Alt-A`.
-
-## User Interface
-### Process Palette Panel
-Process Palette has a small panel that lists all the commands that are configured. It can be toggled by pressing `Ctrl-Alt-P` or from the menu `Packages|Process Palette|Toggle`.
-From here one can see all the commands and also run them.
-
-![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/panel-basic.png?raw=true)
-
-Pressing the down arrow in the top right corner will hide the panel.
-
-### Process Instances
-Multiple instances of a process can run at a time. The process ID of each instance is shown on the right in the form of a button. Pressing the button will show that process' output. The process can be manually terminated by pressing the square stop button next to the process ID.
-
-### Process Output Panel
-If the command is configured to output to the Process Palette panel then clicking on the process ID button will cause the panel to switch to showing the output of that process.
-
-![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/panel-output-basic.png?raw=true)
-
-The other process instances will still be shown, but the selected one will be highlighted.
-
-Scroll lock can be toggled with the lock button. Scroll lock will also enable when one starts to scroll or clicks on the output. It will automatically disable when one scrolls to the bottom.
-
-The output can be cleared by pressing the trash can button.
-
-From here one can return to the list by pressing the button in the top left corner.
-
-### Notifications
-Each time a process is executed a message will be shown in the top right hand corner. A successful execution with an exit status code of 0 will show a success message. Anything other than 0 will show a warning. What these messages display can be configured or even disabled completely as will be seen in the Advanced Configuration section.
 
 ## Advanced Configuration
 The `namespace`, `action`, `command` and `keystroke` aren't the only properties that can be configured. Of these only the `action` and `command` are required. The rest are optional and have default values.

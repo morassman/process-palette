@@ -30,6 +30,7 @@ class ProcessConfig
     @successMessage = 'Executed : {fullCommand}';
     @errorMessage = 'Executed : {fullCommand}\nReturned with code {exitStatus}\n{stderr}';
     @fatalMessage = 'Failed to execute : {fullCommand}\n{stdout}\n{stderr}';
+    @menus = [];
 
     for key, val of object
       @[key] = val
@@ -64,6 +65,7 @@ class ProcessConfig
     @checkArguments();
     @checkInputDialogs();
     @checkPatterns();
+    @checkMenus();
 
   isValid: ->
     if @namespace.trim().length == 0
@@ -122,12 +124,26 @@ class ProcessConfig
 
     @requireStringArray(@patterns);
 
+  checkMenus: ->
+    if !_.isArray(@menus)
+      @menus = [];
+
+    @requireStringArray(@menus);
+    @menus = @removeEmptyStrings(@menus);
+
   requireStringArray: (array) ->
     for i in [0...array.length]
       if !array[i]?
         array[i] = '';
       else if !_.isString(array[i])
         array[i] = array[i].toString();
+
+  removeEmptyStrings: (array) ->
+    result = [];
+    for s in array
+      if s.length > 0
+        result.push(s);
+    return result;
 
   checkInputDialogs: ->
     if !_.isArray(@inputDialogs)

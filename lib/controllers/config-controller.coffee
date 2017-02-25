@@ -12,13 +12,14 @@ class ConfigController
     @listeners = [];
     @patterns = @projectController.getPatterns(@config.patterns);
     @lastTime = null;
+    @disposables = new CompositeDisposable();
 
     cssSelector = 'atom-workspace';
 
     if (@config.outputTarget == 'editor')
       cssSelector = 'atom-text-editor';
 
-    @disposable = atom.commands.add(cssSelector, @config.getCommandName(), @runProcess);
+    @disposables.add(atom.commands.add(cssSelector, @config.getCommandName(), @runProcess));
 
     if @config.keystroke
       binding = {};
@@ -26,6 +27,24 @@ class ConfigController
       binding[@config.keystroke] = @config.getCommandName();
       bindings[cssSelector] = binding;
       atom.keymaps.add('process-palette', bindings);
+
+    @addMenus();
+
+  addMenus: ->
+    if @config.menus.length == 0
+      return;
+
+    root = {};
+    leaf = root;
+    for menu in @config.menus
+      child = {};
+      leaf['label'] = menu;
+      leaf['submenu'] = [child];
+      leaf = child;
+
+    leaf['label'] = _.humanizeEventName(@config.action);
+    leaf['command'] = @config.getCommandName();
+    @disposables.add(atom.menu.add([root]));
 
   getMain: ->
     return @projectController.getMain();
@@ -65,7 +84,7 @@ class ConfigController
   dispose: ->
     @killRunningProcesses();
     @clearControllers();
-    @disposable.dispose();
+    @disposables.dispose();
 
   clearControllers: ->
     for processController in @processControllers

@@ -58,7 +58,17 @@ class CommandEditView extends View
             @tr =>
               @td ' '
               @td =>
-                @span 'Shortcut key. Combine shift, ctrl, cmd and alt with other keys, like ctrl-alt-r', {class: 'text-smaller text-subtle'}
+                @span 'Shortcut key. Combine shift, ctrl, cmd and alt with other keys, like ', {class: 'text-smaller text-subtle'}
+                @span 'ctrl-alt-r', {class: 'text-smaller text-highlight'}
+            @tr =>
+              @td 'Menu:', {class: 'text-highlight first-column'}
+              @td =>
+                @subview 'menuEditor', new TextEditorView(mini: true)
+            @tr =>
+              @td ' '
+              @td =>
+                @span 'A comma separated list of menu names like ', {class: 'text-smaller text-subtle'}
+                @span 'Processes, Global', {class: 'text-smaller text-highlight'}
             @tr =>
               @td {colspan: 2}, =>
                 @h2 'Saving', {class: 'text-highlight'}
@@ -189,7 +199,9 @@ class CommandEditView extends View
                 @h2 'Environment Variables', {class: 'text-highlight'}
             @tr =>
               @td {colspan: 2}, =>
-                @span 'Add additional environment variables. Any of the input variables can be used in the value. The environment variable itself is referenced in the command with a $ followed by the variable name.' , {class: 'text-smaller text-subtle'}
+                @span 'Add additional environment variables. Any of the input variables can be used in the value. The environment variable itself is referenced in the command with a ', {class: 'text-smaller text-subtle'}
+                @span '$', {class: 'text-smaller text-highlight'}
+                @span ' followed by the variable name.', {class: 'text-smaller text-subtle'}
             @tr =>
               @td {class: 'first-column', colspan: 2}, =>
                 @div {class: 'bordered'}, =>
@@ -290,16 +302,17 @@ class CommandEditView extends View
     @commandEditor.attr('tabindex', 3);
     @cwdEditor.attr('tabindex', 4);
     @keystrokeEditor.attr('tabindex', 5);
-    @streamCheck.attr('tabindex', 6);
-    @targetSelect.attr('tabindex', 7);
-    @bufferSizeEditor.attr('tabindex', 8);
-    @successOutputEditor.attr('tabindex', 9);
-    @errorOutputEditor.attr('tabindex', 10);
-    @successMessageEditor.attr('tabindex', 11);
-    @errorMessageEditor.attr('tabindex', 12);
-    @scrollLockCheck.attr('tabindex', 13);
-    @autoShowCheck.attr('tabindex', 14);
-    @autoHideCheck.attr('tabindex', 15);
+    @menuEditor.attr('tabindex', 6);
+    @streamCheck.attr('tabindex', 7);
+    @targetSelect.attr('tabindex', 8);
+    @bufferSizeEditor.attr('tabindex', 9);
+    @successOutputEditor.attr('tabindex', 10);
+    @errorOutputEditor.attr('tabindex', 11);
+    @successMessageEditor.attr('tabindex', 12);
+    @errorMessageEditor.attr('tabindex', 13);
+    @scrollLockCheck.attr('tabindex', 14);
+    @autoShowCheck.attr('tabindex', 15);
+    @autoHideCheck.attr('tabindex', 16);
 
     @bufferSizeEditor.getModel().setPlaceholderText('Unspecified');
     @maxCompletedEditor.getModel().setPlaceholderText('Unspecified');
@@ -347,6 +360,7 @@ class CommandEditView extends View
     @commandEditor.getModel().setText(@appendArguments(@command.command, @command.arguments));
     @cwdEditor.getModel().setText(@emptyString(@command.cwd));
     @keystrokeEditor.getModel().setText(@emptyString(@command.keystroke));
+    @menuEditor.getModel().setText(@command.menus.join());
     @bufferSizeEditor.getModel().setText(@emptyString(@command.outputBufferSize));
     @setChecked(@promptToSaveCheck, @command.promptToSave);
     @saveSelect.val(@command.saveOption);
@@ -435,6 +449,7 @@ class CommandEditView extends View
     @persistIntegerNullIfNaN('outputBufferSize', @bufferSizeEditor.getModel().getText());
     @persistIntegerNullIfNaN('maxCompleted', @maxCompletedEditor.getModel().getText());
     @persistEnv();
+    @persistMenus();
     @persistInputDialogs();
 
   persistStringNullIfEmpty: (name, value) ->
@@ -450,6 +465,22 @@ class CommandEditView extends View
       value = null;
 
     @command[name] = value;
+
+  persistMenus: ->
+    menus = @menuEditor.getModel().getText().trim();
+
+    if menus.length == 0
+      menus = [];
+    else
+      menus = menus.split(',');
+
+    @command.menus = [];
+    for menu in menus
+      menu = menu.trim();
+      if menu.length > 0
+        @command.menus.push(menu);
+
+    console.log(@command.menus);
 
   persistInputDialogs: ->
     inputDialogs = [];

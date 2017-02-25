@@ -1,3 +1,6 @@
+## v0.11.0 (25 February 2017)
+- Added ability to put commands in menus.
+
 ## v0.10.2 (18 February 2017)
 - Prevent panel from showing when list of projects change.
 
