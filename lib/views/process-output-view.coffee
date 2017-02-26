@@ -168,18 +168,35 @@ class ProcessOutputView extends View
       @outputPanel.append(line);
       return;
 
-    for pattern in @patterns
-      match = pattern.match(line);
+    line_class = null;
+    have_path = false
+    have_line = false
 
-      if match?
-        cwd = @processController.getCwd();
-        pathView = new PathView(cwd, match);
-        @outputPanel.append(match.pre);
-        @outputPanel.append $$ ->
-          @span =>
-            @subview "#{@lineIndex}", pathView
-        @outputPanel.append(match.post);
-        return;
+    for pattern in @patterns
+      console.log(pattern);
+      if pattern.config.isPathExpression
+        match = pattern.match(line);
+        if not have_path && match?
+          cwd = @processController.getCwd();
+          pathView = new PathView(cwd, match);
+          line = match.pre;
+          line += ($$ ->
+            @span =>
+              @subview "#{@lineIndex}", pathView
+            ).html();
+          line += match.post;
+          if not have_line
+            line_class = "match"
+          have_path = true;
+      else
+        if not have_line && line.match(pattern.regex)
+          line_class = pattern.config.name;
+          have_line = true;
+      if have_path and have_line
+        break;
+
+    if (line_class)
+      line = '<span class="' + line_class + '">' + line + '</span>'; # + ' (' + line_class + ' - ' + pattern.regex + ')';
 
     @outputPanel.append(line);
 

@@ -145,6 +145,7 @@ class ProjectController
   createRegExpPattern: (name, config) ->
     # Make a copy so that the original doesn't get modified.
     config = JSON.parse(JSON.stringify(config));
+    config.name = name
 
     if !config.expression?
       console.error("Pattern #{name} doesn't have an expression.")
@@ -153,27 +154,26 @@ class ProjectController
     if !config.flags?
       config.flags = "i";
 
-    if config.expression.indexOf("(path)") == -1
-      console.error("Pattern #{name} doesn't have (path) in its expression.");
-      return null;
+    config.isPathExpression = config.expression.indexOf("(path)") >= 0
 
-    pathIndex = config.expression.indexOf("(path)");
-    lineIndex = config.expression.indexOf("(line)");
+    if config.isPathExpression
+      pathIndex = config.expression.indexOf("(path)");
+      lineIndex = config.expression.indexOf("(line)");
 
-    config.pathIndex = 1;
+      config.pathIndex = 1;
 
-    if lineIndex > -1
-      if pathIndex < lineIndex
-        config.lineIndex = 2;
-      else
-        config.lineIndex = 1;
-        config.pathIndex = 2;
+      if lineIndex > -1
+        if pathIndex < lineIndex
+          config.lineIndex = 2;
+        else
+          config.lineIndex = 1;
+          config.pathIndex = 2;
 
-    if !config.path?
-      config.path = @getPathExpression(lineIndex > -1);
+      if !config.path?
+        config.path = @getPathExpression(lineIndex > -1);
 
-    config.expression = config.expression.replace("(path)", "("+config.path+")");
-    config.expression = config.expression.replace("(line)", "(\\d+)");
+      config.expression = config.expression.replace("(path)", "("+config.path+")");
+      config.expression = config.expression.replace("(line)", "(\\d+)");
 
     try
       return new RegExpPattern(config);
