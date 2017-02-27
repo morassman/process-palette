@@ -69,6 +69,7 @@ class CommandEditView extends View
               @td =>
                 @span 'A comma separated list of menu names like ', {class: 'text-smaller text-subtle'}
                 @span 'Processes, Global', {class: 'text-smaller text-highlight'}
+                @span '. The first name is the top level menu in Atom, followed by sub menus. Menus are created as needed and the action name is then placed in the last menu.', {class: 'text-smaller text-subtle'}
             @tr =>
               @td {colspan: 2}, =>
                 @h2 'Saving', {class: 'text-highlight'}
@@ -224,6 +225,11 @@ class CommandEditView extends View
             @tr =>
               @td {colspan: 2}, =>
                 @span 'Variables can be used in many of the fields. These should be surrounded with curly brackets when referenced.' , {class: 'text-smaller text-subtle'}
+            @tr =>
+              @td {colspan: 2}, =>
+                @span 'Tip!', {class: 'text-smaller inline-block highlight-info'}
+                @span 'An easy way to see the value of a variable is to simply configure the shell command to echo it, like ', {class: 'text-smaller text-subtle'}
+                @code 'echo \'{configDirAbsPath}\'', {class: 'text-smaller'}
             @tr =>
               @td {colspan: 2}, =>
                 @h3 'Input Variables', {class: 'text-highlight'}
@@ -479,8 +485,6 @@ class CommandEditView extends View
       menu = menu.trim();
       if menu.length > 0
         @command.menus.push(menu);
-
-    console.log(@command.menus);
 
   persistInputDialogs: ->
     inputDialogs = [];
