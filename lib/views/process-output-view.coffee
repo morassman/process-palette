@@ -5,6 +5,7 @@ ButtonsView = require './buttons-view'
 PathView = require './path-view'
 escapeHTML = require 'underscore.string/escapeHTML'
 AnsiToHtml = require 'ansi-to-html'
+fsp = require 'fs-plus'
 
 module.exports =
 class ProcessOutputView extends View
@@ -168,37 +169,55 @@ class ProcessOutputView extends View
       @outputPanel.append(line);
       return;
 
-    line_class = null;
-    have_path = false
-    have_line = false
+    have_path_match = false
+    have_line_match = false
+    line_class = null
+    line_path = null
 
     for pattern in @patterns
-      console.log(pattern);
+      #console.log(pattern);
       if pattern.config.isPathExpression
         match = pattern.match(line);
-        if not have_path && match?
+        if not have_path_match && match? && fsp.isFileSync(match.path)
           cwd = @processController.getCwd();
-          pathView = new PathView(cwd, match);
-          line = match.pre;
-          line += ($$ ->
-            @span =>
-              @subview "#{@lineIndex}", pathView
-            ).html();
-          line += match.post;
-          if not have_line
-            line_class = "match"
-          have_path = true;
+          line_path = {
+            pre:  match.pre,
+            path: new PathView(cwd, match),
+            post: match.post
+            };
+          # allow to style lines with matching paths
+          #if not have_line_match
+          #  line_class = "path-line"
+          have_path_match = true;
       else
-        if not have_line && line.match(pattern.regex)
+        if not have_line_match && line.match(pattern.regex)
           line_class = pattern.config.name;
-          have_line = true;
-      if have_path and have_line
+          have_line_match = true;
+      if have_path_match and have_line_match
         break;
 
-    if (line_class)
-      line = '<span class="' + line_class + '">' + line + '</span>'; # + ' (' + line_class + ' - ' + pattern.regex + ')';
-
-    @outputPanel.append(line);
+    if line_class
+      if have_path_match
+        @outputPanel.append(
+          $$ ->
+            @span {class: line_class}, =>
+              @raw(line_path.pre)
+              @span =>
+                @subview "#{@lineIndex}", line_path.path
+              @raw(line_path.post)
+          );
+      else
+        @outputPanel.append(
+          $$ ->
+            @span {class: line_class}, => @raw(line)
+          );
+    else
+      if have_path_match
+        @outputPanel.append(line_path.pre);
+        @outputPanel.append(line_path.path);
+        @outputPanel.append(line_path.post);
+      else
+        @outputPanel.append(line);
 
   # Tear down any state and detach
   destroy: ->
