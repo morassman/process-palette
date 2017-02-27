@@ -92,8 +92,6 @@ class ProcessOutputView extends View
       # Only do this while the process is running.
       if (@outputPanel.scrollTop() > 0)
         @setScrollLockEnabled(false);
-    else
-      @setScrollLockEnabled(true);
 
   parentHeightChanged: (parentHeight) ->
     @calculateHeight();
