@@ -154,7 +154,6 @@ class ProcessOutputView extends View
     @refreshScrollLockButton();
 
   outputToPanel: (text) ->
-    text = @sanitizeOutput(text);
     addNewLine = false;
 
     for line in text.split('\n')
@@ -164,59 +163,68 @@ class ProcessOutputView extends View
       @appendLine(line);
       addNewLine = true;
 
-  appendLine: (line) ->
-    if @patterns.length == 0
-      @outputPanel.append(line);
-      return;
+  # append line to output panel
+  #   - detect line patterns and assign css class
+  #   - detect path patterns and create PathView
+  #   - part after path is recursively appended again
+  #       - match_line == undefined : start of line
+  #       - match_line != undefined : line continuation after path match
+  #          - suppress line pattern matching
+  #          - use match_line for line class
+  #          - match_line == null : line continuation, but no line class was detected
+  appendLine: (line, match_line) ->
 
-    have_path_match = false
-    have_line_match = false
-    line_class = null
-    line_path = null
+    match_path = null
+    if match_line == undefined
+      continuation = false
+      match_line = null
+    else
+      continuation = true
 
     for pattern in @patterns
-      #console.log(pattern);
       if pattern.config.isPathExpression
         match = pattern.match(line);
-        if not have_path_match && match? && fsp.isFileSync(match.path)
+        if not match_path and match? and fsp.isFileSync(match.path)
           cwd = @processController.getCwd();
-          line_path = {
+          match_path = {
             pre:  match.pre,
             path: new PathView(cwd, match),
             post: match.post
             };
-          # allow to style lines with matching paths
-          #if not have_line_match
-          #  line_class = "path-line"
-          have_path_match = true;
+          line = match.pre + "<FILE>" + match.post
       else
-        if not have_line_match && line.match(pattern.regex)
-          line_class = pattern.config.name;
-          have_line_match = true;
-      if have_path_match and have_line_match
+        if not continuation and not match_line and line.match(pattern.regex)
+          match_line = pattern.config.name;
+      if match_path and match_line
         break;
-
-    if line_class
-      if have_path_match
+        
+    if match_line
+      if match_path
+        pre = @sanitizeOutput(match_path.pre)
         @outputPanel.append(
           $$ ->
-            @span {class: line_class}, =>
-              @raw(line_path.pre)
+            @span {class: match_line}, =>
+              @raw(pre)
               @span =>
-                @subview "#{@lineIndex}", line_path.path
-              @raw(line_path.post)
-          );
+                @subview "#{@lineIndex}", match_path.path
+          )
+        if match_path.post.length > 0
+          @appendLine(match_path.post, match_line)
       else
+        line = @sanitizeOutput(line)
         @outputPanel.append(
           $$ ->
-            @span {class: line_class}, => @raw(line)
-          );
+            @span {class: match_line}, => @raw(line)
+          )
     else
-      if have_path_match
-        @outputPanel.append(line_path.pre);
-        @outputPanel.append(line_path.path);
-        @outputPanel.append(line_path.post);
+      if match_path
+        pre = @sanitizeOutput(match_path.pre)
+        @outputPanel.append(pre);
+        @outputPanel.append(match_path.path);
+        if match_path.post.length > 0
+          @appendLine(match_path.post, false)
       else
+        line = @sanitizeOutput(line)
         @outputPanel.append(line);
 
   # Tear down any state and detach
