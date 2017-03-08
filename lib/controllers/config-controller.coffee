@@ -10,7 +10,12 @@ class ConfigController
   constructor: (@projectController, @config) ->
     @processControllers = [];
     @listeners = [];
-    @patterns = @projectController.getPatterns(@config.patterns);
+    pattern_names = @config.patterns
+    if not pattern_names?.length
+      pattern_names = @projectController.processConfigs.defaultPatterns
+    if not pattern_names?.length
+      pattern_names = ['default']
+    @patterns = @projectController.getPatterns(pattern_names);
     @lastTime = null;
     @disposables = new CompositeDisposable();
 

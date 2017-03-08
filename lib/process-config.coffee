@@ -23,7 +23,7 @@ class ProcessConfig
     @promptToSave = true;
     # saveOption = [none, all, referenced]
     @saveOption = 'none';
-    @patterns = ['default'];
+    @patterns = [];
     @successOutput = '{stdout}';
     @errorOutput = '{stdout}\n{stderr}';
     @fatalOutput = 'Failed to execute : {fullCommand}\n{stdout}\n{stderr}';
@@ -119,7 +119,7 @@ class ProcessConfig
 
   checkPatterns: ->
     if !_.isArray(@patterns)
-      @patterns = ['default'];
+      @patterns = [];
       return;
 
     @requireStringArray(@patterns);
