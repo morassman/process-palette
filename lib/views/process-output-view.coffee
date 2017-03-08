@@ -206,6 +206,8 @@ class ProcessOutputView extends View
               line_exprs.push obj
               remaining = match.post
               break # process remaining
+            remaining = match.post
+            line_exprs.push match.pre + match.match
     if remaining.length >= 0
       line_exprs.push remaining
 
