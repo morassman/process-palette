@@ -5,25 +5,25 @@ fsp = require 'fs-plus'
 module.exports =
 class PathView extends View
 
-  constructor: (@cwd, @pathPattern) ->
-    super(@pathPattern);
+  constructor: (@cwd, @pathMatch) ->
+    super(@pathMatch);
 
-  @content: (pathPattern) ->
+  @content: (pathMatch) ->
     @span =>
-      @span pathPattern.match, {class: "process-palette-path-view", click: "clicked"}
+      @span pathMatch.match, {class: "process-palette-path-view", click: "clicked"}
 
   clicked: ->
-    path = fsp.normalize(@pathPattern.path);
+    path = fsp.normalize(@pathMatch.path);
 
     if !fsp.isFileSync(path)
-      path = PathUtil.join(@cwd, @pathPattern.path);
+      path = PathUtil.join(@cwd, @pathMatch.path);
 
     if !fsp.isFileSync(path)
       return;
 
     options = {};
 
-    if @pathPattern.line?
-      options.initialLine = @pathPattern.line - 1;
+    if @pathMatch.line?
+      options.initialLine = @pathMatch.line - 1;
 
     atom.workspace.open(path, options);

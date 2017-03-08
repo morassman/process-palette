@@ -1,4 +1,4 @@
-PathPattern = require './path-pattern'
+RegExpMatch = require './regexp-match'
 
 module.exports =
 class RegExpPattern
@@ -14,15 +14,8 @@ class RegExpPattern
 
     try
       match = m[0];
-      path = m[@config.pathIndex];
-
       pre = text.substring(0, m.index);
       post = text.substring(m.index+m[0].length);
-      line = null;
-
-      if @config.lineIndex?
-        line = parseInt(m[@config.lineIndex]);
-
-      return new PathPattern(text, match, path, line, pre, post);
+      return new RegExpMatch(text, match, pre, post);
 
     return null;
