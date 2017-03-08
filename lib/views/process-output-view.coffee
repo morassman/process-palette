@@ -259,7 +259,7 @@ class ProcessOutputView extends View
       if pattern.config.isLineExpression
         match = line_processed.match(pattern.regex)
         if match?
-          console.log(["line match", match.match, line_processed])
+          #console.log(["line match", match.match, line_processed])
           line_span = $$ -> @span {class: pattern.config.name}
           for part in line_exprs
             if typeof part == "string"

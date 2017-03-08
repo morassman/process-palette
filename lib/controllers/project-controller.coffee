@@ -158,7 +158,7 @@ class ProjectController
     config.isLineExpression = config.expression.indexOf("^") == 0
     config.isPathExpression = config.expression.indexOf("(path)") >= 0
     config.isInlineExpression = not config.isLineExpression and not config.isPathExpression
-    
+
     if config.isPathExpression
       pathIndex = config.expression.indexOf("(path)");
       lineIndex = config.expression.indexOf("(line)");
@@ -181,7 +181,7 @@ class ProjectController
       try
         return new PathPattern(config);
       catch err
-        console.error("Path pattern #{name} could not be created.");
+        console.error("Pattern #{name} (Path) could not be created.");
         console.error(err);
 
     else
@@ -189,7 +189,7 @@ class ProjectController
       try
         return new RegExpPattern(config);
       catch err
-        console.error("RegExp pattern #{name} could not be created.");
+        console.error("Pattern #{name} (RegExp) could not be created.");
         console.error(err);
 
     return null;
