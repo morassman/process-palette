@@ -1,0 +1,473 @@
+/*
+ * Your Stylesheet
+ *
+ * This stylesheet is loaded when Atom starts up and is reloaded automatically
+ * when it is changed.
+ *
+ * If you are unfamiliar with LESS, you can read more about it here:
+ * http://www.lesscss.org
+ */
+
+//*****************************************************************************
+// see similar styled section "process-palette" below
+//*****************************************************************************
+
+// test...
+
+// test end.
+
+
+
+::-webkit-scrollbar {
+  width: 4mm !important;
+  height: 4mm !important;
+  opacity: 0.1 !important;
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: #e4e4ff !important;
+  opacity: 0.1 !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #aaaaff !important;
+  opacity: 1 !important;
+  border: 1px solid #6666ff !important;
+}
+
+.tool-panel.panel-bottom
+{
+  border-top: 1px solid #999999 !important;
+
+  &:empty
+  {
+    border-top: 0 !important;
+  }
+}
+
+.tab {
+  max-width: fit-content !important;
+  font-size: 10px !important;
+
+  .title {
+    margin-right: 4px !important;
+  }
+}
+
+
+
+atom-workspace {
+  background: #cccccc !important;
+
+  .panels,
+  .inset-panel,
+  .tool-panel,
+  .toolbar-horiz,
+  .toolbar-vert {
+    background: @panel-color !important;
+  }
+
+  .pattern-navigator,
+  .pattern-navigator-item-indent-0,
+  .pattern-navigator-item-indent-1,
+  .pattern-navigator-item-indent-2,
+  .pattern-navigator-item-indent-3,
+  .pattern-navigator-item-indent-4,
+  .pattern-navigator-item-indent-5 {
+    background: @panel-color !important;
+  }
+
+  .pattern-navigator-item-selected {
+    background-color: @background-color-selected !important;
+  }
+  .pattern-navigator-item:hover {
+    background-color: @background-color-highlight !important;
+  }
+}
+
+
+
+
+// material-ui fixes
+//
+// .package-card {
+//   padding: 1em !important;
+// }
+//
+// h4, .package-name {
+//   font-size: 1rem !important;
+//   font-weight: bold !important;
+// }
+// .card-name,
+// .package-description,
+// .package-message {
+//   margin-bottom: 2px !important;
+// }
+//
+// a,
+// button,
+// .header,
+// .header::before,
+// .name,
+// .list-item {
+//   height: 1.4rem !important;
+//   line-height: 1.4rem !important;
+// }
+//
+// .list-item,
+// .list-item.selected {
+//   width: 90% !important;
+// }
+// .list-item::before {
+//   width: 0% !important;
+// }
+//
+// * {
+//   transition: none !important;
+//   -webkit-transition: none !important;
+// }
+
+
+//---------------------------------------- editor
+
+atom-text-editor {
+
+  .gutter {
+    background: #eeeeee !important;
+  }
+
+  .gutter-container {
+    direction: rtl !important;
+  }
+
+  .custom-decorations {
+    background: #dddddd !important;
+  }
+
+  .lines {
+    margin-left: 1ex !important;
+  }
+
+  .line,
+  .leading-whitespace,
+  .indent-guide,
+  div:has(.line) {
+    background: none !important;
+  }
+
+  .line-number.cursor-line {
+    background: @background-color-selected !important;
+  }
+
+  // wrong...breaks bracket glow
+  // .line.cursor-line {
+  //   background: #eeeeee !important;
+  // }
+
+  .line-number {
+    color: rgba(51, 51, 51, 0.5) !important;
+  }
+
+  .line-number.foldable {
+    color: rgba(0, 0, 0, 0.7) !important;
+  }
+
+  .line-number.bookmarked {
+    background: rgba(0, 255, 255, 0.3) !important;
+  }
+
+  .line-number.foldable .icon-right {
+    visibility: visible !important;
+  }
+
+  .line-number.bookmarked .icon-right {
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .highlight.selection .region {
+    background-color: @selection-color !important;
+    //box-shadow: 0px 0px 0px 2px @selection-color;
+    //outline: solid 1px @selection-color !important;
+    //border: solid 1px @selection-color !important;
+    //background-color: rgba(240, 240, 255, 1) !important;
+    //box-shadow: 0px 0px 0px 2px rgba(0, 0, 255, 1);
+    //outline: solid 2px rgba(0, 0, 255, 1) !important;
+    //border: solid 2px rgba(240, 240, 255, 1) !important;
+  }
+
+  .highlight.find-result .region {
+    background-color: @find-result-color !important;
+    //border-radius: 1ex;
+    //border: 0px !important;
+    //outline: solid 1px @find-result-color !important;
+    border: none;
+  }
+
+
+  .highlight.current-result .region {
+    //background-color: @current-result-color !important;
+    outline: 2px @current-result-color !important;
+    border: none;
+  }
+
+  .bracket-matcher-highlight .region {
+    //border: solid 3px rgba(255, 0, 0, 0.2) !important;
+    //outline: solid 2px rgba(255, 20, 100, 0.5) !important;
+    //outline: solid 2px rgba(255, 255, 255, 1) !important;
+    //background: none;
+    //box-shadow: none;
+    background: lighten(@bracket-highlight-color, 10%) !important;
+    box-shadow: 0 0 10px 2px @bracket-highlight-color;
+  }
+
+
+  .cursor {
+    position: relative;
+    left: -@cursor-width;
+    border: none !important;
+    border-left: @cursor-width solid @cursor-color !important;
+    //border-bottom: 1px solid #ff0000 !important;
+  }
+
+  &[mini=false] {
+    .cursor {
+      background: @cursor-glow !important;
+      box-shadow: 0px 0px 10px 5px @cursor-glow;
+      min-width: 1em;
+    }
+  }
+}
+
+.quick-highlight.box-selection,
+.highlight-selected {
+  .region {
+    background: rgba(255,255,0, 0.5) !important;
+    //border: solid 1px red !important;
+    border-radius: 1ex !important;
+    border: none !important;
+    z-index: -1000 !important;
+  }
+}
+
+
+//---------------------------------------- buttons
+
+.command-toolbar-btn {
+
+  background: #eeeeee !important;
+
+  &[data-cmd^="build:"] {
+    background: #ccffcc !important;
+  }
+
+  &[data-cmd^="file:"],
+  &[data-cmd^="settings-view:"],
+  &[data-cmd^="process-palette:"] {
+    background: #dddddd !important;
+  }
+
+  &[data-cmd^="window:"] {
+    background: #cccccc !important;
+  }
+
+  &[data-cmd^="pattern-navigator:"] {
+    background: #ffcccc !important;
+  }
+
+  &[data-cmd^="editor:"] {
+    background: #ccccff !important;
+  }
+
+  &[data-cmd^="open:"] {
+    background: #ddccdd !important;
+  }
+}
+
+//---------------------------------------- tree view
+
+.tree-view-search-bar {
+  border-bottom: 1px solid #999999 !important;
+}
+
+.working-files-item,
+.working-files .tool-panel {
+  background: none !important;
+}
+.working-files-item {
+  height: auto;
+}
+.working-files-item.selected {
+  background: @background-color-selected !important;
+  &::before {
+    height: auto;
+  }
+}
+.working-files {
+  display: flex;
+  //flex-direction: column;
+  //flex: 1;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  max-height: 30%;
+  height: auto;
+  background: @working-files-color !important;
+  //padding-bottom: 1ex !important;
+  border-bottom: 1px solid #999999 !important;
+}
+
+.tree-view {
+  background: @panel-color;
+
+  .file.selected {
+    background: @background-color-selected !important;
+  }
+}
+
+
+//*****************************************************************************
+//---------------------------------------- process-palette
+//*****************************************************************************
+
+atom-panel .process-palette-output-panel {
+  background: #ffffff !important;
+  color: black !important;
+
+  .process-palette-path-view {
+    //background: #ffff99 !important;
+    color: #0000cc !important;
+  }
+
+  // .match {
+  //   color: #660066 !important;
+  // }
+
+  .dashes {
+    color: #009999 !important;
+  }
+
+  .bracket {
+    color: #cc00cc !important;
+  }
+
+  .command {
+    color: #0000ff !important;
+  }
+
+  .star {
+    color: #cc00cc !important;
+  }
+
+  .trace-begin {
+    color: #6600ff !important;
+  }
+
+  .trace-end {
+    color: #6600ff !important;
+  }
+
+  .trace-result {
+    color: #ff0066 !important;
+  }
+
+  .exclamation {
+    color: #cc00cc !important;
+  }
+
+  .build {
+    color: #669966 !important;
+  }
+
+  .error,
+  .fail {
+    color: #ff0000 !important;
+    background-color: #ffff00 !important;
+  }
+
+  .warning {
+    color: #999900 !important;
+  }
+
+  .at {
+    color: #9999cc !important;
+  }
+}
+
+
+//---------------------------------------- swackets
+
+@swH: 255;
+@swL: 200;
+@sw0:   0;
+@swA: 0.1;
+@swackets-color-0: rgba(@sw0, @sw0, @swH, @swA);
+@swackets-color-1: rgba(@swL, @swL, @sw0, @swA);
+@swackets-color-2: rgba(@sw0, @swH, @sw0, @swA);
+@swackets-color-3: rgba(@swL, @sw0, @swL, @swA);
+
+.swackets-base {
+  //box-shadow: 0px 0 20px 0px;
+  color: rgba(0, 0, 255, 1) !important;
+  border-radius: 2ex;
+  padding: 1px 1px;
+}
+
+.swackets(@i) {
+  &.swackets-@{i} {
+    .swackets-base;
+    @color: "swackets-color-@{i}";
+    background: @@color !important;
+    //border: 1ex @@color !important;
+  }
+}
+
+.syntax--brace,
+.syntax--bracket,
+.syntax--begin,
+.syntax--end {
+  .swackets(0);
+  .swackets(1);
+  .swackets(2);
+  .swackets(3);
+}
+
+
+//---------------------------------------- syntax
+
+.syntax--brace,
+.syntax--bracket,
+.syntax--punctuation {
+  //background: #ffffcc !important;
+  //font-weight: 900 !important;
+  font-size: 1.1rem !important;
+  line-height: 1.0rem !important;
+}
+
+atom-text-editor,
+atom-text-editor.editor {
+  .highlight.ideographic-space {
+    .region:after {
+      color: #800000;
+      content: '×';
+      background-color: #CCCCCC;
+    }
+  }
+}
+
+
+//---------------------------------------- colors
+
+@background-color-highlight: #cccccc;
+@background-color-selected: #aaaaff;
+@bracket-highlight-color: rgba(255, 0, 0, 0.2);
+@current-result-color: rgba(0, 255, 64, 0.5);
+@cursor-color: #ff0000;
+@cursor-glow:  rgba(0, 0, 0, 0.1);
+@cursor-width: 2px;
+@find-result-color: rgba(0, 255, 80, 0.5);
+@panel-color: #ece7e2;
+@selection-color: rgba(180, 180, 255, 1);
+@tree-view-background-color: @panel-color;
+@working-files-color: #ccffcc;

@@ -1,0 +1,240 @@
+{
+  "patterns": {
+    "colon": {
+      "expression": "(path):(line)"
+    },
+    "file_line": {
+      "expression": "(?:\\bfile +|\\bat +)?['\"]?(path)['\"]?.*\\bline +(line)"
+    },
+    "path": {
+      "expression": "['\"]?(path)['\"]?"
+    },
+    "fail": {
+      "expression": "\\bfail(ure|ed)?\\b"
+    },
+    "error": {
+      "expression": "[-\\w]*error[-\\w]*"
+    },
+    "warning": {
+      "expression": "\\bwarn(ing)?\\b"
+    },
+    "dashes": {
+      "expression": "^\\s*--"
+    },
+    "command": {
+      "expression": "^\\s*>"
+    },
+    "star": {
+      "expression": "^\\s*\\*"
+    },
+    "trace-begin": {
+      "expression": "^\\s*\\\\\\s+"
+    },
+    "trace-end": {
+      "expression": "^\\s*/\\s+"
+    },
+    "trace-result": {
+      "expression": "(^\\s*/\\s+.*)(\\s+=\\s+.*)(.*$)"
+    },
+    "exclamation": {
+      "expression": "^\\s*!"
+    },
+    "bracket": {
+      "expression": "^\\s*[[{]"
+    },
+    "build": {
+      "expression": "^\\s*build"
+    },
+    "at": {
+      "expression": "^\\s*at\\b"
+    }
+  },
+  "defaultPatterns": [
+    "colon",
+    "file_line",
+    "path",
+    "trace-begin",
+    "trace-end",
+    "trace-result",
+    "exclamation",
+    "star",
+    "dashes",
+    "command",
+    "bracket",
+    "build",
+    "at",
+    "fail",
+    "error",
+    "warning"
+  ],
+  "commands": [
+    {
+      "namespace": "build",
+      "action": "file",
+      "command": "build {fileAbsPath}",
+      "arguments": [],
+      "cwd": "{fileDirAbsPath}",
+      "inputDialogs": [],
+      "env": {},
+      "keystroke": "f5",
+      "stream": true,
+      "outputTarget": "panel",
+      "outputBufferSize": 80000,
+      "maxCompleted": 3,
+      "autoShowOutput": true,
+      "autoHideOutput": false,
+      "scrollLockEnabled": false,
+      "singular": false,
+      "promptToSave": false,
+      "saveOption": "all",
+      "successOutput": "{stdout}",
+      "errorOutput": "{stdout}\n{stderr}",
+      "fatalOutput": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "successMessage": null,
+      "errorMessage": null,
+      "fatalMessage": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "menus": []
+    },
+    {
+      "namespace": "build",
+      "action": "all",
+      "command": "build",
+      "arguments": [],
+      "cwd": "{fileDirAbsPath}",
+      "inputDialogs": [],
+      "env": {},
+      "keystroke": "f7",
+      "stream": true,
+      "outputTarget": "panel",
+      "outputBufferSize": 80000,
+      "maxCompleted": 3,
+      "autoShowOutput": true,
+      "autoHideOutput": false,
+      "scrollLockEnabled": false,
+      "singular": false,
+      "promptToSave": false,
+      "saveOption": "all",
+      "successOutput": "{stdout}",
+      "errorOutput": "{stdout}\n{stderr}",
+      "fatalOutput": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "successMessage": null,
+      "errorMessage": null,
+      "fatalMessage": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "menus": []
+    },
+    {
+      "namespace": "open",
+      "action": "files",
+      "command": "files",
+      "arguments": [],
+      "cwd": "{fileDirAbsPath}",
+      "inputDialogs": [],
+      "env": {},
+      "keystroke": null,
+      "stream": false,
+      "outputTarget": "void",
+      "outputBufferSize": 80000,
+      "maxCompleted": 3,
+      "autoShowOutput": false,
+      "autoHideOutput": false,
+      "scrollLockEnabled": false,
+      "singular": false,
+      "promptToSave": false,
+      "saveOption": "all",
+      "successOutput": null,
+      "errorOutput": null,
+      "fatalOutput": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "successMessage": null,
+      "errorMessage": null,
+      "fatalMessage": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "menus": []
+    },
+    {
+      "namespace": "open",
+      "action": "shell",
+      "command": "terminal",
+      "arguments": [],
+      "cwd": "{fileDirAbsPath}",
+      "inputDialogs": [],
+      "env": {},
+      "keystroke": null,
+      "stream": false,
+      "outputTarget": "void",
+      "outputBufferSize": 80000,
+      "maxCompleted": 3,
+      "autoShowOutput": false,
+      "autoHideOutput": false,
+      "scrollLockEnabled": false,
+      "singular": false,
+      "promptToSave": false,
+      "saveOption": "all",
+      "successOutput": null,
+      "errorOutput": null,
+      "fatalOutput": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "successMessage": null,
+      "errorMessage": null,
+      "fatalMessage": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "menus": []
+    },
+    {
+      "namespace": "open",
+      "action": "workbench",
+      "command": "start thg",
+      "arguments": [],
+      "cwd": "{fileDirAbsPath}",
+      "inputDialogs": [],
+      "env": {},
+      "keystroke": null,
+      "stream": true,
+      "outputTarget": "void",
+      "outputBufferSize": 80000,
+      "maxCompleted": 3,
+      "autoShowOutput": false,
+      "autoHideOutput": false,
+      "scrollLockEnabled": false,
+      "singular": false,
+      "promptToSave": false,
+      "saveOption": "all",
+      "successOutput": null,
+      "errorOutput": null,
+      "fatalOutput": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "successMessage": null,
+      "errorMessage": null,
+      "fatalMessage": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "menus": []
+    },
+    {
+      "namespace": "run",
+      "action": "prompt",
+      "command": "{command}",
+      "arguments": [],
+      "cwd": "{fileDirAbsPath}",
+      "inputDialogs": [
+        {
+          "variableName": "command",
+          "message": "command",
+          "initialInput": ""
+        }
+      ],
+      "env": {},
+      "keystroke": "alt-r",
+      "stream": true,
+      "outputTarget": "panel",
+      "outputBufferSize": 80000,
+      "maxCompleted": 10,
+      "autoShowOutput": true,
+      "autoHideOutput": false,
+      "scrollLockEnabled": false,
+      "singular": false,
+      "promptToSave": false,
+      "saveOption": "all",
+      "successOutput": "{stdout}",
+      "errorOutput": "{stdout}\n{stderr}",
+      "fatalOutput": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "successMessage": null,
+      "errorMessage": null,
+      "fatalMessage": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "menus": []
+    }
+  ]
+}
