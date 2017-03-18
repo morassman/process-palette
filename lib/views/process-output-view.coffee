@@ -221,11 +221,12 @@ class ProcessOutputView extends View
         while remaining.length > 0 and any_match
           any_match = false
           for pattern in @patterns
+            #console.log(["pattern", pattern.config.name, remaining])
             if pattern.config.isInlineExpression
               match = pattern.match(remaining)
               if match?
                 any_match = true
-                #console.log(["expr match", match.match, remaining])
+                #console.log(["expr match", match, remaining])
                 line_exprs.push match.pre
                 obj = $$ -> @span {class: pattern.config.name}, => @raw(match.match)
                 obj.name = pattern.config.name
