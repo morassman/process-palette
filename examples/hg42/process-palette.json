@@ -53,6 +53,7 @@
     "colon",
     "file_line",
     "path",
+    "default",
     "trace-begin",
     "trace-end",
     "trace-result",
