@@ -14,7 +14,7 @@ class RegExpPattern
 
     try
       #console.log(["matches", matches])
-      if matches.length == 4 && (matches[1].length + matches[2].length + matches[3].length == text.length)
+      if matches.length == 4 and (matches[1].length + matches[2].length + matches[3].length == text.length)
         ## we have a special pattern with three groups for pre, match, post
         # (note: three groups are necessary, because javascript does not have index of a group matches)
         #console.log(["matches3", matches])
