@@ -1,4 +1,6 @@
 ProcessPalette = require '../../lib/main'
+ProcessController = require '../../lib/controllers/process-controller'
+
 fs = require 'fs-plus'
 
 #console.log fs.getHomeDirectory()
@@ -19,7 +21,7 @@ cleanup_html = (text) ->
   text = text.replace /<br>/g, "\n"
   text = text.replace /(\s)+$/g, ""
   text = text.replace /\n{2,}/mg, "\n"
-  return "\n" + text + "\n"
+  return text
 
 for file in fs.readdirSync(test_base)
 
@@ -41,16 +43,26 @@ for file in fs.readdirSync(test_base)
     describe "output test in " + path, ->
       test_name = file.replace(re_test_file, "")
       test_file = path
+      process.chdir(test_project)
 
       #console.log("test_file = " + test_file)
 
       it "runs", ->
-        expected_output = new String(fs.readFileSync(test_file))
-        #console.log "\n-----\n" + expected_output + "\n-----\n"
+        text = new String(fs.readFileSync(test_file))
+
+        output_lines = text
+        #console.log "\n<-----\n" + output_lines + "\n<-----\n"
+        output_lines = output_lines.replace(re_extract_output, "")
+        output_lines = output_lines.replace /^\#.*$/mg, ""
+        output_lines = cleanup_html(output_lines)
+        #console.log "\n<=====\n" + output_lines + "\n<=====\n"
+
+        expected_output = text
+        #console.log "\n>-----\n" + expected_output + "\n>-----\n"
         expected_output = expected_output.replace(re_extract_expect, "")
         expected_output = expected_output.replace /^\#.*$/mg, ""
         expected_output = cleanup_html(expected_output)
-        #console.log "\n=====\n" + expected_output + "\n=====\n"
+        #console.log "\n>=====\n" + expected_output + "\n>=====\n"
 
         activationPromise = atom.packages.activatePackage('process-palette')
         atom.commands.dispatch(workspaceElement, 'process-palette:toggle')
@@ -69,30 +81,34 @@ for file in fs.readdirSync(test_base)
         waitsFor 'config to be loaded', ->
           configCtrl = projectCtrl.getConfigController(test_namespace, test_action)
 
-        processPaletteElement = null
-        waitsFor 'config to be loaded', ->
-          processPaletteElement = workspaceElement.querySelector('.process-palette')
-
+        processCtrl = null
         runs ->
+          expect(output_lines.length).not.toEqual(0)
           expect(expected_output.length).not.toEqual(0)
           expect(projectCtrl).not.toBe(null)
           expect(projectCtrl.getProjectPath()).toBe(test_project);
           expect(projectCtrl.configControllers.length).toBeGreaterThan(0)
           expect(configCtrl).not.toBe(null)
-          expect(processPaletteElement).toExist()
 
-          configCtrl.runProcessWithFile(test_file)
+          #configCtrl.runProcessWithFile(test_file)
+
+          processCtrl = new ProcessController(configCtrl, configCtrl.config)
+          configCtrl.getMain().showProcessOutput(processCtrl)
+
+          processCtrl.outputView.clearOutput()
+          processCtrl.outputView.outputToPanel(output_lines)
+          #processCtrl.outputView.outputToPanel("END\n")
 
         outputPanelElement = null
         waitsFor 'output panel to be created', 1000, ->
-          outputPanelElement = workspaceElement.querySelector('.process-palette-output-panel');
+          outputPanelElement = workspaceElement.querySelector('.process-palette-output-panel')
 
-        waitsFor "EXPECT: in output", 1000, ->
+        #waitsFor "END in output", 1000, ->
           #console.log outputPanelElement.textContent
-          outputPanelElement.innerHTML.includes "EXPECT:"
+          #outputPanelElement.innerHTML.includes "END"
 
         runs ->
           html = outputPanelElement.innerHTML
           html = html.replace(re_extract_output, "")
           html = cleanup_html(html)
-          expect(html).toEqual(expected_output)
+          expect("\n" + html + "\n").toEqual("\n" + expected_output + "\n")

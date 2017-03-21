@@ -145,7 +145,7 @@ module.exports = ProcessPalette =
   hidePanel: ->
     if @bottomPanel.visible
       @bottomPanel.hide();
-
+      
   runLast: ->
     configController = @getLastRunConfigController();
     configController?.runProcess();
