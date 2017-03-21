@@ -1,0 +1,23 @@
+some unstyled text
+   \ a ( x=1 y=2 z=3 )
+     \ b ( x=6 )
+     / b ( x=6 ) = 'converted to string: 6'
+   / a ( x=1 y=2 z=3 ) = 'converted to string: 6'
+unstyled text inbetween
+ / example = xxx = xxx
+ / example = xxx = yyy
+ / failure example = xxx = yyy
+some more unstyled text
+
+EXPECT:
+
+some unstyled text
+<span class="trace-begin" is="space-pen-span">   \ a ( x=1 y=2 z=3 )</span>
+<span class="trace-begin" is="space-pen-span">     \ b ( x=6 )</span>
+<span class="trace-end" is="space-pen-span">     / b ( x=6 )<span class="trace-result" is="space-pen-span"> = 'converted to string: 6'</span></span>
+<span class="trace-end" is="space-pen-span">   / a ( x=1 y=2 z=3 )<span class="trace-result" is="space-pen-span"> = 'converted to string: 6'</span></span>
+unstyled text inbetween
+<span class="trace-end" is="space-pen-span"> / example = xxx<span class="trace-result" is="space-pen-span"> = xxx</span></span>
+<span class="trace-end" is="space-pen-span"> / example = xxx<span class="trace-result" is="space-pen-span"> = yyy</span></span>
+<span class="trace-end" is="space-pen-span"> / failure example = xxx<span class="trace-result" is="space-pen-span"> = yyy</span></span>
+some more unstyled text

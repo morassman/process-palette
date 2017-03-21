@@ -1,0 +1,96 @@
+{
+  "patterns": {
+    "colon": {
+      "expression": "(path):(line)"
+    },
+    "file_line": {
+      "expression": "(?:\\bfile:? +|\\bsource:? +|\\bat:? +)?['\"]?(path)['\"]?.*\\bline +(line)"
+    },
+    "file_paren_line": {
+      "expression": "(?:\\bfile:? +|\\bsource:? +|\\bat:? +)?['\"]?(path)['\"]? *[(\\[](line)[\\])]"
+    },
+    "path": {
+      "expression": "['\"]?(path)['\"]?"
+    },
+    "fail": {
+      "expression": "\\bfail(ure|ed)?\\b"
+    },
+    "error": {
+      "expression": "[-\\w]*error[-\\w]*"
+    },
+    "warning": {
+      "expression": "\\bwarn(ing)?\\b"
+    },
+    "dashes": {
+      "expression": "^\\s*--"
+    },
+    "command": {
+      "expression": "^\\s*>"
+    },
+    "star": {
+      "expression": "^\\s*\\*"
+    },
+    "trace-begin": {
+      "expression": "^\\s*\\\\\\s+"
+    },
+    "trace-end": {
+      "expression": "^\\s*/\\s+"
+    },
+    "trace-result": {
+      "expression": "(^\\s*/\\s+.*)(\\s+=\\s+.*)(.*$)"
+    },
+    "exclamation": {
+      "expression": "^\\s*!"
+    },
+    "bracket": {
+      "expression": "^\\s*[[{]"
+    },
+    "build": {
+      "expression": "^\\s*build"
+    },
+    "at": {
+      "expression": "^\\s*at\\b"
+    }
+  },
+  "defaultPatterns": [
+    "file_paren_line",
+    "file_line",
+    "colon",
+    "path",
+    "default",
+    "trace-begin",
+    "trace-end",
+    "trace-result",
+    "exclamation",
+    "star",
+    "dashes",
+    "command",
+    "bracket",
+    "build",
+    "at",
+    "fail",
+    "error",
+    "warning"
+  ],
+  "commands": [
+    {
+      "namespace" : "process-palette-test",
+      "action" : "cat-test",
+      "command" : "cat",
+      "arguments" : ["{fileAbsPath}"],
+      "cwd" : "{projectPath}",
+      "stream" : false,
+      "outputTarget" : "panel",
+      "autoShowOutput" : true,
+      "maxCompleted" : 1,
+      "outputBufferSize" : 10000,
+      "successOutput" : "{stdout}",
+      "errorOutput" : "{stdout}\n{stderr}",
+      "fatalOutput" : "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "successMessage" : "Executed : {fullCommand}",
+      "errorMessage" : "Executed : {fullCommand}\nReturned with code {exitStatus}\n{stderr}",
+      "fatalMessage" : "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "patterns": []
+    }
+  ]
+}

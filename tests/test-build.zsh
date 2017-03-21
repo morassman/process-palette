@@ -21,3 +21,7 @@ echo "xxxx.xxx /usr/local/src/atom/packages/process-palette/lib/views/process-ou
 echo "BUILD FAILED"
 echo "build: compilation error"
 echo "   * TEST"
+echo "blabla, source: /usr/local/src/atom/packages/process-palette/spec/output-tests/output-tests-spec.coffee (44)"
+echo "   * source: /usr/local/src/atom/packages/process-palette/spec/output-tests/output-tests-spec.coffee (44)"
+echo "[blabla] \"3\", source: /usr/local/src/atom/packages/process-palette/spec/output-tests/output-tests-spec.coffee (44)"
+echo "[3053:0320/170814:INFO:CONSOLE(44)] \"3\", source: /usr/local/src/atom/packages/process-palette/spec/output-tests/output-tests-spec.coffee (44)"

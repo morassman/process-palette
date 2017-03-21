@@ -1,0 +1,5 @@
+  * Hello
+
+EXPECT:
+
+<span class="star" is="space-pen-span">  * Hello</span>
