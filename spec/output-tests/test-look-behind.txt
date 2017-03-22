@@ -19,5 +19,5 @@ some unstyled text
 unstyled text inbetween
 <span class="trace-end" is="space-pen-span"> / example = xxx<span class="trace-result" is="space-pen-span"> = xxx</span></span>
 <span class="trace-end" is="space-pen-span"> / example = xxx<span class="trace-result" is="space-pen-span"> = yyy</span></span>
-<span class="trace-end" is="space-pen-span"> / failure example = xxx<span class="trace-result" is="space-pen-span"> = yyy</span></span>
+<span class="trace-end" is="space-pen-span"> / <span class="fail" is="space-pen-span">failure</span> example = xxx<span class="trace-result" is="space-pen-span"> = yyy</span></span>
 some more unstyled text

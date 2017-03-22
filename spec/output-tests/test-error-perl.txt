@@ -1,6 +1,6 @@
-Undefined subroutine &main::undefined_function called at test-error.pl line 7.
+Undefined subroutine &main::undefined_function called at test.pl line 7.
 
 
 EXPECT:
 
-Undefined subroutine &amp;main::undefined_function called at <span class="error" is="space-pen-span">test-error</span>.pl line 7.
+Undefined subroutine &amp;main::undefined_function called at test.pl line 7.

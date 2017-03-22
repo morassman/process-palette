@@ -14,6 +14,7 @@ test_action = 'cat-test'
 re_test_file = /^test-/
 re_extract_expect = /[\s\S]*\n+EXPECT:\n+/m
 re_extract_output = /(<br>|\n)+EXPECT:(<br>|\n)+[\s\S]*/m
+re_extract_result = /(<br>|\n)+ENDofTEST(<br>|\n)+[\s\S]*/m
 
 #console.log("test_base = " + test_base)
 
@@ -55,6 +56,7 @@ for file in fs.readdirSync(test_base)
         output_lines = output_lines.replace(re_extract_output, "")
         output_lines = output_lines.replace /^\#.*$/mg, ""
         output_lines = cleanup_html(output_lines)
+        ########### enable this to see how it looks in output window ##########
         #console.log "\n<=====\n" + output_lines + "\n<=====\n"
 
         expected_output = text
@@ -97,18 +99,19 @@ for file in fs.readdirSync(test_base)
 
           processCtrl.outputView.clearOutput()
           processCtrl.outputView.outputToPanel(output_lines)
-          #processCtrl.outputView.outputToPanel("END\n")
+          processCtrl.outputView.outputToPanel("\nENDofTEST\n")
 
         outputPanelElement = null
-        waitsFor 'output panel to be created', 1000, ->
+        waitsFor 'output panel to be created', ->
           outputPanelElement = workspaceElement.querySelector('.process-palette-output-panel')
 
-        #waitsFor "END in output", 1000, ->
-          #console.log outputPanelElement.textContent
-          #outputPanelElement.innerHTML.includes "END"
+        html = ""
+        waitsFor "ENDofTEST in output", ->
+          html = outputPanelElement.innerHTML
+          html.includes "ENDofTEST"
 
         runs ->
-          html = outputPanelElement.innerHTML
-          html = html.replace(re_extract_output, "")
+          #html = outputPanelElement.innerHTML
+          html = html.replace(re_extract_result, "")
           html = cleanup_html(html)
           expect("\n" + html + "\n").toEqual("\n" + expected_output + "\n")
