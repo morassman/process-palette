@@ -6,6 +6,16 @@ fs = require 'fs-plus'
 #console.log fs.getHomeDirectory()
 #console.log fs.getAppDataDirectory()
 
+# enable this to show output_lines in output view to visualize the resulting styling
+# note, in styles.less you need corresponding styles for each used pattern name
+# see examples/hg42/styles.less
+use_output_visualization = 1
+
+# two different ways to detect the end of the output
+# both are currently disabled, because feeding the output view directly seems to work in sync
+use_output_end_marker = 0
+use_output_end_length = 0
+
 #test_base = "./spec/output-tests"
 test_base = __dirname
 test_project = test_base
@@ -14,7 +24,8 @@ test_action = 'cat-test'
 re_test_file = /^test-/
 re_extract_expect = /[\s\S]*\n+EXPECT:\n+/m
 re_extract_output = /(<br>|\n)+EXPECT:(<br>|\n)+[\s\S]*/m
-re_extract_result = /(<br>|\n)+ENDofTEST(<br>|\n)+[\s\S]*/m
+if use_output_end_marker
+  re_extract_result = /(<br>|\n)+ENDofTEST(<br>|\n)+[\s\S]*/m
 
 #console.log("test_base = " + test_base)
 
@@ -56,8 +67,10 @@ for file in fs.readdirSync(test_base)
         output_lines = output_lines.replace(re_extract_output, "")
         output_lines = output_lines.replace /^\#.*$/mg, ""
         output_lines = cleanup_html(output_lines)
-        ########### enable this to see how it looks in output window ##########
-        #console.log "\n<=====\n" + output_lines + "\n<=====\n"
+        if use_output_visualization
+          console.log "\n\n\n<================================================================================ " + test_name + "\n" +
+                      output_lines +
+                      "\n<--------------------------------------------------------------------------------\n\n\n"
 
         expected_output = text
         #console.log "\n>-----\n" + expected_output + "\n>-----\n"
@@ -99,19 +112,32 @@ for file in fs.readdirSync(test_base)
 
           processCtrl.outputView.clearOutput()
           processCtrl.outputView.outputToPanel(output_lines)
-          processCtrl.outputView.outputToPanel("\nENDofTEST\n")
+          if use_output_end_marker
+            processCtrl.outputView.outputToPanel("\nENDofTEST\n")
 
         outputPanelElement = null
         waitsFor 'output panel to be created', ->
           outputPanelElement = workspaceElement.querySelector('.process-palette-output-panel')
 
         html = ""
-        waitsFor "ENDofTEST in output", ->
-          html = outputPanelElement.innerHTML
-          html.includes "ENDofTEST"
+        if use_output_end_marker
+          waitsFor "ENDofTEST in output", ->
+            html = outputPanelElement.innerHTML
+            html.includes "ENDofTEST"
+        if use_output_end_length
+          len0 = -1
+          waitsFor "ENDofTEST in output", ->
+            html = outputPanelElement.innerHTML
+            len = html.length
+            if len == len0
+              return true
+            len0 = len
+            return false
 
         runs ->
-          #html = outputPanelElement.innerHTML
-          html = html.replace(re_extract_result, "")
+          if use_output_end_marker
+            html = html.replace(re_extract_result, "")
+          if html == ""
+            html = outputPanelElement.innerHTML
           html = cleanup_html(html)
           expect("\n" + html + "\n").toEqual("\n" + expected_output + "\n")

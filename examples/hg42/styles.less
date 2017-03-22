@@ -46,15 +46,117 @@
   }
 }
 
-.tab {
-  max-width: fit-content !important;
-  font-size: 10px !important;
 
-  .title {
-    margin-right: 4px !important;
+//---------------------------------------- tabs
+
+.tab-bar {
+  padding-top: 5px;
+  padding-left: 15px !important;
+  padding-right: 15px !important;
+  height: auto;
+  &::after {
+    height: 1px;
+    border: none;
+    background: @panel-color;
+  }
+
+  .tab {
+    position: relative;
+    top: 0 !important;
+    margin-bottom: 0 !important;
+    min-width: fit-content !important;
+    max-width: fit-content !important;
+    font-size: 0.8em !important;
+
+    background: @tab-color;
+    &::before, &::after {
+      background: @tab-color;
+    }
+    &::before {
+      border-top-left-radius: 1em !important;
+      border-bottom-left-radius: 0em !important;
+      -webkit-transform: skewX(-@tab-skew) !important;
+    }
+    &::after {
+      border-top-right-radius: 1em !important;
+      border-bottom-right-radius: 0em !important;
+      -webkit-transform: skewX(@tab-skew) !important;
+    }
+    // &::before {
+    //   border-top-left-radius: 2em;
+    //   border-bottom-left-radius: 2em;
+    //   -webkit-transform: none;
+    // }
+    // &::after {
+    //   border-top-right-radius: 2em;
+    //   border-bottom-right-radius: 2em;
+    //   -webkit-transform: none;
+    // }
+    &.active {
+      background: @tab-color-highlight !important;
+      &::before, &::after {
+        background: @tab-color-highlight !important;
+      }
+      // &::before {
+      //   border-top-left-radius: 1em;
+      //   border-bottom-left-radius: 0em;
+      //   -webkit-transform: skewX(-@tab-skew);
+      // }
+      // &::after {
+      //   border-top-right-radius: 1em;
+      //   border-bottom-right-radius: 0em;
+      //   -webkit-transform: skewX(@tab-skew);
+      // }
+    }
+
+    .icon::before {
+      margin-right: 4px !important;
+      font-size: 1.3em !important;
+      //display: none;
+    }
+
+    .close-icon {
+      line-height: 1.5em !important;
+      color: #ff0000 !important;
+    }
+    &:not(:hover) .close-icon {
+      display: none;
+    }
+
+    .title {
+      margin-left: 0px !important;
+      margin-right: 0px !important;
+      padding-left: 0px !important;
+      padding-right: 0px !important;
+      overflow-x: hidden !important;
+      display: inline !important;
+    }
+
+    .foldername-tabs {
+      height: 2em !important;
+      top: -0.7em !important;
+      margin-left: 0px !important;
+
+      .folder {
+        font-weight: lighter;
+        color: #000000 !important;
+      }
+      .file {
+        font-weight: bold;
+      }
+    }
+
+    &.modified {
+      box-shadow: 0px 0px 5px 2px red;
+      .foldername-tabs {
+        .folder {
+        }
+        .file {
+        }
+      }
+    }
   }
 }
-
 
 
 atom-workspace {
@@ -157,7 +259,14 @@ atom-text-editor {
   }
 
   .line-number.cursor-line {
-    background: @background-color-selected !important;
+    background: @background-color-cursor-linenumber !important;
+  }
+
+  .highlight-column {
+    //background-color: @selection-color !important;
+    //background-color: magenta !important;
+    background-color: green !important;
+    opacity: 0.3 !important;
   }
 
   // wrong...breaks bracket glow
@@ -225,20 +334,20 @@ atom-text-editor {
 
   .cursor {
     position: relative;
-    left: -@cursor-width;
+    left: -@cursor-width/2;
     border: none !important;
     border-left: @cursor-width solid @cursor-color !important;
     //border-bottom: 1px solid #ff0000 !important;
   }
 
-  &[mini=false] {
-    .cursor {
-      background: @cursor-glow !important;
-      box-shadow: 0px 0px 10px 5px @cursor-glow;
-      min-width: 1em;
-    }
-  }
-}
+  // &:not(.mini) {
+  //   .cursor {
+  //     background: @cursor-glow !important;
+  //     box-shadow: 0px 0px 10px 5px @cursor-glow;
+  //     min-width: 1em;
+  //   }
+  // }
+ }
 
 .quick-highlight.box-selection,
 .highlight-selected {
@@ -327,6 +436,7 @@ atom-text-editor {
 }
 
 
+
 //*****************************************************************************
 //---------------------------------------- process-palette
 //*****************************************************************************
@@ -339,10 +449,6 @@ atom-panel .process-palette-output-panel {
     //background: #ffff99 !important;
     color: #0000cc !important;
   }
-
-  // .match {
-  //   color: #660066 !important;
-  // }
 
   .dashes {
     color: #009999 !important;
@@ -357,7 +463,7 @@ atom-panel .process-palette-output-panel {
   }
 
   .star {
-    color: #cc00cc !important;
+    color: #993399 !important;
   }
 
   .trace-begin {
@@ -373,7 +479,7 @@ atom-panel .process-palette-output-panel {
   }
 
   .exclamation {
-    color: #cc00cc !important;
+    color: #996699 !important;
   }
 
   .build {
@@ -398,40 +504,40 @@ atom-panel .process-palette-output-panel {
 
 //---------------------------------------- swackets
 
-@swH: 255;
-@swL: 200;
-@sw0:   0;
-@swA: 0.1;
-@swackets-color-0: rgba(@sw0, @sw0, @swH, @swA);
-@swackets-color-1: rgba(@swL, @swL, @sw0, @swA);
-@swackets-color-2: rgba(@sw0, @swH, @sw0, @swA);
-@swackets-color-3: rgba(@swL, @sw0, @swL, @swA);
-
-.swackets-base {
-  //box-shadow: 0px 0 20px 0px;
-  color: rgba(0, 0, 255, 1) !important;
-  border-radius: 2ex;
-  padding: 1px 1px;
-}
-
-.swackets(@i) {
-  &.swackets-@{i} {
-    .swackets-base;
-    @color: "swackets-color-@{i}";
-    background: @@color !important;
-    //border: 1ex @@color !important;
-  }
-}
-
-.syntax--brace,
-.syntax--bracket,
-.syntax--begin,
-.syntax--end {
-  .swackets(0);
-  .swackets(1);
-  .swackets(2);
-  .swackets(3);
-}
+// //(((((((((((((())))))))))))))
+//
+// @swackets-color-0: rgba(0, 0, 255, 1.0);
+// @swackets-color-1: rgba(255, 0, 0, 1.0);
+// @swackets-color-2: rgba(0, 180, 0, 1.0);
+// @swackets-color-3: rgba(180, 0, 180, 1.0);
+//
+// .swackets-base {
+//   //box-shadow: 0px 0 20px 0px;
+//   color: rgba(0, 0, 255, 1) !important;
+//   //border-radius: 2ex;
+//   //padding: 1px 1px;
+// }
+//
+// .swackets(@i) {
+//   &.swackets-@{i} {
+//     .swackets-base;
+//     @color: "swackets-color-@{i}";
+//     //background: @@color !important;
+//     //border: 1ex @@color !important;
+//     //box-shadow: 0 0 5px 2px @@color;
+//     color: @@color !important;
+//   }
+// }
+//
+// .syntax--brace,
+// .syntax--bracket,
+// .syntax--begin,
+// .syntax--end {
+//   .swackets(0);
+//   .swackets(1);
+//   .swackets(2);
+//   .swackets(3);
+// }
 
 
 //---------------------------------------- syntax
@@ -440,9 +546,10 @@ atom-panel .process-palette-output-panel {
 .syntax--bracket,
 .syntax--punctuation {
   //background: #ffffcc !important;
-  //font-weight: 900 !important;
-  font-size: 1.1rem !important;
-  line-height: 1.0rem !important;
+  //font-weight: bold !important;
+  // does not work correctly:
+  // font-size: 1.1rem !important;
+  // line-height: 1.3rem !important;
 }
 
 atom-text-editor,
@@ -451,7 +558,7 @@ atom-text-editor.editor {
     .region:after {
       color: #800000;
       content: '×';
-      background-color: #CCCCCC;
+      background-color: #cccccc;
     }
   }
 }
@@ -459,15 +566,19 @@ atom-text-editor.editor {
 
 //---------------------------------------- colors
 
+@selection-color: rgba(180, 180, 255, 1);
 @background-color-highlight: #cccccc;
-@background-color-selected: #aaaaff;
+@background-color-selected: @selection-color;
+@background-color-cursor-linenumber: @selection-color;
 @bracket-highlight-color: rgba(255, 0, 0, 0.2);
-@current-result-color: rgba(0, 255, 64, 0.5);
+@current-result-color: rgba(0, 255, 80, 0.7);
 @cursor-color: #ff0000;
 @cursor-glow:  rgba(0, 0, 0, 0.1);
 @cursor-width: 2px;
 @find-result-color: rgba(0, 255, 80, 0.5);
-@panel-color: #ece7e2;
-@selection-color: rgba(180, 180, 255, 1);
+@panel-color: #dddddd;
+@tab-color: #eeeeee;
+@tab-color-highlight: #ffffff;
+@tab-skew: 20deg;
 @tree-view-background-color: @panel-color;
 @working-files-color: #ccffcc;
