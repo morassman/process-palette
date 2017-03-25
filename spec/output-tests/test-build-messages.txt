@@ -1,24 +1,24 @@
-build: at: /usr/local/src/atom/packages/process-palette/lib/views args: /usr/local/src/atom/packages/process-palette/lib/views/process-output-view.coffee
-build: at: ... args: /usr/local/src/atom/packages/process-palette/lib/views/process-output-view.coffee
-xxxx.xxx /usr/local/src/atom/packages/process-palette/lib/views/process-output-view.coffee
+build: at: ../../lib/views args: ../../lib/views/process-output-view.coffee
+build: at: ... args: ../../lib/views/process-output-view.coffee
+xxxx.xxx ../../lib/views/process-output-view.coffee
 BUILD FAILED
 build: compilation error
    * TEST
-blabla, source: /usr/local/src/atom/packages/process-palette/spec/output-tests/output-tests-spec.coffee (44)
-   * source: /usr/local/src/atom/packages/process-palette/spec/output-tests/output-tests-spec.coffee (44)
-[blabla] "3", source: /usr/local/src/atom/packages/process-palette/spec/output-tests/output-tests-spec.coffee (44)
-[3053:0320/170814:INFO:CONSOLE(44)] "3", source: /usr/local/src/atom/packages/process-palette/spec/output-tests/output-tests-spec.coffee (44)
+blabla, source: ./output-tests-spec.coffee (44)
+   * source: ./output-tests-spec.coffee (44)
+[blabla] "3", source: ./output-tests-spec.coffee (44)
+[3053:0320/170814:INFO:CONSOLE(44)] "3", source: ./output-tests-spec.coffee (44)
 
 
 EXPECT:
 
-<span class="build" is="space-pen-span">build: at: /usr/local/src/atom/packages/process-palette/lib/views args: <span is="space-pen-span"><span class="process-palette-path-view" click="clicked">/usr/local/src/atom/packages/process-palette/lib/views/process-output-view.coffee</span></span></span>
-<span class="build" is="space-pen-span">build: at: ... args: <span is="space-pen-span"><span class="process-palette-path-view" click="clicked">/usr/local/src/atom/packages/process-palette/lib/views/process-output-view.coffee</span></span></span>
-xxxx.xxx <span is="space-pen-span"><span class="process-palette-path-view" click="clicked">/usr/local/src/atom/packages/process-palette/lib/views/process-output-view.coffee</span></span>
+<span class="build" is="space-pen-span">build: at: ../../lib/views args: <span is="space-pen-span"><span class="process-palette-path-view" click="clicked">../../lib/views/process-output-view.coffee</span></span></span>
+<span class="build" is="space-pen-span">build: at: ... args: <span is="space-pen-span"><span class="process-palette-path-view" click="clicked">../../lib/views/process-output-view.coffee</span></span></span>
+xxxx.xxx <span is="space-pen-span"><span class="process-palette-path-view" click="clicked">../../lib/views/process-output-view.coffee</span></span>
 <span class="build" is="space-pen-span">BUILD <span class="fail" is="space-pen-span">FAILED</span></span>
 <span class="build" is="space-pen-span">build: compilation <span class="error" is="space-pen-span">error</span></span>
 <span class="star" is="space-pen-span">   * TEST</span>
-blabla, <span is="space-pen-span"><span class="process-palette-path-view" click="clicked">source: /usr/local/src/atom/packages/process-palette/spec/output-tests/output-tests-spec.coffee (44)</span></span>
-<span class="star" is="space-pen-span">   * <span is="space-pen-span"><span class="process-palette-path-view" click="clicked">source: /usr/local/src/atom/packages/process-palette/spec/output-tests/output-tests-spec.coffee (44)</span></span></span>
-<span class="bracket" is="space-pen-span">[blabla] "3", <span is="space-pen-span"><span class="process-palette-path-view" click="clicked">source: /usr/local/src/atom/packages/process-palette/spec/output-tests/output-tests-spec.coffee (44)</span></span></span>
-<span class="bracket" is="space-pen-span">[3053:0320/170814:INFO:CONSOLE(44)] "3", <span is="space-pen-span"><span class="process-palette-path-view" click="clicked">source: /usr/local/src/atom/packages/process-palette/spec/output-tests/output-tests-spec.coffee (44)</span></span></span>
+blabla, <span is="space-pen-span"><span class="process-palette-path-view" click="clicked">source: ./output-tests-spec.coffee (44)</span></span>
+<span class="star" is="space-pen-span">   * <span is="space-pen-span"><span class="process-palette-path-view" click="clicked">source: ./output-tests-spec.coffee (44)</span></span></span>
+<span class="bracket" is="space-pen-span">[blabla] "3", <span is="space-pen-span"><span class="process-palette-path-view" click="clicked">source: ./output-tests-spec.coffee (44)</span></span></span>
+<span class="bracket" is="space-pen-span">[3053:0320/170814:INFO:CONSOLE(44)] "3", <span is="space-pen-span"><span class="process-palette-path-view" click="clicked">source: ./output-tests-spec.coffee (44)</span></span></span>
