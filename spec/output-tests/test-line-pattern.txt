@@ -2,4 +2,4 @@
 
 EXPECT:
 
-<span class="star" is="space-pen-span">  * Hello</span>
+<span class="line_star" is="space-pen-span">  * Hello</span>

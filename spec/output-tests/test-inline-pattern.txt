@@ -2,4 +2,4 @@ bla bla error blubb
 
 EXPECT:
 
-bla bla <span class="error" is="space-pen-span">error</span> blubb
+bla bla <span class="inline_error" is="space-pen-span">error</span> blubb

@@ -23,7 +23,7 @@ class ProcessOutputView extends View
 
   @content: (main, processController) ->
     @div =>
-      @div {class:"process-palette-process", style:'margin-bottom:5px', outlet:"header"}, =>
+      @div {class:"process-palette-process", outlet:"header"}, =>
         @button {class:'btn btn-xs icon-three-bars inline-block-tight', outlet:'showListViewButton', click:'showListView'}
         @button {class:'btn btn-xs icon-playback-play inline-block-tight', outlet:'runButton', click:'runButtonPressed'}
         @span {class:'header inline-block text-highlight', outlet: 'commandName'}
@@ -179,47 +179,78 @@ class ProcessOutputView extends View
 
   appendLine: (line) ->
 
-    #console.log("<< " + line)
+    #console.log "<< " + line
 
     #@outputPanel.append @sanitizeOutput(line) + "<br>"
 
     ##### process path patterns
-    line_parts = []
-    remaining = line
-    any_match = true
-    while remaining.length > 0 and any_match
-      any_match = false
-      for pattern in @patterns
-        #console.log(["pattern", pattern.config.name, pattern.config.isLineExpression, pattern.config.isPathExpression, pattern])
-        if pattern.config.isPathExpression
-          matches = pattern.match(remaining)
-          if matches?
-            #console.log(["path match", matches.match, remaining])
-            if fsp.isFileSync(matches.path)
-              any_match = true
-              #console.log(["path exist", matches.match, remaining])
-              cwd = @processController.getCwd()
-              line_parts.push matches.pre
-              obj = new PathView(cwd, matches)
-              obj.name = "path"
-              line_parts.push obj
-              remaining = matches.post
-              break # process remaining
-            remaining = matches.post
-            line_parts.push matches.pre + matches.match
-    if remaining.length >= 0
-      line_parts.push remaining
-
-    ##### process inline patterns
+    line_parts = [line]
     for pattern in @patterns
       #console.log(["pattern", pattern.config.name, remaining])
-      if pattern.config.isInlineExpression
+      if pattern.config.isPathExpression
         # process all parts and build new line_parts array
         #console.log(["line_parts", line_parts])
         parts = line_parts
         line_parts = []
         for part in parts
           if typeof part != "string"
+            # copy non-string parts (already processed)
+            #console.log(["+ + push", part])
+            line_parts.push part
+          else
+            # match string parts
+            remaining = part
+            while remaining.length > 0
+              matches = pattern.match(remaining)
+              if matches?
+                #console.log ["+ path match", matches.match, matches.path, remaining]
+                line_parts.push matches.pre
+                # TODO: search in some path (active project, active-file, other projects, other open files)
+                if fsp.isFileSync(matches.path)
+                  #console.log ["+ path exist", matches.match, remaining]
+                  cwd = @processController.getCwd()
+                  obj = new PathView(cwd, matches)
+                  obj.addClass(pattern.config.name)
+                  obj.name = "path"
+                  #console.log(["+ + push", obj])
+                  line_parts.push obj
+                else
+                  line_parts.push matches.match
+                # continue with string following match
+                remaining = matches.post
+                #console.log(["remaining", remaining])
+              else
+                break
+              #console.log(["line_parts", line_parts, "--> " +  remaining])
+            if remaining.length >= 0
+              line_parts.push remaining
+        # concatenate strings following strings
+        parts = line_parts
+        line_parts = []
+        combined = ""
+        for part in parts
+          if typeof part != "string"
+            if combined.length
+              line_parts.push combined
+              combined = ""
+            line_parts.push part
+          else
+            combined += part
+        if combined.length
+          line_parts.push combined
+      #console.log(["line_parts", line_parts])
+
+    ##### process inline patterns
+    for pattern in @patterns
+      #console.log(["pattern", pattern.config.name])
+      if pattern.config.isInlineExpression
+        # process all parts and build new line_parts array
+        #console.log(["pattern", pattern.config.name])
+        #console.log(["line_parts", line_parts])
+        parts = line_parts
+        line_parts = []
+        for part in parts
+          if typeof part == "object"
             # copy non-string parts (already processed)
             #console.log(["push", part])
             line_parts.push part
@@ -229,12 +260,13 @@ class ProcessOutputView extends View
             while remaining.length > 0
               matches = pattern.match(remaining)
               if matches?
-                #console.log(["expr match", matches, remaining])
+                #console.log(["expr match", remaining])
+                #console.log(JSON.stringify(matches, null, "  "))
                 # copy string in front of match
-                #console.log(["push", matches.pre])
                 line_parts.push matches.pre
                 # build span
-                obj = $$ -> @span {class: pattern.config.name}, => @raw(matches.match)
+                text = @sanitizeOutput(matches.match)
+                obj = $$ -> @span {class: pattern.config.name}, =>  @raw(text)
                 obj.name = pattern.config.name
                 #console.log(["push", obj])
                 line_parts.push obj
@@ -243,38 +275,43 @@ class ProcessOutputView extends View
                 #console.log(["remaining", remaining])
               else
                 break
+              #console.log(["line_parts", line_parts, "--> " +  remaining])
             if remaining.length >= 0
               line_parts.push remaining
-          #console.log(["line_parts", line_parts, "--> " +  remaining])
       #console.log(["line_parts", line_parts])
 
     ##### replace all objects in line for whole-line matching
-    line_processed = ""
-    for part in line_parts
-      if typeof part == "string"
-        line_processed += part
-      else
-        line_processed += "<" + part.name + ">"
+    # line_processed = ""
+    # for part in line_parts
+    #   if typeof part == "string"
+    #     line_processed += part
+    #   else
+    #     line_processed += "<" + part.name + ">"
     #console.log("== " + line_processed)
 
     ##### (whole-)line matching
     for pattern in @patterns
       if pattern.config.isLineExpression
-        matches = line_processed.match(pattern.regex)
+        matches = pattern.match(line)
         if matches?
           #console.log(["line match", matches.match, line_processed])
           line_span = $$ -> @span {class: pattern.config.name}
           for part in line_parts
             if typeof part == "string"
-              line_span.append $$ -> @text(part)
+              text = @sanitizeOutput(part)
+              line_span.append $$ -> @raw(text)
             else
               line_span.append part
+          #console.log "\n\n--- line_span\n" + line_span[0].innerHTML + "\n---\n\n"
           @outputPanel.append(line_span)
           return
 
+    # no (while-)line match
     for part in line_parts
       if typeof part == "string"
         part = @sanitizeOutput(part)
+      else
+        #console.log "\n\n--- part\n" + part[0].innerHTML + "\n---\n\n"
       @outputPanel.append(part)
 
   # Tear down any state and detach

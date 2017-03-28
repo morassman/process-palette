@@ -15,7 +15,7 @@
     "atom": ">=1.0.0 <2.0.0"
   },
   "dependencies": {
-    "atom-space-pen-views": "^2.0.5",
+    "atom-space-pen-views": "2.2.0",
     "underscore-plus": "^1.0.0",
     "minimatch": "^2.0.10",
     "shelljs": "^0.7.4",
@@ -23,6 +23,7 @@
     "ps-tree": "1.0.0",
     "underscore.string": "~3.2",
     "ansi-to-html": "~0.3",
-    "fs-plus": "^2.8.0"
+    "fs-plus": "^2.8.0",
+    "uxregexp": "^0.0.2"
   }
 }

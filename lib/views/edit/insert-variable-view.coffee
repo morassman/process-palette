@@ -7,7 +7,7 @@ class InsertVariableView extends SelectListView
     super();
 
   initialize: ->
-    super();
+    super()
 
     @addClass('overlay from-top');
     @refreshItems();

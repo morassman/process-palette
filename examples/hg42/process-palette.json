@@ -1,77 +1,76 @@
 {
   "patterns": {
-    "colon": {
+    "path_colon": {
       "expression": "(path):(line)"
     },
-    "file_line": {
-      "expression": "(?:\\bfile +|\\bat +)?['\"]?(path)['\"]?.*\\bline +(line)"
+    "path_file_line": {
+      "expression": "(?:\n  \\b file:?   \\s+ |\n  \\b source:? \\s+ |\n  \\b at:?     \\s+\n)?\n(?:\n  ' (path) ' |\n  \" (path) \" |\n    (path)\n)\n(?:\n  [\\s,]+\n  (?:\n    \\b line:? \\s* (line)    |\n               \\( (line) \\) |\n               \\[ (line) \\]\n  )\n)?"
+    },
+    "path_squote": {
+      "expression": "'(path)'"
+    },
+    "path_dquote": {
+      "expression": "\"(path)\""
     },
     "path": {
-      "expression": "['\"]?(path)['\"]?"
+      "expression": "(path)"
     },
-    "fail": {
-      "expression": "\\bfail(ure|ed)?\\b"
-    },
-    "error": {
-      "expression": "[-\\w]*error[-\\w]*"
-    },
-    "warning": {
-      "expression": "\\bwarn(ing)?\\b"
-    },
-    "dashes": {
-      "expression": "^\\s*--"
-    },
-    "command": {
-      "expression": "^\\s*>"
-    },
-    "star": {
-      "expression": "^\\s*\\*"
-    },
-    "trace-begin": {
+    "line_trace_begin": {
       "expression": "^\\s*\\\\\\s+"
     },
-    "trace-end": {
+    "line_trace_end": {
       "expression": "^\\s*/\\s+"
     },
-    "trace-result": {
-      "expression": "(^\\s*/\\s+.*)(\\s+=\\s+.*)(.*$)"
+    "inline_trace_result": {
+      "expression": "(?:^)\\s*/\\s+.*\\s+(=\\s+.*).*$"
     },
-    "exclamation": {
-      "expression": "^\\s*!"
+    "inline_error": {
+      "expression": "[-\\w]*error[-\\w]*"
     },
-    "bracket": {
-      "expression": "^\\s*[[{]"
+    "inline_fail": {
+      "expression": "\\bfail(?:ure|ed)?\\b"
     },
-    "build": {
+    "inline_tag": {
+      "expression": "<[^<>]*>"
+    },
+    "inline_bracket": {
+      "expression": "\\[[^\\[\\]]*\\]|{[^{}]*}"
+    },
+    "line_command": {
+      "expression": "^\\s*>"
+    },
+    "line_build": {
       "expression": "^\\s*build"
     },
-    "at": {
-      "expression": "^\\s*at\\b"
+    "line_dashes": {
+      "expression": "^\\s*--"
+    },
+    "line_star": {
+      "expression": "^\\s*\\*"
     }
   },
-  "defaultPatterns": [
-    "colon",
-    "file_line",
+  "allPatterns": [
+    "path_colon",
+    "path_file_line",
+    "path_squote",
+    "path_dquote",
     "path",
-    "default",
-    "trace-begin",
-    "trace-end",
-    "trace-result",
-    "exclamation",
-    "star",
-    "dashes",
-    "command",
-    "bracket",
-    "build",
-    "at",
-    "fail",
-    "error",
-    "warning"
+    "line_trace_begin",
+    "line_trace_end",
+    "inline_trace_result",
+    "inline_error",
+    "inline_fail",
+    "inline_tag",
+    "inline_bracket",
+    "line_command",
+    "line_build",
+    "line_dashes",
+    "line_star"
   ],
   "commands": [
     {
-      "namespace": "build",
-      "action": "file",
+      "namespace": "z",
+      "action": "build-file",
       "command": "build {fileAbsPath}",
       "arguments": [],
       "cwd": "{fileDirAbsPath}",
@@ -88,6 +87,7 @@
       "singular": false,
       "promptToSave": false,
       "saveOption": "all",
+      "patterns": [],
       "successOutput": "{stdout}",
       "errorOutput": "{stdout}\n{stderr}",
       "fatalOutput": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
@@ -97,8 +97,8 @@
       "menus": []
     },
     {
-      "namespace": "build",
-      "action": "all",
+      "namespace": "z",
+      "action": "build",
       "command": "build",
       "arguments": [],
       "cwd": "{fileDirAbsPath}",
@@ -115,6 +115,7 @@
       "singular": false,
       "promptToSave": false,
       "saveOption": "all",
+      "patterns": [],
       "successOutput": "{stdout}",
       "errorOutput": "{stdout}\n{stderr}",
       "fatalOutput": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
@@ -124,8 +125,8 @@
       "menus": []
     },
     {
-      "namespace": "open",
-      "action": "files",
+      "namespace": "z",
+      "action": "open-files",
       "command": "files",
       "arguments": [],
       "cwd": "{fileDirAbsPath}",
@@ -142,6 +143,7 @@
       "singular": false,
       "promptToSave": false,
       "saveOption": "all",
+      "patterns": [],
       "successOutput": null,
       "errorOutput": null,
       "fatalOutput": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
@@ -151,8 +153,8 @@
       "menus": []
     },
     {
-      "namespace": "open",
-      "action": "shell",
+      "namespace": "z",
+      "action": "open-shell",
       "command": "terminal",
       "arguments": [],
       "cwd": "{fileDirAbsPath}",
@@ -169,6 +171,7 @@
       "singular": false,
       "promptToSave": false,
       "saveOption": "all",
+      "patterns": [],
       "successOutput": null,
       "errorOutput": null,
       "fatalOutput": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
@@ -178,8 +181,8 @@
       "menus": []
     },
     {
-      "namespace": "open",
-      "action": "workbench",
+      "namespace": "z",
+      "action": "open-hg-gui",
       "command": "start thg",
       "arguments": [],
       "cwd": "{fileDirAbsPath}",
@@ -196,6 +199,7 @@
       "singular": false,
       "promptToSave": false,
       "saveOption": "all",
+      "patterns": [],
       "successOutput": null,
       "errorOutput": null,
       "fatalOutput": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
@@ -205,8 +209,8 @@
       "menus": []
     },
     {
-      "namespace": "run",
-      "action": "prompt",
+      "namespace": "z",
+      "action": "run-prompt",
       "command": "{command}",
       "arguments": [],
       "cwd": "{fileDirAbsPath}",
@@ -229,6 +233,7 @@
       "singular": false,
       "promptToSave": false,
       "saveOption": "all",
+      "patterns": [],
       "successOutput": "{stdout}",
       "errorOutput": "{stdout}\n{stderr}",
       "fatalOutput": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
@@ -236,6 +241,242 @@
       "errorMessage": null,
       "fatalMessage": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
       "menus": []
+    },
+    {
+      "namespace": "z",
+      "action": "apm-test",
+      "command": "apm test",
+      "arguments": [],
+      "cwd": null,
+      "inputDialogs": [],
+      "env": {},
+      "keystroke": null,
+      "stream": true,
+      "outputTarget": "panel",
+      "outputBufferSize": 80000,
+      "maxCompleted": 3,
+      "autoShowOutput": true,
+      "autoHideOutput": false,
+      "scrollLockEnabled": false,
+      "singular": false,
+      "promptToSave": false,
+      "saveOption": "all",
+      "patterns": [],
+      "successOutput": "{stdout}",
+      "errorOutput": "{stdout}\n{stderr}",
+      "fatalOutput": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "successMessage": null,
+      "errorMessage": null,
+      "fatalMessage": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "menus": [
+        "apm"
+      ]
+    },
+    {
+      "namespace": "z",
+      "action": "open-git-gui",
+      "command": "start smartgit {fileDirAbsPath}",
+      "arguments": [],
+      "cwd": "{fileDirAbsPath}",
+      "inputDialogs": [],
+      "env": {},
+      "keystroke": null,
+      "stream": true,
+      "outputTarget": "void",
+      "outputBufferSize": 80000,
+      "maxCompleted": 3,
+      "autoShowOutput": false,
+      "autoHideOutput": false,
+      "scrollLockEnabled": false,
+      "singular": false,
+      "promptToSave": false,
+      "saveOption": "all",
+      "patterns": [],
+      "successOutput": null,
+      "errorOutput": null,
+      "fatalOutput": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "successMessage": null,
+      "errorMessage": null,
+      "fatalMessage": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "menus": []
+    },
+    {
+      "namespace": "z",
+      "action": "npm-test",
+      "command": "npm test",
+      "arguments": [],
+      "cwd": null,
+      "inputDialogs": [],
+      "env": {},
+      "keystroke": null,
+      "stream": true,
+      "outputTarget": "panel",
+      "outputBufferSize": 80000,
+      "maxCompleted": 3,
+      "autoShowOutput": true,
+      "autoHideOutput": false,
+      "scrollLockEnabled": false,
+      "singular": false,
+      "promptToSave": false,
+      "saveOption": "all",
+      "patterns": [],
+      "successOutput": "{stdout}",
+      "errorOutput": "{stdout}\n{stderr}",
+      "fatalOutput": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "successMessage": null,
+      "errorMessage": null,
+      "fatalMessage": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "menus": [
+        "npm"
+      ]
+    },
+    {
+      "namespace": "z",
+      "action": "debug-file",
+      "command": "node-debug {fileAbsPath}",
+      "arguments": [],
+      "cwd": "{fileDirAbsPath}",
+      "inputDialogs": [],
+      "env": {},
+      "keystroke": "f6",
+      "stream": true,
+      "outputTarget": "panel",
+      "outputBufferSize": 80000,
+      "maxCompleted": 3,
+      "autoShowOutput": true,
+      "autoHideOutput": false,
+      "scrollLockEnabled": false,
+      "singular": false,
+      "promptToSave": false,
+      "saveOption": "all",
+      "patterns": [],
+      "successOutput": "{stdout}",
+      "errorOutput": "{stdout}\n{stderr}",
+      "fatalOutput": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "successMessage": null,
+      "errorMessage": null,
+      "fatalMessage": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "menus": []
+    },
+    {
+      "namespace": "z",
+      "action": "npm-test-debug",
+      "command": "npm run test-debug",
+      "arguments": [],
+      "cwd": null,
+      "inputDialogs": [],
+      "env": {},
+      "keystroke": null,
+      "stream": true,
+      "outputTarget": "panel",
+      "outputBufferSize": 80000,
+      "maxCompleted": 3,
+      "autoShowOutput": true,
+      "autoHideOutput": false,
+      "scrollLockEnabled": false,
+      "singular": false,
+      "promptToSave": false,
+      "saveOption": "all",
+      "patterns": [],
+      "successOutput": "{stdout}",
+      "errorOutput": "{stdout}\n{stderr}",
+      "fatalOutput": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "successMessage": null,
+      "errorMessage": null,
+      "fatalMessage": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "menus": [
+        "npm"
+      ]
+    },
+    {
+      "namespace": "z",
+      "action": "npm-install",
+      "command": "npm install",
+      "arguments": [],
+      "cwd": null,
+      "inputDialogs": [],
+      "env": {},
+      "keystroke": null,
+      "stream": true,
+      "outputTarget": "panel",
+      "outputBufferSize": 80000,
+      "maxCompleted": 3,
+      "autoShowOutput": true,
+      "autoHideOutput": false,
+      "scrollLockEnabled": false,
+      "singular": false,
+      "promptToSave": false,
+      "saveOption": "all",
+      "patterns": [],
+      "successOutput": "{stdout}",
+      "errorOutput": "{stdout}\n{stderr}",
+      "fatalOutput": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "successMessage": null,
+      "errorMessage": null,
+      "fatalMessage": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "menus": [
+        "npm"
+      ]
+    },
+    {
+      "namespace": "z",
+      "action": "apm-install",
+      "command": "apm install",
+      "arguments": [],
+      "cwd": null,
+      "inputDialogs": [],
+      "env": {},
+      "keystroke": null,
+      "stream": true,
+      "outputTarget": "panel",
+      "outputBufferSize": 80000,
+      "maxCompleted": 3,
+      "autoShowOutput": true,
+      "autoHideOutput": false,
+      "scrollLockEnabled": false,
+      "singular": false,
+      "promptToSave": false,
+      "saveOption": "all",
+      "patterns": [],
+      "successOutput": "{stdout}",
+      "errorOutput": "{stdout}\n{stderr}",
+      "fatalOutput": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "successMessage": null,
+      "errorMessage": null,
+      "fatalMessage": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "menus": [
+        "apm"
+      ]
+    },
+    {
+      "namespace": "z",
+      "action": "npm-publish",
+      "command": "npm publish",
+      "arguments": [],
+      "cwd": null,
+      "inputDialogs": [],
+      "env": {},
+      "keystroke": null,
+      "stream": true,
+      "outputTarget": "panel",
+      "outputBufferSize": 80000,
+      "maxCompleted": 3,
+      "autoShowOutput": true,
+      "autoHideOutput": false,
+      "scrollLockEnabled": false,
+      "singular": true,
+      "promptToSave": true,
+      "saveOption": "all",
+      "patterns": [],
+      "successOutput": "{stdout}",
+      "errorOutput": "{stdout}\n{stderr}",
+      "fatalOutput": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "successMessage": null,
+      "errorMessage": null,
+      "fatalMessage": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "menus": [
+        "npm"
+      ]
     }
   ]
 }

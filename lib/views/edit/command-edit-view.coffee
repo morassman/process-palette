@@ -205,7 +205,10 @@ class CommandEditView extends View
             @tr =>
               @td {class: 'first-column', colspan: 2}, =>
                 @div {class: 'bordered'}, =>
-                  @subview 'envVarsView', new TableEditView(['Name', 'Value'])
+                  @subview 'envVarsView', new TableEditView(
+                                                  ['Name', 'Value'],
+                                                  deletable: true
+                                                  )
             @tr =>
               @td {colspan: 2}, =>
                 @h2 'Input Dialogs', {class: 'text-highlight'}
@@ -217,7 +220,11 @@ class CommandEditView extends View
             @tr =>
               @td {class: 'first-column', colspan: 2}, =>
                 @div {class: 'bordered'}, =>
-                  @subview 'inputDialogsView', new TableEditView(['Name', 'Message (optional)', 'Default value (optional)'])
+                  @subview 'inputDialogsView', new TableEditView(
+                                                      ['Name', 'Message (optional)',
+                                                       'Default value (optional)'],
+                                                      deletable: true
+                                                      )
             @tr =>
               @td {colspan: 2}, =>
                 @h2 'Variables', {class: 'text-highlight'}

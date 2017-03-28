@@ -3,6 +3,7 @@
 // See https://github.com/atom/atom-dark-ui/blob/master/styles/ui-variables.less
 // for a full listing of what's available.
 @import "ui-variables";
+@import 'syntax-variables';
 
 .process-palette-split-view {
   width: 100%;
@@ -226,6 +227,10 @@
 
 .process-palette-pattern-choose-view {
 
+  .select {
+    margin-right: 5px;
+  }
+
   .pattern-button {
     margin-right: 10px;
   }
@@ -246,7 +251,9 @@
 }
 
 .process-palette-table-edit-view {
+
   border: 1px solid @tool-panel-border-color;
+  margin: 5px;
 
   table {
     width: 100%;
@@ -258,11 +265,15 @@
     text-align: center;
   }
 
+  // tr {
+  //   border: 1px solid black;
+  // }
+
   td {
-    padding-top: 5px;
+    padding-top: 3px;
     padding-left: 3px;
     padding-right: 3px;
-    padding-bottom: 0px;
+    padding-bottom: 3px;
   }
 
   td atom-text-editor[mini] {
@@ -342,14 +353,19 @@
   }
 
   .command-choose-view {
-    padding: 5px;
+    padding: 0px;
+    margin: 5px;
 
     .item-view {
+      padding: 0px;
+
       .name-label {
-        width: 100%;
-        padding-left: 5px;
+        width: 85%;
+        height: auto;
+        text-align: left;
         vertical-align: middle;
-        display: inline-block;;
+        display: inline-block;
+        margin: 5px;
       }
 
       .name-label:hover {
@@ -363,4 +379,59 @@
 
   }
 
+}
+
+
+// drag and drop
+
+.process-palette-table-edit-view {
+
+  tr {
+    vertical-align: top;
+  }
+
+  .multi-line-editor {
+    border: 1px solid @input-border-color;
+    background-color: @input-background-color;
+    min-height: initial;
+  }
+
+  .drop-target {
+    //outline: 1px dotted blue;
+    //border-top: 2px solid #cccccc;
+    //margin-top: 2px;
+    //border-top: none;
+  }
+
+  .current-drop-target {
+    border-top: 2px solid @text-color-error;
+    //margin-top: 0px;
+  }
+
+  .items-selected {
+    background: fadeout(@app-background-color, 60%);
+    button {
+      visibility: hidden;
+    }
+    tr {
+      background: none;
+      padding-bottom: 3px;
+      margin-bottom: 0px;
+      td {
+        position: relative;
+        height: 100%;
+        :not(.select) {
+          color: fadeout(@text-color, 60%);
+          pointer-events:none;
+        }
+      }
+      &.selected {
+        background: @background-color-selected;
+        &:hover {
+          cursor:move;
+          //border-bottom: none;
+        }
+      }
+    }
+  }
 }

@@ -1,30 +1,3 @@
-
-# use with
-#
-# line starting with \
-#
-# "trace-begin": {
-#   "expression": "^\\s*\\\\\\s+"
-# },
-#
-# line starting with \
-#
-# "trace-end": {
-#   "expression": "^\\s*/\\s+"
-# },
-#
-# line starting with / regex matches " = some content but not the last word"
-#
-# "trace-result": {
-#   "expression": "(^\\s*/\\s+.*)(\\s+=\\s+.*)(.*$)"
-# },
-#
-# also after the above sections an expression matching the fords fail, failed or failure
-#
-# "fail": {
-#   "expression": "\\bfail(ure|ed)?\\b"
-# },
-
 echo "some unstyled text"
 # should style next two lines as .trace-begin
 echo "   \ a ( x=1 y=2 z=3 )"

@@ -24,25 +24,24 @@ class PatternChooseView extends View
     @itemViews = [];
 
   addRow: (name, value, select=false) ->
-    itemView = new PatternItemView();
-    itemView.initialize(@, name, value, select);
+    itemView = new PatternItemView(@, name, value, select);
     @itemViews.push(itemView);
-    @list[0].appendChild(itemView);
+    @list.append(itemView);
 
-  moveUp: (item) ->
-    index = @itemViews.indexOf(item);
+  moveUp: (itemViewClicked) ->
+    index = @itemViews.indexOf(itemViewClicked);
 
     if index == 0
       return;
 
     for itemView in @itemViews
-      @list[0].removeChild(itemView);
+      @list[0].removeChild(itemView[0]);
 
     @itemViews[index] = @itemViews[index-1];
-    @itemViews[index-1] = item;
+    @itemViews[index-1] = itemViewClicked;
 
     for itemView in @itemViews
-      @list[0].appendChild(itemView);
+      @list[0].appendChild(itemView[0]);
 
   selectPatterns: (patternNames) ->
     if !patternNames?

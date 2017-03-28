@@ -44,22 +44,29 @@ for file in fs.readdirSync(test_base)
 
   if file.match(re_test_file)
 
+    #continue if not file.match(/test-test/)
+
     #console.log(file)
     #continue
 
     workspaceElement = null
+    #test_name = null
+    #test_name = null
+    #test_file = null
 
     beforeEach ->
       workspaceElement = atom.views.getView(atom.workspace)
 
-    describe "output test in " + path, ->
-      test_name = file.replace(re_test_file, "")
-      test_file = path
-      process.chdir(test_project)
+    describe "test in " + path, ->
 
       #console.log("test_file = " + test_file)
+      test_name = file.replace(re_test_file, "")
+      test_name = test_name.replace(/\..*$/, "")
+      test_file = path
 
-      it "runs", ->
+      process.chdir(test_project)
+
+      it "should produce expected output", ->
         text = new String(fs.readFileSync(test_file))
 
         output_lines = text
@@ -89,15 +96,16 @@ for file in fs.readdirSync(test_base)
           atom.project.setPaths([test_project])
 
         projectCtrl = null
-        waitsFor 'project to be loaded', ->
+        waitsFor 'project to be loaded', 1000, ->
           projectCtrl = ProcessPalette.getProjectControllerWithPath(test_project)
 
         configCtrl = null
-        waitsFor 'config to be loaded', ->
+        waitsFor 'config to be loaded', 1000, ->
           configCtrl = projectCtrl.getConfigController(test_namespace, test_action)
 
         processCtrl = null
         runs ->
+          expect(configCtrl).not.toBe(null)
           expect(output_lines.length).not.toEqual(0)
           expect(expected_output.length).not.toEqual(0)
           expect(projectCtrl).not.toBe(null)

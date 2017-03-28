@@ -1,26 +1,21 @@
-{$, $$} = require 'atom-space-pen-views'
+{$, View} = require 'atom-space-pen-views'
 
 module.exports =
-class CommandItemView extends HTMLElement
+class CommandItemView extends View
 
-  initialize: (@commandChooseView, @command) ->
-    @.classList.add('item-view');
+  constructor: (@commandChooseView, @command) ->
+    super(@commandChooseView, @command);
 
-    button = $$ ->
-      @button {class: 'btn btn-sm icon icon-x'}
-    @nameSpan = $$ ->
-      @span 'Name', {class: 'name-label'}
+  @content: (commandChooseView, command) ->
+    @li {class: 'item-view'}, =>
+      @button {outlet: "button", class: 'btn btn-sm icon icon-x'}
+      @button 'Name', {outlet: "nameSpan", class: 'btn btn-sm name-label'}
 
-    button.click => @delete();
-    button.on 'mousedown', (e) -> e.preventDefault();
-
-    @nameSpan.text(@command.namespace+": "+@command.action);
-    @nameSpan.click => @selected();
-
-    element = $(@);
-
-    button.appendTo(element);
-    @nameSpan.appendTo(element);
+  initialize: ->
+    @button.click => @delete()
+    @button.on 'mousedown', (e) -> e.preventDefault()
+    @nameSpan.text(@command.namespace+": "+@command.action)
+    @nameSpan.click => @selected()
 
   refreshName: ->
     @nameSpan.text(@command.namespace+": "+@command.action);
@@ -43,5 +38,3 @@ class CommandItemView extends HTMLElement
 
   delete: ->
     @commandChooseView.deleteCommandItemView(@);
-
-module.exports = document.registerElement("command-item-view", prototype: CommandItemView.prototype, extends: "li")

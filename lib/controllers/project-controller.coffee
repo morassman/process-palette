@@ -94,11 +94,15 @@ class ProjectController
     if !@processConfigs?
       return;
 
+    # patterns
+
     @addDefaultPattern();
 
     if @processConfigs.patterns?
       for key, value of @processConfigs.patterns
         @addPattern(key, value);
+
+    # commands
 
     if @processConfigs.commands?
       commands = @processConfigs.commands.slice();
@@ -154,29 +158,20 @@ class ProjectController
 
     if !config.flags?
       config.flags = "i";
+    if config.expression.indexOf("\n") >= 0   # multiline patterns must have x-flag
+      config.flags += "x"                     # x-flag not available in javascript but in UXRegExp
+      #config.expression = config.expression.replace(/\n/g, ""); # cheap solution to missing x-flag in javascript
 
     config.isLineExpression = config.expression.indexOf("^") == 0
-    config.isPathExpression = config.expression.indexOf("(path)") >= 0
+    config.isPathExpression = config.path? or config.expression.indexOf("(path)") >= 0 or config.expression.indexOf("(?<path>") >= 0
     config.isInlineExpression = not config.isLineExpression and not config.isPathExpression
 
     if config.isPathExpression
-      pathIndex = config.expression.indexOf("(path)");
-      lineIndex = config.expression.indexOf("(line)");
-
-      config.pathIndex = 1;
-
-      if lineIndex > -1
-        if pathIndex < lineIndex
-          config.lineIndex = 2;
-        else
-          config.lineIndex = 1;
-          config.pathIndex = 2;
-
       if !config.path?
-        config.path = @getPathExpression(lineIndex > -1);
+        config.path = @getPathExpression();
 
-      config.expression = config.expression.replace("(path)", "(" + config.path + ")");
-      config.expression = config.expression.replace("(line)", "(\\d+)");
+      config.expression = config.expression.replace(/\(path\)/g, "(?<path>" + config.path + ")");
+      config.expression = config.expression.replace(/\(line\)/g, "(?<line>\\d+)");
 
       try
         return new PathPattern(config);
@@ -194,7 +189,7 @@ class ProjectController
 
     return null;
 
-  getPathExpression: (hasLine) ->
+  getPathExpression: () ->
     if os.platform == "win32"
       return "(?:[a-z]:\\\\|\\\\)?[\\w\\.\\-\\\\]+[.\\\\][\\w\\.\\-\\\\]+";
     return "(?:~\\/|\\/)?[\\w\\.\\-\\/]+[.\\/][\\w\\.\\-\\/]+";

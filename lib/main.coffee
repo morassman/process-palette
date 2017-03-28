@@ -239,6 +239,16 @@ module.exports = ProcessPalette =
         config.patterns = {};
       if !_.isArray(config.commands)
         config.commands = [];
+      if !_.isArray(config.allPatterns)
+        config.allPatterns = [];
+
+      # remove names from allPatterns if not in patterns
+      config.allPatterns = (name for name in config.allPatterns when name of config.patterns)
+
+      # add missing keys to allPatterns
+      for key, value of config.patterns
+        unless key in config.allPatterns
+          config.allPatterns.push key
 
       view = new MainEditView(main, title, filePath, config, selectedAction);
       paneItem = pane.addItem(view, {index: 0});

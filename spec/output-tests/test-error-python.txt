@@ -1,5 +1,5 @@
 Traceback (most recent call last):
-  File "test.py", line 7, in <module>
+  File "test-error-python.txt", line 7, in <module>
     undefined_function()
 NameError: name 'undefined_function' is not defined
 
@@ -7,6 +7,6 @@ NameError: name 'undefined_function' is not defined
 EXPECT:
 
 Traceback (most recent call last):
-  File "test.py", line 7, in &lt;module&gt;
+  <span is="space-pen-span" class="path_file_line"><span class="process-palette-path-view" click="clicked">File "test-error-python.txt", line 7</span></span>, in <span class="inline_tag" is="space-pen-span">&lt;module&gt;</span>
     undefined_function()
-<span class="error" is="space-pen-span">NameError</span>: name 'undefined_function' is not defined
+<span class="inline_error" is="space-pen-span">NameError</span>: name 'undefined_function' is not defined

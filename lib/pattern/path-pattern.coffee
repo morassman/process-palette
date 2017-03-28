@@ -1,27 +1,28 @@
 PathMatch = require './path-match'
+UXRegExp = require 'uxregexp'
 
 module.exports =
 class PathPattern
 
   constructor: (@config) ->
-    @regex = new RegExp(@config.expression, @config.flags);
+    @uxre = new UXRegExp(@config.expression, @config.flags);
 
   match: (text) ->
-    m = @regex.exec(text);
+    matches = @uxre.exec(text);
 
-    if !m?
+    if !matches?
       return null;
 
     try
-      match = m[0];
-      path = m[@config.pathIndex];
-
-      pre = text.substring(0, m.index);
-      post = text.substring(m.index+m[0].length);
-      line = null;
-
-      if @config.lineIndex?
-        line = parseInt(m[@config.lineIndex]);
+      #console.log JSON.stringify([@config.name, @uxre.re.toString(), matches], null, "  ")
+      match = matches.all
+      pre = matches.pre
+      post = matches.post
+      path = matches.groups.path
+      line = matches.groups.line
+      #console.log ["path match:", JSON.stringify(path), JSON.stringify(line)]
+      if line != null
+        line = parseInt(line);
 
       return new PathMatch(text, match, pre, post, path, line);
 

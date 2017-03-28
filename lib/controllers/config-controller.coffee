@@ -12,7 +12,7 @@ class ConfigController
     @listeners = [];
     pattern_names = @config.patterns
     if not pattern_names?.length
-      pattern_names = @projectController.processConfigs.defaultPatterns
+      pattern_names = @projectController.processConfigs.allPatterns
     if not pattern_names?.length
       pattern_names = ['default']
     @patterns = @projectController.getPatterns(pattern_names);

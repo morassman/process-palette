@@ -12,13 +12,13 @@ blabla, source: ./output-tests-spec.coffee (44)
 
 EXPECT:
 
-<span class="build" is="space-pen-span">build: at: ../../lib/views args: <span is="space-pen-span"><span class="process-palette-path-view" click="clicked">../../lib/views/process-output-view.coffee</span></span></span>
-<span class="build" is="space-pen-span">build: at: ... args: <span is="space-pen-span"><span class="process-palette-path-view" click="clicked">../../lib/views/process-output-view.coffee</span></span></span>
-xxxx.xxx <span is="space-pen-span"><span class="process-palette-path-view" click="clicked">../../lib/views/process-output-view.coffee</span></span>
-<span class="build" is="space-pen-span">BUILD <span class="fail" is="space-pen-span">FAILED</span></span>
-<span class="build" is="space-pen-span">build: compilation <span class="error" is="space-pen-span">error</span></span>
-<span class="star" is="space-pen-span">   * TEST</span>
-blabla, <span is="space-pen-span"><span class="process-palette-path-view" click="clicked">source: ./output-tests-spec.coffee (44)</span></span>
-<span class="star" is="space-pen-span">   * <span is="space-pen-span"><span class="process-palette-path-view" click="clicked">source: ./output-tests-spec.coffee (44)</span></span></span>
-<span class="bracket" is="space-pen-span">[blabla] "3", <span is="space-pen-span"><span class="process-palette-path-view" click="clicked">source: ./output-tests-spec.coffee (44)</span></span></span>
-<span class="bracket" is="space-pen-span">[3053:0320/170814:INFO:CONSOLE(44)] "3", <span is="space-pen-span"><span class="process-palette-path-view" click="clicked">source: ./output-tests-spec.coffee (44)</span></span></span>
+<span class="line_build" is="space-pen-span">build: at: ../../lib/views args: <span is="space-pen-span" class="path_file_line"><span class="process-palette-path-view" click="clicked">../../lib/views/process-output-view.coffee</span></span></span>
+<span class="line_build" is="space-pen-span">build: at: ... args: <span is="space-pen-span" class="path_file_line"><span class="process-palette-path-view" click="clicked">../../lib/views/process-output-view.coffee</span></span></span>
+xxxx.xxx <span is="space-pen-span" class="path_file_line"><span class="process-palette-path-view" click="clicked">../../lib/views/process-output-view.coffee</span></span>
+<span class="line_build" is="space-pen-span">BUILD <span class="inline_fail" is="space-pen-span">FAILED</span></span>
+<span class="line_build" is="space-pen-span">build: compilation <span class="inline_error" is="space-pen-span">error</span></span>
+<span class="line_star" is="space-pen-span">   * TEST</span>
+blabla, <span is="space-pen-span" class="path_file_line"><span class="process-palette-path-view" click="clicked">source: ./output-tests-spec.coffee (44)</span></span>
+<span class="line_star" is="space-pen-span">   * <span is="space-pen-span" class="path_file_line"><span class="process-palette-path-view" click="clicked">source: ./output-tests-spec.coffee (44)</span></span></span>
+<span class="inline_bracket" is="space-pen-span">[blabla]</span> "3", <span is="space-pen-span" class="path_file_line"><span class="process-palette-path-view" click="clicked">source: ./output-tests-spec.coffee (44)</span></span>
+<span class="inline_bracket" is="space-pen-span">[3053:0320/170814:INFO:CONSOLE(44)]</span> "3", <span is="space-pen-span" class="path_file_line"><span class="process-palette-path-view" click="clicked">source: ./output-tests-spec.coffee (44)</span></span>
