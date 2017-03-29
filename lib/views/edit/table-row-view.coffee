@@ -18,7 +18,11 @@ class TableRowView extends HTMLElement
 
     for column in [0...@columnCount]
       td = document.createElement("td");
-      editor = new TextEditorView(mini: true);
+      editor = new TextEditorView();
+      editor.addClass('multi-line-editor');
+      editor.getModel().setSoftTabs(true);
+      editor.getModel().setSoftWrapped(true);
+      editor.getModel().setLineNumberGutterVisible(false);
       jtd = $(td);
       jtd.append(editor);
       @appendChild(td);
