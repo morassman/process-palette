@@ -24,6 +24,6 @@
     "underscore.string": "~3.2",
     "ansi-to-html": "~0.3",
     "fs-plus": "^2.8.0",
-    "uxregexp": "^0.0.2"
+    "uxregexp": "^0.0.3"
   }
 }
