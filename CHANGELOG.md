@@ -1,3 +1,6 @@
+## v0.12.1 (8 May 2017)
+- Added optional notification when starting process.
+
 ## v0.12.0 (25 February 2017)
 - Added ability to put commands in menus.
 

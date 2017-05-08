@@ -140,18 +140,34 @@ class CommandEditView extends View
                 @button 'Insert Variable', {class: 'btn btn-sm', click: 'errorOutputInsertVariable'}
             @tr =>
               @td {colspan: 2}, =>
-                @h3 'Notification Format', {class: 'text-highlight'}
+                @h3 'Notifications', {class: 'text-highlight'}
             @tr =>
               @td {colspan: 2}, =>
-                @span 'Format of output when creating a notification. Any variable can be used here. Leave empty to disable notification.' , {class: 'text-smaller text-subtle'}
+                @span 'Notifications can be shown at the start and end of a process. ' , {class: 'text-smaller text-subtle'}
+                @span 'A more detailed message can optionally be configured for each notification that can reference any of the defined variables.' , {class: 'text-smaller text-subtle'}
             @tr =>
-              @td 'Success:', {class: 'text-highlight top-label first-column'}
+              @td 'Notify on', {class: 'th text-highlight'}
+              @td 'Detailed message (optional)', {class: 'th text-highlight'}
+            @tr =>
+              @td {class: 'first-column'}, =>
+                @input {type: 'checkbox', outlet: 'startNotifyCheck'}
+                @span 'Start', {class: 'check-label'}
+              @td =>
+                @subview 'startMessageEditor', new TextEditorView()
+              @td {class: 'variable-button'}, =>
+                @button 'Insert Variable', {class: 'btn btn-sm', click: 'startMessageInsertVariable'}
+            @tr =>
+              @td {class: 'first-column'}, =>
+                @input {type: 'checkbox', outlet: 'successNotifyCheck'}
+                @span 'Success', {class: 'check-label'}
               @td =>
                 @subview 'successMessageEditor', new TextEditorView()
               @td {class: 'variable-button'}, =>
                 @button 'Insert Variable', {class: 'btn btn-sm', click: 'successMessageInsertVariable'}
             @tr =>
-              @td 'Error:', {class: 'text-highlight top-label first-column'}
+              @td {class: 'first-column'}, =>
+                @input {type: 'checkbox', outlet: 'errorNotifyCheck'}
+                @span 'Error', {class: 'check-label'}
               @td =>
                 @subview 'errorMessageEditor', new TextEditorView()
               @td {class: 'variable-button'}, =>
@@ -314,11 +330,12 @@ class CommandEditView extends View
     @bufferSizeEditor.attr('tabindex', 9);
     @successOutputEditor.attr('tabindex', 10);
     @errorOutputEditor.attr('tabindex', 11);
-    @successMessageEditor.attr('tabindex', 12);
-    @errorMessageEditor.attr('tabindex', 13);
-    @scrollLockCheck.attr('tabindex', 14);
-    @autoShowCheck.attr('tabindex', 15);
-    @autoHideCheck.attr('tabindex', 16);
+    @startMessageEditor.attr('tabindex', 12);
+    @successMessageEditor.attr('tabindex', 13);
+    @errorMessageEditor.attr('tabindex', 14);
+    @scrollLockCheck.attr('tabindex', 15);
+    @autoShowCheck.attr('tabindex', 16);
+    @autoHideCheck.attr('tabindex', 17);
 
     @bufferSizeEditor.getModel().setPlaceholderText('Unspecified');
     @maxCompletedEditor.getModel().setPlaceholderText('Unspecified');
@@ -333,6 +350,9 @@ class CommandEditView extends View
     @errorOutputEditor.addClass('multi-line-editor');
     @errorOutputEditor.getModel().setSoftTabs(true);
     @errorOutputEditor.getModel().setLineNumberGutterVisible(false);
+    @startMessageEditor.addClass('multi-line-editor');
+    @startMessageEditor.getModel().setSoftTabs(true);
+    @startMessageEditor.getModel().setLineNumberGutterVisible(false);
     @successMessageEditor.addClass('multi-line-editor');
     @successMessageEditor.getModel().setSoftTabs(true);
     @successMessageEditor.getModel().setLineNumberGutterVisible(false);
@@ -379,6 +399,10 @@ class CommandEditView extends View
     @maxCompletedEditor.getModel().setText(@emptyString(@command.maxCompleted));
     @setMultiLineEditorText(@successOutputEditor, @emptyString(@command.successOutput));
     @setMultiLineEditorText(@errorOutputEditor, @emptyString(@command.errorOutput));
+    @setChecked(@startNotifyCheck, @command.notifyOnStart);
+    @setChecked(@successNotifyCheck, @command.notifyOnSuccess);
+    @setChecked(@errorNotifyCheck, @command.notifyOnError);
+    @setMultiLineEditorText(@startMessageEditor, @emptyString(@command.startMessage));
     @setMultiLineEditorText(@successMessageEditor, @emptyString(@command.successMessage));
     @setMultiLineEditorText(@errorMessageEditor, @emptyString(@command.errorMessage));
     @patternChooseView.setPatterns(@config.patterns, @command.patterns);
@@ -406,6 +430,7 @@ class CommandEditView extends View
   setChecked: (checkBox, checked) ->
     if !checked?
       checked = false;
+
     if checked != @isChecked(checkBox)
       checkBox.trigger("click");
 
@@ -428,6 +453,9 @@ class CommandEditView extends View
   errorOutputInsertVariable: ->
     new InsertVariableView(@errorOutputEditor, true);
 
+  startMessageInsertVariable: ->
+    new InsertVariableView(@startMessageEditor, false);
+
   successMessageInsertVariable: ->
     new InsertVariableView(@successMessageEditor, true);
 
@@ -446,10 +474,14 @@ class CommandEditView extends View
     @command.scrollLockEnabled = @isChecked(@scrollLockCheck);
     @command.patterns = @patternChooseView.getSelectedPatterns();
     @command.outputTarget = @targetSelect.val();
+    @command.notifyOnStart = @isChecked(@startNotifyCheck);
+    @command.notifyOnSuccess = @isChecked(@successNotifyCheck);
+    @command.notifyOnError = @isChecked(@errorNotifyCheck);
     @persistStringNullIfEmpty('cwd', @cwdEditor.getModel().getText());
     @persistStringNullIfEmpty('keystroke', @keystrokeEditor.getModel().getText());
     @persistStringNullIfEmpty('successOutput', @successOutputEditor.getModel().getText());
     @persistStringNullIfEmpty('errorOutput', @errorOutputEditor.getModel().getText());
+    @persistStringNullIfEmpty('startMessage', @startMessageEditor.getModel().getText());
     @persistStringNullIfEmpty('successMessage', @successMessageEditor.getModel().getText());
     @persistStringNullIfEmpty('errorMessage', @errorMessageEditor.getModel().getText());
     @persistIntegerNullIfNaN('outputBufferSize', @bufferSizeEditor.getModel().getText());

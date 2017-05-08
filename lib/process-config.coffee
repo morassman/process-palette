@@ -27,6 +27,7 @@ class ProcessConfig
     @successOutput = '{stdout}';
     @errorOutput = '{stdout}\n{stderr}';
     @fatalOutput = 'Failed to execute : {fullCommand}\n{stdout}\n{stderr}';
+    @startMessage = '';
     @successMessage = 'Executed : {fullCommand}';
     @errorMessage = 'Executed : {fullCommand}\nReturned with code {exitStatus}\n{stderr}';
     @fatalMessage = 'Failed to execute : {fullCommand}\n{stdout}\n{stderr}';
@@ -53,6 +54,7 @@ class ProcessConfig
     @requireString('outputTarget', 'panel', false);
     @requireString('successOutput', '{stdout}', true);
     @requireString('errorOutput', '{stdout}\n{stderr}', true);
+    @requireString('startMessage', '', true);
     @requireString('successMessage', 'Executed : {fullCommand}', true);
     @requireString('errorMessage', 'Executed : {fullCommand}\nReturned with code {exitStatus}\n{stderr}', true);
     @requireBoolean('promptToSave', true);
@@ -66,6 +68,7 @@ class ProcessConfig
     @checkInputDialogs();
     @checkPatterns();
     @checkMenus();
+    @checkNotifications();
 
   isValid: ->
     if @namespace.trim().length == 0
@@ -167,6 +170,25 @@ class ProcessConfig
         validInputDialogs.push(inputDialog);
 
     @inputDialogs = validInputDialogs;
+
+  checkNotifications: ->
+    # This is done for backwards compatibility. If the notifyOn? flags haven't
+    # been defined then set them based on whether a message is configured.
+    if !@startMessage?
+      @startMessage = '';
+    if !@successMessage?
+      @successMessage = '';
+    if !@errorMessage?
+      @errorMessage = '';
+
+    if !@notifyOnStart?
+      @notifyOnStart = @startMessage.length > 0;
+
+    if !@notifyOnSuccess?
+      @notifyOnSuccess = @successMessage.length > 0;
+
+    if !@notifyOnError?
+      @notifyOnError = @errorMessage.length > 0;
 
   getCommandName: ->
     return @namespace + ":" + @action;

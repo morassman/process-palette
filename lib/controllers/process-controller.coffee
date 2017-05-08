@@ -311,6 +311,12 @@ class ProcessController
       if @config.stream
         @streamOutput(data);
 
+    if @config.notifyOnStart
+      notifOptions = {};
+      notifOptions["detail"] = @insertFields(@config.startMessage);
+      messageTitle = 'Running ' + _.humanizeEventName(@config.getCommandName());
+      atom.notifications.addInfo(messageTitle, notifOptions);
+
     @processStarted();
 
   getCwd: ->
@@ -427,11 +433,11 @@ class ProcessController
 
     if !killed
       if @fields.exitStatus == 0
-        if @config.successMessage?
+        if @config.notifyOnSuccess
           notifOptions["detail"] = @insertFields(@config.successMessage);
           atom.notifications.addSuccess(messageTitle, notifOptions);
       else
-        if @config.errorMessage?
+        if @config.notifyOnError
           notifOptions["dismissable"] = true;
           notifOptions["detail"] = @insertFields(@config.errorMessage);
           atom.notifications.addWarning(messageTitle, notifOptions);
