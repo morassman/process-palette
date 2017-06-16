@@ -33,6 +33,7 @@ class InsertVariableView extends SelectListView
     items.push({name:'fileDirAbsPath',description:'Absolute path of file\'s directory.'});
     items.push({name:'fileProjectPath',description:'Absolute path of file\'s project folder.'});
 
+    items.push({name:'text',description:'The full contents of the editor.'});
     items.push({name:'clipboard',description:'Text currently on clipboard.'});
     items.push({name:'selection',description:'Currently selected text.'});
     items.push({name:'word',description:'Word under cursor.'});
