@@ -94,6 +94,7 @@ class ProcessController
     editor = atom.workspace.getActiveTextEditor();
 
     if editor
+      @fields.text = editor.getText();
       @fields.selection = editor.getSelectedText();
       @fields.word = editor.getWordUnderCursor();
       lastCursor = editor.getLastCursor();

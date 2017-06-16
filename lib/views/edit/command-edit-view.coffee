@@ -292,6 +292,9 @@ class CommandEditView extends View
               @td 'fileProjectPath', {class: 'text-highlight first-column'}
               @td 'Absolute path of file\'s project folder.'
             @tr =>
+              @td 'text', {class: 'text-highlight first-column'}
+              @td 'The full contents of the editor.'
+            @tr =>
               @td 'selection', {class: 'text-highlight first-column'}
               @td 'Currently selected text.'
             @tr =>
