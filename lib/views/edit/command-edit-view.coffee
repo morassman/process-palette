@@ -94,6 +94,18 @@ class CommandEditView extends View
                 @span 'Prompt before saving', {class: 'check-label'}
             @tr =>
               @td {colspan: 2}, =>
+                @h2 'Input', {class: 'text-highlight'}
+            @tr =>
+              @td {colspan: 2, class: 'text-smaller text-subtle'}, =>
+                @span 'This text is sent to the process\'s standard input on execution.'
+            @tr =>
+              @td 'Input', {class: 'text-highlight first-column'}
+              @td =>
+                @subview 'stdinEditor', new TextEditorView()
+              @td {class: 'variable-button'}, =>
+                @button 'Insert Variable', {class: 'btn btn-sm', click: 'stdinInsertVariable'}
+            @tr =>
+              @td {colspan: 2}, =>
                 @h2 'Output', {class: 'text-highlight'}
             @tr =>
               @td {class: 'first-column', colspan: 2}, =>
@@ -325,17 +337,18 @@ class CommandEditView extends View
     @cwdEditor.attr('tabindex', 4);
     @keystrokeEditor.attr('tabindex', 5);
     @menuEditor.attr('tabindex', 6);
-    @streamCheck.attr('tabindex', 7);
-    @targetSelect.attr('tabindex', 8);
-    @bufferSizeEditor.attr('tabindex', 9);
-    @successOutputEditor.attr('tabindex', 10);
-    @errorOutputEditor.attr('tabindex', 11);
-    @startMessageEditor.attr('tabindex', 12);
-    @successMessageEditor.attr('tabindex', 13);
-    @errorMessageEditor.attr('tabindex', 14);
-    @scrollLockCheck.attr('tabindex', 15);
-    @autoShowCheck.attr('tabindex', 16);
-    @autoHideCheck.attr('tabindex', 17);
+    @stdinEditor.attr('tabindex', 7);
+    @streamCheck.attr('tabindex', 8);
+    @targetSelect.attr('tabindex', 9);
+    @bufferSizeEditor.attr('tabindex', 10);
+    @successOutputEditor.attr('tabindex', 11);
+    @errorOutputEditor.attr('tabindex', 12);
+    @startMessageEditor.attr('tabindex', 13);
+    @successMessageEditor.attr('tabindex', 14);
+    @errorMessageEditor.attr('tabindex', 15);
+    @scrollLockCheck.attr('tabindex', 16);
+    @autoShowCheck.attr('tabindex', 17);
+    @autoHideCheck.attr('tabindex', 18);
 
     @bufferSizeEditor.getModel().setPlaceholderText('Unspecified');
     @maxCompletedEditor.getModel().setPlaceholderText('Unspecified');
@@ -359,6 +372,11 @@ class CommandEditView extends View
     @errorMessageEditor.addClass('multi-line-editor');
     @errorMessageEditor.getModel().setSoftTabs(true);
     @errorMessageEditor.getModel().setLineNumberGutterVisible(false);
+
+    @stdinEditor.addClass('multi-line-editor');
+    @stdinEditor.getModel().setSoftTabs(true);
+    @stdinEditor.getModel().setSoftWrapped(true);
+    @stdinEditor.getModel().setLineNumberGutterVisible(false);
 
     @showConfig();
 
@@ -388,6 +406,7 @@ class CommandEditView extends View
     @keystrokeEditor.getModel().setText(@emptyString(@command.keystroke));
     @menuEditor.getModel().setText(@command.menus.join());
     @bufferSizeEditor.getModel().setText(@emptyString(@command.outputBufferSize));
+    @stdinEditor.getModel().setText(@emptyString(@command.input));
     @setChecked(@promptToSaveCheck, @command.promptToSave);
     @saveSelect.val(@command.saveOption);
     @setChecked(@streamCheck, @command.stream);
@@ -462,6 +481,9 @@ class CommandEditView extends View
   errorMessageInsertVariable: ->
     new InsertVariableView(@errorMessageEditor, true);
 
+  stdinInsertVariable: ->
+    new InsertVariableView(@stdinEditor);
+
   persistChanges: ->
     @command.command = @commandEditor.getModel().getText().trim();
     @command.arguments = [];
@@ -479,6 +501,7 @@ class CommandEditView extends View
     @command.notifyOnError = @isChecked(@errorNotifyCheck);
     @persistStringNullIfEmpty('cwd', @cwdEditor.getModel().getText());
     @persistStringNullIfEmpty('keystroke', @keystrokeEditor.getModel().getText());
+    @persistStringNullIfEmpty('input', @stdinEditor.getModel().getText());
     @persistStringNullIfEmpty('successOutput', @successOutputEditor.getModel().getText());
     @persistStringNullIfEmpty('errorOutput', @errorOutputEditor.getModel().getText());
     @persistStringNullIfEmpty('startMessage', @startMessageEditor.getModel().getText());

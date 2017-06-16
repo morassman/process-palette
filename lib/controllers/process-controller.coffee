@@ -317,6 +317,11 @@ class ProcessController
       messageTitle = 'Running ' + _.humanizeEventName(@config.getCommandName());
       atom.notifications.addInfo(messageTitle, notifOptions);
 
+    if @config.input
+      @process.stdin.write(@insertFields(@config.input));
+      @process.stdin.uncork();
+      @process.stdin.end();
+
     @processStarted();
 
   getCwd: ->
