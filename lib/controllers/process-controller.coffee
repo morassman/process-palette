@@ -276,7 +276,10 @@ class ProcessController
         @envBackup[key] = shell.env[key];
         shell.env[key] = @insertFields(val);
 
-    shell.cd(@options.cwd);
+    if @options.cwd
+      @options.cwd = @options.cwd.trim();
+      if @options.cwd.length > 0
+        shell.cd(@options.cwd);
 
     pathToShell = atom.config.get("process-palette.shell");
 
@@ -288,9 +291,12 @@ class ProcessController
       if pathToShell.length > 0
         execOptions["shell"] = pathToShell;
 
-    @process = shell.exec @fields.fullCommand, execOptions, (code) =>
-      @fields.exitStatus = code;
-      @processStopped(!code?);
+    try
+      @process = shell.exec @fields.fullCommand, execOptions, (code) =>
+        @fields.exitStatus = code;
+        @processStopped(!code?);
+    catch e
+      console.log(e);
 
     if !@process?
       notifOptions = {};
