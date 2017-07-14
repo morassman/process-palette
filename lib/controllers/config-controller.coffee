@@ -92,10 +92,25 @@ class ConfigController
 
   runProcess: =>
     filePath = null;
-    pane = atom.workspace.getActivePaneItem();
+    textEditor = atom.workspace.getActiveTextEditor();
 
-    if typeof pane?.getPath is "function"
-      filePath = pane.getPath();
+    if textEditor?
+      filePath = textEditor.getPath();
+
+    # Do not run the command if it depends on a file when there isn't one.
+    if !filePath? and @inputUsesFileVariables()
+      notifOptions = {};
+      notifOptions["dismissable"] = true;
+
+      # filePath is null if there aren't any text editors.
+      # filePath is undefined if there is a text editor open, but it hasn't been saved before.
+      if filePath == null
+        notifOptions["detail"] = "This command requires an open file to be active in the workspace.";
+      else
+        notifOptions["detail"] = "The file needs to be saved before this command can be executed on it.";
+
+      atom.notifications.addWarning("Cannot execute #{@config.namespace}: #{@config.action}", notifOptions);
+      return;
 
     @runProcessWithFile(filePath);
 
@@ -154,6 +169,23 @@ class ConfigController
       return;
 
     main.hidePanel();
+
+  # Return true if any of the inputs use any of the {file*} variables.
+  inputUsesFileVariables: ->
+    r = new RegExp("{file.*?}","g");
+
+    if r.test(@config.command) || r.test(@config.cwd)
+      return true;
+
+    if @config.env?
+      for key, val of @config.env
+        if r.test(val)
+          return true;
+
+    if @config.input? and r.test(@config.input)
+      return true;
+
+    return false;
 
   # Returns a string describing the output target.
   getTargetDescription: ->
