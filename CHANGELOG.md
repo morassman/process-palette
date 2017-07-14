@@ -1,6 +1,7 @@
-## v0.13.0 (16 June 2017)
+## v0.13.0 (14 July 2017)
 - Added a `text` variable which contains the full text of the editor (@adrianmalacoda)
 - Added ability to supply stdin for the process (@adrianmalacoda)
+- Prevent commands that depend on file variables from executing if there isn't an active editor.
 
 ## v0.12.1 (8 May 2017)
 - Added optional notification when starting process.
