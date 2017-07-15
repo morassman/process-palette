@@ -7,7 +7,7 @@ See the [changelog](https://github.com/morassman/process-palette/blob/master/CHA
 ![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/demo.gif?raw=true)
 
 **Run commands that target files directly from the project view**
-![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/demos.gif?raw=true)
+![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/demo2.gif?raw=true)
 
 ## Quick Start
 Install Process Palette and then either generate or download a configuration file.
