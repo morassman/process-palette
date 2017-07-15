@@ -22,16 +22,16 @@
   }
 ]
 
-'context-menu':
-  '.tree-view': [
-    {
-      label: 'Run With',
-      submenu: [
-        {
-          label: 'Edit Configuration'
-          command: 'process-palette:edit-configuration'
-        }
-        { type: 'separator' }
-      ]
-    }
-  ]
+# 'context-menu':
+#   '.tree-view': [
+#     {
+#       label: 'Run With',
+#       submenu: [
+#         {
+#           label: 'Edit Configuration'
+#           command: 'process-palette:edit-configuration'
+#         }
+#         { type: 'separator' }
+#       ]
+#     }
+#   ]
