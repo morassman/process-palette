@@ -13,6 +13,7 @@ class ConfigController
     @patterns = @projectController.getPatterns(@config.patterns);
     @lastTime = null;
     @disposables = new CompositeDisposable();
+    @ctxMenuDisposables = null;
 
     cssSelector = 'atom-workspace';
 
@@ -133,6 +134,7 @@ class ConfigController
     @killRunningProcesses();
     @clearControllers();
     @disposables.dispose();
+    @ctxMenuDisposables?.dispose();
 
   clearControllers: ->
     for processController in @processControllers
