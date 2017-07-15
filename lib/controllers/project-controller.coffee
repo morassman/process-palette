@@ -117,6 +117,8 @@ class ProjectController
         saveController = new SaveController(@main, saveCommand);
         @saveControllers.push(saveController);
 
+    @main.recreateTreeViewContextMenu();
+
   getPatterns: (names) ->
     result = [];
 

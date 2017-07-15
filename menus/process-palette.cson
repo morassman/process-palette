@@ -22,16 +22,15 @@
   }
 ]
 
-# 'context-menu':
-#   '.tree-view': [
-#     {
-#       label: 'Run With',
-#       submenu: [
-#         {
-#           label: 'Edit Configuration'
-#           command: 'process-palette:edit-configuration'
-#         }
-#         { type: 'separator' }
-#       ]
-#     }
-#   ]
+# Even though this menu item is created dynamically, it is still defined here
+# so that the separator can be added.
+'context-menu':
+  '.tree-view': [
+    { type: 'separator' }
+    {
+      label: 'Run With',
+      submenu: [
+        # This sub menu will be dynamically populated.
+      ]
+    }
+  ]

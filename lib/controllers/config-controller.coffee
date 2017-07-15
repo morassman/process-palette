@@ -30,7 +30,6 @@ class ConfigController
       atom.keymaps.add('process-palette', bindings);
 
     @addMenus();
-    @addTreeViewMenu();
 
   addMenus: ->
     if @config.menus.length == 0
@@ -51,9 +50,8 @@ class ConfigController
   # Adds a menu item to the tree-view's context menu to run this command with
   # the selected path in the tree view. An item is only added if this command
   # takes a file as input.
-  addTreeViewMenu: ->
-    @ctxMenuDisposables?.dispose();
-    @ctxMenuDisposables = null;
+  recreateTreeViewMenuItem: ->
+    @disposeTreeViewMenuItem();
 
     if !@inputUsesFileVariables()
       return;
@@ -71,9 +69,11 @@ class ConfigController
     root = {
       label: 'Run With',
       submenu: [
-        label: _.humanizeEventName(@config.action),
-        command: commandName,
-        created: () -> @.enabled = shouldEnable()
+        {
+          label: _.humanizeEventName(@config.action),
+          command: commandName,
+          created: () -> @.enabled = shouldEnable()
+        }
       ]
     };
 
@@ -83,12 +83,15 @@ class ConfigController
   # If the command previously didn't depend on a file and does now, then
   # a context menu item will be created for it. If the command did depend
   # on a file, but now doesn't anymore then the menu item is removed.
-  recreateTreeViewMenu: ->
+  recreateTreeViewMenuItemIfNeeded: ->
     hasCtxMenu = @ctxMenuDisposables?;
     usesFileVars = @inputUsesFileVariables();
 
-    if hasCtxMenu != usesFileVars
-      @addTreeViewMenu();
+    # Do nothing if there is already a menu item and it is still needed.
+    if hasCtxMenu and !usesFileVars
+      @disposeTreeViewMenuItem();
+    else if !hasCtxMenu and usesFileVars
+      @projectController.main.recreateTreeViewContextMenu();
 
   shouldTreeViewMenuEnable: ->
     tv = atom.packages.getActivePackage("tree-view").mainModule.treeView;
@@ -112,7 +115,7 @@ class ConfigController
   # Changes the command to execute. This is called when editing the command from the panel.
   setCommand: (command) ->
     @config.command = command;
-    @recreateTreeViewMenu();
+    @recreateTreeViewMenuItemIfNeeded();
     # @saveFile();
 
   getFirstProcessController: ->
@@ -133,8 +136,12 @@ class ConfigController
   dispose: ->
     @killRunningProcesses();
     @clearControllers();
+    @disposeTreeViewMenuItem();
     @disposables.dispose();
+
+  disposeTreeViewMenuItem: ->
     @ctxMenuDisposables?.dispose();
+    @ctxMenuDisposables = null;
 
   clearControllers: ->
     for processController in @processControllers

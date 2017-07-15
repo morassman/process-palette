@@ -4,9 +4,11 @@ With Process Palette you can add custom entries to the command palette to run an
 See the [changelog](https://github.com/morassman/process-palette/blob/master/CHANGELOG.md) for the latest improvements.
 
 **Add a command for running Python scripts**
+
 ![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/demo.gif?raw=true)
 
 **Run commands that target files directly from the project view**
+
 ![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/demo2.gif?raw=true)
 
 ## Quick Start

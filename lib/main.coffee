@@ -1,6 +1,7 @@
 _ = require 'underscore-plus'
 {File, CompositeDisposable} = require 'atom'
 MainView = require './views/main-view'
+TreeViewController = require './controllers/tree-view-controller'
 
 Path = null
 ConfigsView = null
@@ -33,6 +34,7 @@ module.exports = ProcessPalette =
     @subscriptions = new CompositeDisposable();
     @projectControllers = [];
     @mainView = new MainView(@);
+    @treeViewController = new TreeViewController(@);
     @bottomPanel = atom.workspace.addBottomPanel(item: @mainView.getElement(), visible: false);
 
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:show': => @showPanel()
@@ -61,6 +63,7 @@ module.exports = ProcessPalette =
   deactivate: ->
     @subscriptions.dispose();
     @disposeProjectControllers();
+    @treeViewController.dispose();
     @mainView.destroy();
 
   disposeProjectControllers: ->
@@ -117,7 +120,10 @@ module.exports = ProcessPalette =
 
     return null;
 
-  reloadConfiguration: (saveEditors = true)->
+  reloadConfiguration: (saveEditors = true) ->
+    @treeViewController.dispose();
+    @treeViewController = new TreeViewController(@);
+
     if saveEditors
       @saveEditors();
 
@@ -308,3 +314,6 @@ module.exports = ProcessPalette =
     if @dirty != dirty
       @dirty = dirty;
       @mainView.setSaveButtonVisible(@dirty);
+
+  recreateTreeViewContextMenu: ->
+    @treeViewController.recreateContextMenu();
