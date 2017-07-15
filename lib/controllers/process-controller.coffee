@@ -135,7 +135,7 @@ class ProcessController
 
     @takeUserInput(@config.inputDialogs);
 
-# Return true if the execution should continue. false if the user canceled.
+  # Return true if the execution should continue. false if the user canceled.
   saveDirtyFiles: ->
     if @config.saveOption == 'none'
       return true;
@@ -190,6 +190,8 @@ class ProcessController
 
     return null;
 
+  # return true if the editors were saved and the process can be executed.
+  # false if the user canceled saving and the process shouldn't execute.
   saveEditors: (editors) ->
     if editors.length == 0
       return true;

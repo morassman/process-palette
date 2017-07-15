@@ -193,6 +193,9 @@ class ProcessConfig
   getCommandName: ->
     return @namespace + ":" + @action;
 
+  getHumanizedCommandName: ->
+    _.humanizeEventName(@getCommandName());
+
   getFullCommand: ->
     full = @command + " " + @arguments.join(" ");
     return full.trim();
