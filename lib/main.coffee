@@ -225,9 +225,9 @@ module.exports = ProcessPalette =
     # If the file is already open then activate its pane.
     filePath = file.getRealPathSync();
     paneItem = @getPaneItem(filePath);
-    pane = atom.workspace.getActivePane();
 
-    if paneItem != null
+    if paneItem?
+      pane = atom.workspace.paneForItem(paneItem);
       pane.activateItem(paneItem);
       return;
 
@@ -241,6 +241,7 @@ module.exports = ProcessPalette =
         config.commands = [];
 
       view = new MainEditView(main, title, filePath, config, selectedAction);
+      pane = atom.workspace.getCenter().getActivePane();
       paneItem = pane.addItem(view, {index: 0});
       pane.activateItem(paneItem);
 
