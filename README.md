@@ -15,7 +15,7 @@ See the [changelog](https://github.com/morassman/process-palette/blob/master/CHA
 ## Examples
 ### Add a command for running Python scripts
 
-![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/demo.gif?raw=true)
+![demo](https://github.com/morassman/process-palette/blob/master/resources/demo.gif?raw=true)
 
 <a name="tree_view_example"></a>
 ### Run commands that target files directly from the project tree
