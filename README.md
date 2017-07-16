@@ -8,6 +8,7 @@ Highlights:
 - Run multiple instances of commands in parallel.
 - Provides a convenient graphical editor. No need to edit configuration files directly unless you want to.
 - Integrates with the project tree. Select a file in the project tree and choose which command to run it with.
+- Detects paths and line numbers in the output that links back to the editor.
 
 See the [changelog](https://github.com/morassman/process-palette/blob/master/CHANGELOG.md) for the latest improvements.
 
