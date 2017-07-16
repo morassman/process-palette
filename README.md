@@ -1,13 +1,23 @@
 # Process Palette
-With Process Palette you can add custom entries to the command palette to run any command that you typically would from a terminal. This prevents you from having to switch to a terminal each time you need to run something and is especially useful for shell commands that you use regularly.
+Run parameterized shell commands from Atom.
+
+Highlights:
+- Parameterize commands with values from the workspace, e.g, file path, project path, selected text, etc.
+- Add entries to the command palette with optionally shortcut keys for each command.
+- Define parameterized environment variables.
+- Run multiple instances of commands in parallel.
+- Provides a convenient graphical editor. No need to edit configuration files directly unless you want to.
+- Integrates with the project tree. Select a file in the project tree and choose which command to run it with.
 
 See the [changelog](https://github.com/morassman/process-palette/blob/master/CHANGELOG.md) for the latest improvements.
 
-**Add a command for running Python scripts**
+## Examples
+### Add a command for running Python scripts
 
 ![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/demo.gif?raw=true)
 
-**Run commands that target files directly from the project view**
+<a name="tree_view_example"></a>
+### Run commands that target files directly from the project tree
 
 ![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/demo2.gif?raw=true)
 
@@ -177,6 +187,11 @@ Custom shortcut keys can also be associated with commands by adding a `keystroke
 ![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/command-palette-keystroke.png?raw=true)
 
 After reloading the configuration the `Ant: Default` command can be run by pressing `Ctrl-Alt-A`.
+
+## Tree View Integration
+Commands can be run from the tree view with the selected file as input to the command. Any command that references any of the `{file*}` variables will be available.
+
+See the [example](#tree_view_example) at the top.
 
 ## Advanced Configuration
 The `namespace`, `action`, `command` and `keystroke` aren't the only properties that can be configured. Of these only the `action` and `command` are required. The rest are optional and have default values.
