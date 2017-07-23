@@ -94,8 +94,7 @@ class ConfigController
       @projectController.main.recreateTreeViewContextMenu();
 
   shouldTreeViewMenuEnable: ->
-    tv = atom.packages.getActivePackage("tree-view").mainModule.treeView;
-    return tv.selectedPaths().length > 0;
+    return document.querySelectorAll(".tree-view .selected").length > 0;
 
   getMain: ->
     return @projectController.getMain();
