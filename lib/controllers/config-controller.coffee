@@ -171,8 +171,11 @@ class ConfigController
     @runProcessWithFile(filePath);
 
   runProcessFromTreeView: ->
-    tv = atom.packages.getActivePackage("tree-view").mainModule.treeView;
-    @runProcessWithFile(tv.selectedPath);
+    selected = document.querySelectorAll(".tree-view .selected > .list-item > .name, .tree-view .selected > .name")
+    return unless selected.length > 0
+    
+    selectedPaths = el.dataset.path for el in selected
+    @runProcessWithFile(selectedPaths[0]);
 
   runProcessWithFile: (filePath) ->
     if @config.singular
