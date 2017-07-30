@@ -94,8 +94,7 @@ class ConfigController
       @projectController.main.recreateTreeViewContextMenu();
 
   shouldTreeViewMenuEnable: ->
-    tv = atom.packages.getActivePackage("tree-view").mainModule.treeView;
-    return tv.selectedPaths().length > 0;
+    return document.querySelectorAll(".tree-view .selected").length > 0;
 
   getMain: ->
     return @projectController.getMain();
@@ -172,8 +171,8 @@ class ConfigController
     @runProcessWithFile(filePath);
 
   runProcessFromTreeView: ->
-    tv = atom.packages.getActivePackage("tree-view").mainModule.treeView;
-    @runProcessWithFile(tv.selectedPath);
+    selected = document.querySelectorAll(".tree-view .selected > .list-item > .name, .tree-view .selected > .name")
+    @runProcessWithFile(selected[0].dataset.path);
 
   runProcessWithFile: (filePath) ->
     if @config.singular
