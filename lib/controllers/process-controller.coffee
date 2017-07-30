@@ -52,6 +52,7 @@ class ProcessController
     @stderrBuffer = new Buffer(@config.outputBufferSize);
     @killed = false;
     @exitStatus = null;
+    @autoDiscard = false;
 
     if (@config.outputTarget == "panel")
       @outputView = new ProcessOutputView(@configController.getMain(), @);
@@ -382,9 +383,15 @@ class ProcessController
     if (index != -1)
       @processCallbacks.splice(index, 1);
 
-  killProcess:  ->
+  discard: ->
+    if !@process?
+      @configController.removeProcessController(@);
+
+  killProcess: (discard = false) ->
     if @process == null
       return;
+
+    @autoDiscard = discard;
 
     try
       if process.platform == "win32"
@@ -477,6 +484,9 @@ class ProcessController
 
     @configController.notifyProcessStopped(@);
     _.invoke(_.clone(@processCallbacks), "processStopped");
+
+    if @autoDiscard
+      @discard();
 
   outputToTarget: (output, stream) ->
     if (@config.outputTarget == "editor")

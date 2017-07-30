@@ -172,7 +172,8 @@ class ConfigController
 
   runProcessFromTreeView: ->
     selected = document.querySelectorAll(".tree-view .selected > .list-item > .name, .tree-view .selected > .name")
-    @runProcessWithFile(selected[0].dataset.path);
+    if selected.length > 0
+      @runProcessWithFile(selected[0].dataset.path);
 
   runProcessWithFile: (filePath) ->
     if @config.singular

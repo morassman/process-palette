@@ -163,6 +163,14 @@ class MainView extends View
     else
       @showListView();
 
+  killFocusedProcess: (discard) ->
+    if !@outputViewContainer.isHidden()
+      @outputView?.processController.killProcess(discard);
+
+  discardFocusedOutput: ->
+    if !@outputViewContainer.isHidden()
+      @outputView?.processController.discard();
+
   destroy: ->
     @listView.destroy();
     @helpView.destroy();

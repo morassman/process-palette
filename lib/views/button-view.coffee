@@ -26,7 +26,7 @@ class ButtonView extends View
     @showOutputButton.on 'mousedown', (e) ->
       e.preventDefault();
 
-    @disposables.add(atom.tooltips.add(@killButton, {title: "Stop/Discard"}));
+    @disposables.add(atom.tooltips.add(@killButton, {title: "Kill/Discard"}));
     @disposables.add(atom.tooltips.add(@showOutputButton, {title: "Show output"}));
 
   destroy: ->
@@ -48,9 +48,9 @@ class ButtonView extends View
 
   killButtonPressed: ->
     if @processController.process != null
-      @processController.killProcess();
+      @processController.killProcess(false);
     else
-      @configController.removeProcessController(@processController);
+      @processController.discard();
 
   showOutputButtonPressed: ->
     if @isHighlighted()
