@@ -1,5 +1,5 @@
 {File, CompositeDisposable} = require 'atom'
-{$$, View} = require 'atom-space-pen-views'
+{View} = require 'atom-space-pen-views'
 SplitView = require '../split-view'
 CommandChooseView = require './command-choose-view'
 CommandEditView = require './command-edit-view'

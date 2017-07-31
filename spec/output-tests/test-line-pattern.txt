@@ -1,0 +1,5 @@
+  * Hello
+
+EXPECT:
+
+<span class="line_star" is="space-pen-span">  * Hello</span>

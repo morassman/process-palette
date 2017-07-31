@@ -42,10 +42,9 @@ class CommandChooseView extends View
     @commandItemViewSelected(itemView);
 
   addCommandItemView: (command) ->
-    itemView = new CommandItemView();
-    itemView.initialize(@, command);
+    itemView = new CommandItemView(@, command);
     @itemViews.push(itemView);
-    @list[0].appendChild(itemView);
+    @list.append(itemView);
     return itemView;
 
   commandItemViewSelected: (itemView) ->
@@ -55,7 +54,8 @@ class CommandChooseView extends View
     @selectedItemView?.setHighlighted(true);
 
   deleteCommandItemView: (itemView) ->
-    @list[0].removeChild(itemView);
+    #@list[0].removeChild(itemView);
+    itemView.remove();
     @itemViews.splice(@itemViews.indexOf(itemView), 1);
     @commands.splice(@commands.indexOf(itemView.getCommand()), 1);
 

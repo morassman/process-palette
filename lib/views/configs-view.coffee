@@ -8,7 +8,7 @@ class ConfigsView extends SelectListView
     super();
 
   initialize: ->
-    super();
+    super()
 
     @addClass('overlay from-top');
     items = @refreshItems();

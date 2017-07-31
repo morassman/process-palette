@@ -1,46 +1,30 @@
-{$, $$} = require 'atom-space-pen-views'
+{$, View} = require 'atom-space-pen-views'
 
 module.exports =
-class PatternItemView extends HTMLElement
+class PatternItemView extends View
 
-  initialize: (@patternChooseView, @name, @value, select=false) ->
-    @checkbox = $$ ->
-      @input {type: 'checkbox'}
-    button = $$ ->
-      @button {class: 'btn btn-sm icon icon-arrow-up pattern-button'}
-    nameSpan = $$ ->
-      @span {class: 'pattern-name'}
-    expressionSpan = $$ ->
-      @span {class: 'text-subtle pattern-expression'}
+  constructor: (@patternChooseView, @name, @value, select=true) ->
+    super(@patternChooseView, @name, @value, select=false)
 
-    nameSpan.text(@name);
-    expressionSpan.text(@value.expression);
+  @content: (patternChooseView, name, value, select) ->
+    @li =>
+      @input {outlet: "selectButton", type: 'checkbox', class: "select input-checkbox", value: select}
+      @button {outlet: "upButton", class: 'btn btn-sm icon icon-arrow-up pattern-button'}
+      @span name, {outlet: "nameSpan", class: 'pattern-name'}
+      @span value.expression, {outlet: "expressionSpan", class: 'text-subtle pattern-expression'}
 
-    button.click => @moveUp();
-    button.on 'mousedown', (e) -> e.preventDefault();
-
-    element = $(@);
-
-    button.appendTo(element);
-    @checkbox.appendTo(element);
-    nameSpan.appendTo(element);
-    expressionSpan.appendTo(element);
-
-    @setChecked(select);
+  initialize: ->
+    @upButton.click => @patternChooseView.moveUp(@);
+    @upButton.on 'mousedown', (e) -> e.preventDefault();
 
   getName: ->
     return @name;
-
-  moveUp: ->
-    @patternChooseView.moveUp(@);
 
   setChecked: (checked) ->
     if !checked?
       checked = false;
     if checked != @isChecked()
-      @checkbox.trigger("click");
+      @selectButton.trigger("click");
 
   isChecked: ->
-    return @checkbox.is(":checked");
-
-module.exports = document.registerElement("pattern-item-view", prototype: PatternItemView.prototype, extends: "li")
+    return @selectButton.is(":checked");

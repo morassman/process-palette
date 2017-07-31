@@ -1,0 +1,10 @@
+this is <not> wrong
+this <is <not> wrong> inside inline
+-- this is <not> wrong inside line
+
+
+EXPECT:
+
+this is <span class="inline_tag" is="space-pen-span">&lt;not&gt;</span> wrong
+this &lt;is <span class="inline_tag" is="space-pen-span">&lt;not&gt;</span> wrong&gt; inside inline
+<span class="line_dashes" is="space-pen-span">-- this is <span class="inline_tag" is="space-pen-span">&lt;not&gt;</span> wrong inside line</span>

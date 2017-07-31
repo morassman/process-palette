@@ -3,6 +3,7 @@ SaveController = require './save-controller'
 ConfigController = require './config-controller'
 ProcessController = require './process-controller'
 RegExpPattern = require '../pattern/regexp-pattern'
+PathPattern = require '../pattern/path-pattern'
 {Directory, File, BufferedProcess, CompositeDisposable} = require 'atom'
 os = require 'os';
 
@@ -93,11 +94,15 @@ class ProjectController
     if !@processConfigs?
       return;
 
+    # patterns
+
     @addDefaultPattern();
 
     if @processConfigs.patterns?
       for key, value of @processConfigs.patterns
         @addPattern(key, value);
+
+    # commands
 
     if @processConfigs.commands?
       commands = @processConfigs.commands.slice();
@@ -139,14 +144,15 @@ class ProjectController
     @addPattern("default", config);
 
   addPattern: (name, config) ->
-    pattern = @createRegExpPattern(name, config);
+    pattern = @createPattern(name, config);
 
     if pattern != null
       @patterns[name] = pattern;
 
-  createRegExpPattern: (name, config) ->
+  createPattern: (name, config) ->
     # Make a copy so that the original doesn't get modified.
     config = JSON.parse(JSON.stringify(config));
+    config.name = name
 
     if !config.expression?
       console.error("Pattern #{name} doesn't have an expression.")
@@ -154,48 +160,41 @@ class ProjectController
 
     if !config.flags?
       config.flags = "i";
+    if config.expression.indexOf("\n") >= 0   # multiline patterns must have x-flag
+      config.flags += "x"                     # x-flag not available in javascript but in UXRegExp
+      #config.expression = config.expression.replace(/\n/g, ""); # cheap solution to missing x-flag in javascript
 
-    if config.expression.indexOf("(path)") == -1
-      console.error("Pattern #{name} doesn't have (path) in its expression.");
-      return null;
+    config.isLineExpression = config.expression.indexOf("^") == 0
+    config.isPathExpression = config.path? or config.expression.indexOf("(path)") >= 0 or config.expression.indexOf("(?<path>") >= 0
+    config.isInlineExpression = not config.isLineExpression and not config.isPathExpression
 
-    pathIndex = config.expression.indexOf("(path)");
-    lineIndex = config.expression.indexOf("(line)");
+    if config.isPathExpression
+      if !config.path?
+        config.path = @getPathExpression();
 
-    config.pathIndex = 1;
+      config.expression = config.expression.replace(/\(path\)/g, "(?<path>" + config.path + ")");
+      config.expression = config.expression.replace(/\(line\)/g, "(?<line>\\d+)");
 
-    if lineIndex > -1
-      if pathIndex < lineIndex
-        config.lineIndex = 2;
-      else
-        config.lineIndex = 1;
-        config.pathIndex = 2;
+      try
+        return new PathPattern(config);
+      catch err
+        console.error("Pattern #{name} (Path) could not be created.");
+        console.error(err);
 
-    if !config.path?
-      config.path = @getPathExpression(lineIndex > -1);
+    else
 
-    config.expression = config.expression.replace("(path)", "("+config.path+")");
-    config.expression = config.expression.replace("(line)", "(\\d+)");
-
-    try
-      return new RegExpPattern(config);
-    catch err
-      console.error("Pattern #{name} could not be created.");
-      console.error(err);
+      try
+        return new RegExpPattern(config);
+      catch err
+        console.error("Pattern #{name} (RegExp) could not be created.");
+        console.error(err);
 
     return null;
 
-  getPathExpression: (hasLine) ->
-    if hasLine
-      if os.platform == "win32"
-        return "(?:[a-z]:\\\\|\\\\)?[\\w\\.\\-]+[\\\\[\\w\\.\\-]+]*";
-      else
-        return "(?:~\\/|\\/?)[\\w\\.\\-]+[\\/[\\w\\.\\-]+]*";
-
+  getPathExpression: () ->
     if os.platform == "win32"
-      return "(?:[a-z]:\\\\|\\\\)?(?:[\\w\\.\\-]+\\\\)+[\\w\\.\\-]+";
-
-    return "(?:~\\/|\\/?)(?:[\\w\\.\\-]+\\/)+[\\w\\.\\-]+";
+      return "(?:[a-z]:\\\\|\\\\)?[\\w\\.\\-\\\\]+[.\\\\][\\w\\.\\-\\\\]+";
+    return "(?:~\\/|\\/)?[\\w\\.\\-\\/]+[.\\/][\\w\\.\\-\\/]+";
 
   editConfiguration: ->
     if (@configurationFile.isFile() and @configurationFile.existsSync())

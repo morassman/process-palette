@@ -1,0 +1,91 @@
+{
+  "patterns": {
+    "path_colon": {
+      "expression": "(path):(line)"
+    },
+    "path_file_line": {
+      "expression": "(?:\n  \\b file:?   \\s+ |\n  \\b source:? \\s+ |\n  \\b at:?     \\s+\n)?\n(?:\n  ' (path) ' |\n  \" (path) \" |\n    (path)\n)\n(?:\n  [\\s,]+\n  (?:\n    \\b line:? \\s* (line)    |\n               \\( (line) \\) |\n               \\[ (line) \\]\n  )\n)?"
+    },
+    "path_squote": {
+      "expression": "'(path)'"
+    },
+    "path_dquote": {
+      "expression": "\"(path)\""
+    },
+    "path": {
+      "expression": "(path)"
+    },
+    "line_trace_begin": {
+      "expression": "^\\s*\\\\\\s+"
+    },
+    "line_trace_end": {
+      "expression": "^\\s*/\\s+"
+    },
+    "inline_trace_result": {
+      "expression": "(?:^)\\s*/\\s+.*\\s+(=\\s+.*).*$"
+    },
+    "inline_error": {
+      "expression": "[-\\w]*error[-\\w]*"
+    },
+    "inline_fail": {
+      "expression": "\\bfail(?:ure|ed)?\\b"
+    },
+    "inline_tag": {
+      "expression": "<[^<>]*>"
+    },
+    "inline_bracket": {
+      "expression": "\\[[^\\[\\]]*\\]|{[^{}]*}"
+    },
+    "line_command": {
+      "expression": "^\\s*>"
+    },
+    "line_build": {
+      "expression": "^\\s*build"
+    },
+    "line_dashes": {
+      "expression": "^\\s*--"
+    },
+    "line_star": {
+      "expression": "^\\s*\\*"
+    }
+  },
+  "allPatterns": [
+    "path_colon",
+    "path_file_line",
+    "path_squote",
+    "path_dquote",
+    "path",
+    "line_trace_begin",
+    "line_trace_end",
+    "inline_trace_result",
+    "inline_error",
+    "inline_fail",
+    "inline_tag",
+    "inline_bracket",
+    "line_command",
+    "line_build",
+    "line_dashes",
+    "line_star"
+  ],
+  "commands": [
+    {
+      "namespace" : "process-palette-test",
+      "action" : "cat-test",
+      "command" : "cat",
+      "arguments" : ["{fileAbsPath}"],
+      "cwd" : "{projectPath}",
+      "stream" : false,
+      "outputTarget" : "panel",
+      "autoShowOutput" : true,
+      "maxCompleted" : 1,
+      "outputBufferSize" : 10000,
+      "successOutput" : "{stdout}",
+      "errorOutput" : "{stdout}\n{stderr}",
+      "fatalOutput" : "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "successMessage" : "Executed : {fullCommand}",
+      "errorMessage" : "Executed : {fullCommand}\nReturned with code {exitStatus}\n{stderr}",
+      "fatalMessage" : "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "patterns": []
+    }
+  ]
+}

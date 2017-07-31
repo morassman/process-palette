@@ -5,6 +5,7 @@ ButtonsView = require './buttons-view'
 PathView = require './path-view'
 escapeHTML = require 'underscore.string/escapeHTML'
 AnsiToHtml = require 'ansi-to-html'
+fsp = require 'fs-plus'
 
 module.exports =
 class ProcessOutputView extends View
@@ -22,7 +23,7 @@ class ProcessOutputView extends View
 
   @content: (main, processController) ->
     @div =>
-      @div {class:"process-palette-process", style:'margin-bottom:5px', outlet:"header"}, =>
+      @div {class:"process-palette-process", outlet:"header"}, =>
         @button {class:'btn btn-xs icon-three-bars inline-block-tight', outlet:'showListViewButton', click:'showListView'}
         @button {class:'btn btn-xs icon-playback-play inline-block-tight', outlet:'runButton', click:'runButtonPressed'}
         @span {class:'header inline-block text-highlight', outlet: 'commandName'}
@@ -153,7 +154,6 @@ class ProcessOutputView extends View
     @refreshScrollLockButton();
 
   outputToPanel: (text) ->
-    text = @sanitizeOutput(text);
     addNewLine = false;
 
     for line in text.split('\n')
@@ -163,31 +163,161 @@ class ProcessOutputView extends View
       @appendLine(line);
       addNewLine = true;
 
+  # append line to output panel
+  #   uses three kinds of patterns (processed in three loops in this sequence):
+  #     * PTHEXP = path expression
+  #     * INLEXP = inline expression
+  #     * LINEXP = (whole-)line expression
+  #   * PTHEXPs are roughly the same as INLEXPs, but create clickable objects (PathView)
+  #   * PTHEXPs only match if a corresponding file exists (this allows very loose path regexps)
+  #   * INLEXPs are converted to span objects
+  #   * converting is done sequentially: remaining = match(line) ; while(remaining) remaining = match(remaining)
+  #   * resulting objects and the remaining strings are collected in an array (line_parts)
+  #   * LINEXPs are detected by using `^` at the start
+  #   *   because of that INLEXP anchored at the start of the line need to use a fake group or similar
+  #   * the first matching LINEXP stops matching outputs a span object wrapping the collected array
+
   appendLine: (line) ->
-    if @patterns.length == 0
-      @outputPanel.append(line);
-      return;
 
+    #console.log "<< " + line
+
+    #@outputPanel.append @sanitizeOutput(line) + "<br>"
+
+    ##### process path patterns
+    line_parts = [line]
     for pattern in @patterns
-      match = pattern.match(line);
+      #console.log(["pattern", pattern.config.name, remaining])
+      if pattern.config.isPathExpression
+        # process all parts and build new line_parts array
+        #console.log(["line_parts", line_parts])
+        parts = line_parts
+        line_parts = []
+        for part in parts
+          if typeof part != "string"
+            # copy non-string parts (already processed)
+            #console.log(["+ + push", part])
+            line_parts.push part
+          else
+            # match string parts
+            remaining = part
+            while remaining.length > 0
+              matches = pattern.match(remaining)
+              if matches?
+                #console.log ["+ path match", matches.match, matches.path, remaining]
+                line_parts.push matches.pre
+                # TODO: search in some path (active project, active-file, other projects, other open files)
+                if fsp.isFileSync(matches.path)
+                  #console.log ["+ path exist", matches.match, remaining]
+                  cwd = @processController.getCwd()
+                  obj = new PathView(cwd, matches)
+                  obj.addClass(pattern.config.name)
+                  obj.name = "path"
+                  #console.log(["+ + push", obj])
+                  line_parts.push obj
+                else
+                  line_parts.push matches.match
+                # continue with string following match
+                remaining = matches.post
+                #console.log(["remaining", remaining])
+              else
+                break
+              #console.log(["line_parts", line_parts, "--> " +  remaining])
+            if remaining.length >= 0
+              line_parts.push remaining
+        # concatenate strings following strings
+        parts = line_parts
+        line_parts = []
+        combined = ""
+        for part in parts
+          if typeof part != "string"
+            if combined.length
+              line_parts.push combined
+              combined = ""
+            line_parts.push part
+          else
+            combined += part
+        if combined.length
+          line_parts.push combined
+      #console.log(["line_parts", line_parts])
 
-      if match?
-        cwd = @processController.getCwd();
-        pathView = new PathView(cwd, match);
-        @outputPanel.append(match.pre);
-        @outputPanel.append $$ ->
-          @span =>
-            @subview "#{@lineIndex}", pathView
-        @outputPanel.append(match.post);
-        return;
+    ##### process inline patterns
+    for pattern in @patterns
+      #console.log(["pattern", pattern.config.name])
+      if pattern.config.isInlineExpression
+        # process all parts and build new line_parts array
+        #console.log(["pattern", pattern.config.name])
+        #console.log(["line_parts", line_parts])
+        parts = line_parts
+        line_parts = []
+        for part in parts
+          if typeof part == "object"
+            # copy non-string parts (already processed)
+            #console.log(["push", part])
+            line_parts.push part
+          else
+            # match string parts
+            remaining = part
+            while remaining.length > 0
+              matches = pattern.match(remaining)
+              if matches?
+                #console.log(["expr match", remaining])
+                #console.log(JSON.stringify(matches, null, "  "))
+                # copy string in front of match
+                line_parts.push matches.pre
+                # build span
+                text = @sanitizeOutput(matches.match)
+                obj = $$ -> @span {class: pattern.config.name}, =>  @raw(text)
+                obj.name = pattern.config.name
+                #console.log(["push", obj])
+                line_parts.push obj
+                # continue with string following match
+                remaining = matches.post
+                #console.log(["remaining", remaining])
+              else
+                break
+              #console.log(["line_parts", line_parts, "--> " +  remaining])
+            if remaining.length >= 0
+              line_parts.push remaining
+      #console.log(["line_parts", line_parts])
 
-    @outputPanel.append(line);
+    ##### replace all objects in line for whole-line matching
+    # line_processed = ""
+    # for part in line_parts
+    #   if typeof part == "string"
+    #     line_processed += part
+    #   else
+    #     line_processed += "<" + part.name + ">"
+    #console.log("== " + line_processed)
+
+    ##### (whole-)line matching
+    for pattern in @patterns
+      if pattern.config.isLineExpression
+        matches = pattern.match(line)
+        if matches?
+          #console.log(["line match", matches.match, line_processed])
+          line_span = $$ -> @span {class: pattern.config.name}
+          for part in line_parts
+            if typeof part == "string"
+              text = @sanitizeOutput(part)
+              line_span.append $$ -> @raw(text)
+            else
+              line_span.append part
+          #console.log "\n\n--- line_span\n" + line_span[0].innerHTML + "\n---\n\n"
+          @outputPanel.append(line_span)
+          return
+
+    # no (while-)line match
+    for part in line_parts
+      if typeof part == "string"
+        part = @sanitizeOutput(part)
+      else
+        #console.log "\n\n--- part\n" + part[0].innerHTML + "\n---\n\n"
+      @outputPanel.append(part)
 
   # Tear down any state and detach
   destroy: ->
     if @processController
       @processController.removeProcessCallback(@);
-
     @buttonsView.destroy();
     @disposables.dispose();
     @element.remove();
@@ -200,5 +330,4 @@ class ProcessOutputView extends View
     output = escapeHTML(output);
     # Convert ANSI escape sequences (ex. colors) to HTML
     output = @ansiConvert.toHtml(output);
-
     return output;

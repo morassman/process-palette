@@ -28,32 +28,42 @@ class PatternEditView extends View
         @span ' column is optional. If it is left out then the built-in expression will be used for the path, '
         @span 'but a custom expression can be specified in case the built-in one isn\'t sufficient.'
         @tag 'p'
-        @subview 'tableView', new TableEditView(['Name', 'Expression', 'Path RegEx'])
+        @subview 'tableView', new TableEditView(
+                                    ['Name', 'Expression', 'Path RegEx'],
+                                    draggable: true, deletable: true
+                                    )
 
   initialize: ->
-    patterns = @config.patterns;
+    if not @config.patterns? or not @config.allPatterns?
+      return
 
-    if !patterns?
-      return;
-
-    for name, value of patterns
-      @tableView.addRow([name, value.expression, value.path]);
+    for name in @config.allPatterns
+      value = @config.patterns[name]
+      if not value?
+        console.log ["value does not exist", name, value]
+        continue
+      @tableView.addRow([name, value.expression, value.path])
 
   persistChanges: ->
-    patterns = {};
-    rows = @tableView.getRows();
+    patterns = {}
+    allPatterns = []
+
+    rows = @tableView.getRows()
 
     for row in rows
-      name = row[0].trim();
+      name = row[0].trim()
 
       if name.length > 0
-        pattern = {};
-        pattern.expression = row[1].trim();
+        pattern = {}
+        pattern.expression = row[1].trim()
 
-        path = row[2].trim();
+        path = row[2].trim()
         if path.length > 0
-          pattern.path = path;
+          pattern.path = path
 
-        patterns[name] = pattern;
+        patterns[name] = pattern
+        allPatterns.push name
 
-    @config.patterns = patterns;
+    @config.patterns = patterns
+    @config.allPatterns = allPatterns
+    console.log ["read allPatterns from editor", @config.allPatterns]
