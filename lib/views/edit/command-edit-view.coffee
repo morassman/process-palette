@@ -249,6 +249,41 @@ class CommandEditView extends View
                   @subview 'inputDialogsView', new TableEditView(['Name', 'Message (optional)', 'Default value (optional)'])
             @tr =>
               @td {colspan: 2}, =>
+                @h2 'Scripts', {class: 'text-highlight'}
+            @tr =>
+              @td {colspan: 2}, =>
+                @span 'Custom JavaScript can be executed at the start and end of a process. ' , {class: 'text-smaller text-subtle'}
+                @span 'Any of the defined variables can be accessed without needing to use braces. ' , {class: 'text-smaller text-subtle'}
+                @span 'Environment variables can be accessed with the env object, such as env[\'PWD\']. ' , {class: 'text-smaller text-subtle'}
+            @tr =>
+              @td 'Run on', {class: 'th text-highlight'}
+              @td 'Script', {class: 'th text-highlight'}
+            @tr =>
+              @td {class: 'first-column'}, =>
+                @input {type: 'checkbox', outlet: 'startScriptCheck'}
+                @span 'Start', {class: 'check-label'}
+              @td =>
+                @subview 'startScriptEditor', new TextEditorView()
+              @td {class: 'variable-button'}, =>
+                @button 'Insert Variable', {class: 'btn btn-sm', click: 'startScriptInsertVariable'}
+            @tr =>
+              @td {class: 'first-column'}, =>
+                @input {type: 'checkbox', outlet: 'successScriptCheck'}
+                @span 'Success', {class: 'check-label'}
+              @td =>
+                @subview 'successScriptEditor', new TextEditorView()
+              @td {class: 'variable-button'}, =>
+                @button 'Insert Variable', {class: 'btn btn-sm', click: 'successScriptInsertVariable'}
+            @tr =>
+              @td {class: 'first-column'}, =>
+                @input {type: 'checkbox', outlet: 'errorScriptCheck'}
+                @span 'Error', {class: 'check-label'}
+              @td =>
+                @subview 'errorScriptEditor', new TextEditorView()
+              @td {class: 'variable-button'}, =>
+                @button 'Insert Variable', {class: 'btn btn-sm', click: 'errorScriptInsertVariable'}
+            @tr =>
+              @td {colspan: 2}, =>
                 @h2 'Variables', {class: 'text-highlight'}
             @tr =>
               @td {colspan: 2}, =>
@@ -375,6 +410,15 @@ class CommandEditView extends View
     @errorMessageEditor.addClass('multi-line-editor');
     @errorMessageEditor.getModel().setSoftTabs(true);
     @errorMessageEditor.getModel().setLineNumberGutterVisible(false);
+    @startScriptEditor.addClass('multi-line-editor');
+    @startScriptEditor.getModel().setSoftTabs(true);
+    @startScriptEditor.getModel().setLineNumberGutterVisible(false);
+    @successScriptEditor.addClass('multi-line-editor');
+    @successScriptEditor.getModel().setSoftTabs(true);
+    @successScriptEditor.getModel().setLineNumberGutterVisible(false);
+    @errorScriptEditor.addClass('multi-line-editor');
+    @errorScriptEditor.getModel().setSoftTabs(true);
+    @errorScriptEditor.getModel().setLineNumberGutterVisible(false);
 
     @stdinEditor.addClass('multi-line-editor');
     @stdinEditor.getModel().setSoftTabs(true);
@@ -427,6 +471,14 @@ class CommandEditView extends View
     @setMultiLineEditorText(@startMessageEditor, @emptyString(@command.startMessage));
     @setMultiLineEditorText(@successMessageEditor, @emptyString(@command.successMessage));
     @setMultiLineEditorText(@errorMessageEditor, @emptyString(@command.errorMessage));
+
+    @setChecked(@startScriptCheck, @command.scriptOnStart);
+    @setChecked(@successScriptCheck, @command.scriptOnSuccess);
+    @setChecked(@errorScriptCheck, @command.scriptOnError);
+    @setMultiLineEditorText(@startScriptEditor, @emptyString(@decode(@command.startScript)));
+    @setMultiLineEditorText(@successScriptEditor, @emptyString(@decode(@command.successScript)));
+    @setMultiLineEditorText(@errorScriptEditor, @emptyString(@decode(@command.errorScript)));
+
     @patternChooseView.setPatterns(@config.patterns, @command.patterns);
 
     if @command.env?
@@ -436,6 +488,18 @@ class CommandEditView extends View
     if @command.inputDialogs?
       for inputDialog in @command.inputDialogs
         @inputDialogsView.addRow([inputDialog.variableName, inputDialog.message, inputDialog.initialInput]);
+
+  encode: (value) ->
+    if !value?
+      return value;
+
+    return btoa(value);
+
+  decode: (value) ->
+    if !value?
+      return value;
+
+    return atob(value);
 
   emptyString: (value) ->
     if !value?
@@ -484,6 +548,15 @@ class CommandEditView extends View
   errorMessageInsertVariable: ->
     new InsertVariableView(@errorMessageEditor, true);
 
+  startScriptInsertVariable: ->
+    new InsertVariableView(@startScriptEditor, false, false);
+
+  successScriptInsertVariable: ->
+    new InsertVariableView(@successScriptEditor, true, false);
+
+  errorScriptInsertVariable: ->
+    new InsertVariableView(@errorScriptEditor, true, false);
+
   stdinInsertVariable: ->
     new InsertVariableView(@stdinEditor);
 
@@ -502,6 +575,9 @@ class CommandEditView extends View
     @command.notifyOnStart = @isChecked(@startNotifyCheck);
     @command.notifyOnSuccess = @isChecked(@successNotifyCheck);
     @command.notifyOnError = @isChecked(@errorNotifyCheck);
+    @command.scriptOnStart = @isChecked(@startScriptCheck);
+    @command.scriptOnSuccess = @isChecked(@successScriptCheck);
+    @command.scriptOnError = @isChecked(@errorScriptCheck);
     @persistStringNullIfEmpty('cwd', @cwdEditor.getModel().getText());
     @persistStringNullIfEmpty('keystroke', @keystrokeEditor.getModel().getText());
     @persistStringNullIfEmpty('input', @stdinEditor.getModel().getText());
@@ -510,6 +586,10 @@ class CommandEditView extends View
     @persistStringNullIfEmpty('startMessage', @startMessageEditor.getModel().getText());
     @persistStringNullIfEmpty('successMessage', @successMessageEditor.getModel().getText());
     @persistStringNullIfEmpty('errorMessage', @errorMessageEditor.getModel().getText());
+    @persistStringNullIfEmpty('startScript', @encode(@startScriptEditor.getModel().getText()));
+    @persistStringNullIfEmpty('successScript', @encode(@successScriptEditor.getModel().getText()));
+    @persistStringNullIfEmpty('errorScript', @encode(@errorScriptEditor.getModel().getText()));
+
     @persistIntegerNullIfNaN('outputBufferSize', @bufferSizeEditor.getModel().getText());
     @persistIntegerNullIfNaN('maxCompleted', @maxCompletedEditor.getModel().getText());
     @persistEnv();

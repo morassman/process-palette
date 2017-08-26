@@ -9,6 +9,7 @@ InputDialogView = require '../views/input-dialog-view'
 ProjectsView = require '../views/projects-view'
 Buffer = require './buffer'
 cp = require('child_process')
+{allowUnsafeNewFunction} = require 'loophole'
 
 # Fields :
 # stdout : Standard output.
@@ -326,6 +327,9 @@ class ProcessController
       messageTitle = 'Running ' + _.humanizeEventName(@config.getCommandName());
       atom.notifications.addInfo(messageTitle, notifOptions);
 
+    if @config.scriptOnStart
+      @runScript('start', @config.startScript);
+
     if @config.input
       @process.stdin.write(@insertFields(@config.input));
       @process.stdin.uncork();
@@ -456,11 +460,15 @@ class ProcessController
         if @config.notifyOnSuccess
           notifOptions["detail"] = @insertFields(@config.successMessage);
           atom.notifications.addSuccess(messageTitle, notifOptions);
+        if @config.scriptOnSuccess
+          @runScript('success', @config.successScript);
       else
         if @config.notifyOnError
           notifOptions["dismissable"] = true;
           notifOptions["detail"] = @insertFields(@config.errorMessage);
           atom.notifications.addWarning(messageTitle, notifOptions);
+        if @config.scriptOnError
+          @runScript('error', @config.errorScript);
 
     if !@config.stream
       if @fields.exitStatus == 0
@@ -545,3 +553,32 @@ class ProcessController
 
     pane = atom.workspace.paneForItem(@newFile);
     pane?.activateItem(@newFile);
+
+  runScript: (target, script) ->
+    if !script?
+      return;
+
+    argNames = [];
+    argValues = [];
+
+    for key, val of @fields
+      argNames.push(key);
+      argValues.push(val);
+
+    argNames.push('env');
+    argValues.push(shell.env);
+
+    try
+      script = atob(script);
+
+      allowUnsafeNewFunction ->
+        f = new Function(argNames.join(','), script);
+        f.apply(null, argValues);
+    catch e
+      message = "The 'on " + target + "' JavaScript could not be executed. " + e.message;
+      warning = "Error executing script for #{@config.namespace}: #{@config.action}";
+
+      notifOptions = {};
+      notifOptions["dismissable"] = true;
+      notifOptions["detail"] = message;
+      atom.notifications.addWarning(warning, notifOptions);

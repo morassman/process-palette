@@ -64,6 +64,13 @@ class ProcessConfig
     @requireBoolean('scrollLockEnabled', false);
     @requireInteger('outputBufferSize', 80000, true);
     @requireInteger('maxCompleted', 3, true);
+    @requireString('startScript', null, true);
+    @requireString('successScript', null, true);
+    @requireString('errorScript', null, true);
+    @requireBoolean('scriptOnStart', false);
+    @requireBoolean('scriptOnSuccess', false);
+    @requireBoolean('scriptOnError', false);
+
     @checkArguments();
     @checkInputDialogs();
     @checkPatterns();

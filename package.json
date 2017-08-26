@@ -23,6 +23,7 @@
     "ps-tree": "1.0.0",
     "underscore.string": "~3.2",
     "ansi-to-html": "~0.3",
-    "fs-plus": "^2.8.0"
+    "fs-plus": "^2.8.0",
+    "loophole": "^1.1.0"
   }
 }

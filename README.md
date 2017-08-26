@@ -9,6 +9,7 @@ Highlights:
 - Provides a convenient graphical editor. No need to edit configuration files directly unless you want to.
 - Integrates with the project tree. Select a file in the project tree and choose which command to run it with.
 - Detects paths and line numbers in the output that links back to the editor.
+- Add hooks for custom JavaScript to run before and after a process.
 
 See the [changelog](https://github.com/morassman/process-palette/blob/master/CHANGELOG.md) for the latest improvements.
 
@@ -192,6 +193,8 @@ After reloading the configuration the `Ant: Default` command can be run by press
 ## Tree View Integration
 Commands can be run from the tree view with the selected file as input to the command. Any command that references any of the `{file*}` variables will be available.
 
+To choose the command to run a file with, open the context menu on a file in the tree view and choose the command from the `Run With` sub menu.
+
 See the [example](#tree_view_example) at the top.
 
 ## Advanced Configuration
@@ -230,13 +233,27 @@ maxCompleted|The maximum number of completed processes whose output to keep at a
 outputBufferSize|The maximum number of characters to accumulate from standard output and error. When the buffer size is reached the oldest output is discarded. This is not applied to the output target, but only to the output accumulated in the `stdout` and `stderr` variables. This limit can be disabled by setting it to `null`, but should be done with caution for long running processes.|80000
 singular|Set to `true` to terminate the running process before running a new instance.|false
 
-The following properties relate to the messages shown after a command is executed. Giving any of the `xxxMessage` properties a value of `null` will prevent that message from being shown.
+The following properties relate to the messages shown before and after a command is executed. Giving any of the `xxxMessage` properties a value of `null` will prevent that message from being shown.
 
 Property|Description|Default
 ---|---|---
+startMessage|The format of the message before the process starts.|null
 successMessage|The format of the message when the process returned with an exit status of 0.|"Executed : {fullCommand}"
 errorMessage|The format of the message when the process returned with a non-0 exit status.|"Executed : {fullCommand}\nReturned with code {exitStatus}\n{stderr}"
-fatalMessage|The format of the message when the command could not be executed at all.|"Failed to execute : {fullCommand}\n{stdout}\n{stderr}"
+notifyOnStart|true if the start message should be shown.|false
+notifyOnSuccess|true if the success message should be shown.|true
+notifyOnError|true if the error message should be shown.|true
+
+The following properties relate to custom JavaScript that can be executed before and after the process.
+
+Property|Description|Default
+---|---|---
+startScript|Base-64 encoded JavaScript to run before the process starts.|null
+successScript|Base-64 encoded JavaScript to run when the process returned with exit status of 0.|null
+errorScript|Base-64 encoded JavaScript to run when the process returned with a non-0 exit status.|null
+scriptOnStart|true if the start script should be run.|false
+scriptOnSuccess|true if the success script should be run.|false
+scriptOnError|true if the error script should be run.|false
 
 ### Output Targets
 The `outputTarget` property specifies where the output produced by the process should be directed to. The following are valid targets:
@@ -333,9 +350,12 @@ arguments|yes|no
 successOutput|yes|yes
 errorOutput|yes|yes
 fatalOutput|yes|yes
+startMessage|yes|no
 successMessage|yes|yes
 errorMessage|yes|yes
-fatalMessage|yes|yes
+startScript|yes|no
+successScript|yes|yes
+errorMessage|yes|yes
 
 The `namespace`, `action` and `keystroke` properties do not support variables. The `env` property supports variables only in its values, for example :
 
@@ -388,7 +408,7 @@ Edit Configuration|Opens graphical configuration editor.
 Reload Configuration|Reloads all configuration files. This is only necessary if a process-palette.json file was directly modified with a text editor.
 Rerun Last|Runs the last command that was executed again.
 
-## Detect Paths and Line Numbers
+## Detect Paths And Line Numbers
 Commands that write to the output panel can be configured to detect file paths and optionally line numbers.
 
 ![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/pattern.png?raw=true)
@@ -453,6 +473,21 @@ In this case the given expression for `path` will be used instead.
 
 **Important note about groups**<br>
 Groups are enclosed in round brackets. `path` and `line` each forms a group and in this order they are at index 1 and 2 respectively. In this example the `path` expression is being overwritten, but this expression defines a group of its own. What's important to notice is the `?:` at the start of the group, which ensures that the group is not counted. The only groups that are allowed to be counted are for `path` and `line`, but neglecting to exclude other groups will interfere with their indexes.
+
+## Callbacks To Custom JavaScript
+You can specify your own JavaScript to run at certain stages of a process. Code can be specified to run before the process starts and after it has completed. Separate scripts can be specified based on whether the process completed successfully or failed.
+
+Any of the input and output variables are available from within the scripts. Variables can be accessed simply by using its name, without the need to enclose it in braces. You also have access to Atom's API. For example:
+```javascript
+atom.workspace.open(fileProjectPath + '/my.file')
+```
+
+Environment variables can be accessed via a variable called `env`. For example:
+```javascript
+console.log(env['MY_ENV_VAR'])
+```
+
+These scripts are base-64 encoded. It is therefore advised to rather edit the scripts from the graphical editor instead of directly in the `process-palette.json` file, because then the script will be encoded automatically.
 
 ## Known Issues
 ### Background Processes

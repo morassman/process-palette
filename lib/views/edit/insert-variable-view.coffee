@@ -3,7 +3,7 @@
 module.exports =
 class InsertVariableView extends SelectListView
 
-  constructor: (@editor, @showOutputVariables=false) ->
+  constructor: (@editor, @showOutputVariables=false, @addBraces=true) ->
     super();
 
   initialize: ->
@@ -57,7 +57,13 @@ class InsertVariableView extends SelectListView
 
   confirmed: (item) ->
     @cancel();
-    @editor.getModel().insertText("{#{item.name}}");
+
+    text = item.name;
+
+    if @addBraces
+      text = "{" + text + "}";
+
+    @editor.getModel().insertText(text);
     @editor.focus();
 
   cancelled: ->

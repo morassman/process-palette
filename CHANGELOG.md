@@ -1,3 +1,9 @@
+## v0.14.1 (19 August 2017)
+- Added hooks for running custom JavaScript.
+
+## v0.14.0 (23 July 2017)
+- Added 'Run With' context menu to tree view.
+
 ## v0.13.0 (14 July 2017)
 - Added a `text` variable which contains the full text of the editor (@adrianmalacoda)
 - Added ability to supply stdin for the process (@adrianmalacoda)
