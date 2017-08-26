@@ -23,6 +23,7 @@ See the [changelog](https://github.com/morassman/process-palette/blob/master/CHA
 
 ![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/demo2.gif?raw=true)
 
+
 ## Quick Start
 Install Process Palette and then either generate or download a configuration file.
 
@@ -94,6 +95,26 @@ From here one can return to the list by pressing the button in the top left corn
 
 ### Notifications
 Each time a process is executed a message will be shown in the top right hand corner. A successful execution with an exit status code of 0 will show a success message. Anything other than 0 will show a warning. What these messages display can be configured or even disabled completely as will be seen in the Advanced Configuration section.
+
+## Tree View Integration
+Commands can be run from the tree view with the selected file as input to the command. Any command that references any of the `{file*}` variables will be available.
+
+To choose the command to run a file with, open the context menu on a file in the tree view and choose the command from the `Run With` sub menu.
+
+See the [example](#tree_view_example) at the top.
+
+## Command Palette
+Command|Description
+---|---
+Hide|Hides the output panel.
+Show|Shows the output panel.
+Toggle|Toggles the output panel's visibility.
+Edit Configuration|Opens graphical configuration editor.
+Reload Configuration|Reloads all configuration files. This is only necessary if a process-palette.json file was directly modified with a text editor.
+Rerun Last|Runs the last command that was executed again.
+Kill Focused Process|Kills the process that is currently shown.
+Kill And Remove Focused Process|Kill the process that is currently shown and removes its output.
+Remove Focused Output|Removes the output that is currently shown, unless the process is still running.
 
 ## Configuration Files
 The configuration files can also be edited by hand. The remainder of the document will describe how to do this.
@@ -189,13 +210,6 @@ Custom shortcut keys can also be associated with commands by adding a `keystroke
 ![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/command-palette-keystroke.png?raw=true)
 
 After reloading the configuration the `Ant: Default` command can be run by pressing `Ctrl-Alt-A`.
-
-## Tree View Integration
-Commands can be run from the tree view with the selected file as input to the command. Any command that references any of the `{file*}` variables will be available.
-
-To choose the command to run a file with, open the context menu on a file in the tree view and choose the command from the `Run With` sub menu.
-
-See the [example](#tree_view_example) at the top.
 
 ## Advanced Configuration
 The `namespace`, `action`, `command` and `keystroke` aren't the only properties that can be configured. Of these only the `action` and `command` are required. The rest are optional and have default values.
@@ -393,20 +407,9 @@ win|Converts a posix path to a Windows path.
 trim|Trims whitespace.
 
 ### Converting File Paths
-
 It may sometimes be necessary to convert a file path to use separators for a different platform. Any of the variables can be converted by piping it through a transform.
 
 If, for instance, you are running on Linux and need to convert the `filePath` variable to a Windows style path, then you can specify it as `{filePath | win}`. The opposite can also be done with `{filePath | unix}` or `{filePath | posix}` when running on Windows.
-
-## Command Palette
-Command|Description
----|---
-Hide|Hides the output panel.
-Show|Shows the output panel.
-Toggle|Toggles the output panel's visibility.
-Edit Configuration|Opens graphical configuration editor.
-Reload Configuration|Reloads all configuration files. This is only necessary if a process-palette.json file was directly modified with a text editor.
-Rerun Last|Runs the last command that was executed again.
 
 ## Detect Paths And Line Numbers
 Commands that write to the output panel can be configured to detect file paths and optionally line numbers.
