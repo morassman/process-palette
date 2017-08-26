@@ -42,8 +42,8 @@ module.exports = ProcessPalette =
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:toggle': => @togglePanel()
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:rerun-last': => @runLast()
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:kill-focused-process': => @mainView.killFocusedProcess(false)
-    @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:kill-and-discard-focused-process': => @mainView.killFocusedProcess(true)
-    @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:discard-focused-output': => @mainView.discardFocusedOutput()
+    @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:kill-and-remove-focused-process': => @mainView.killFocusedProcess(true)
+    @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:remove-focused-output': => @mainView.discardFocusedOutput()
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:edit-configuration': => @editConfiguration()
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:reload-configuration': => @reloadConfiguration()
     @subscriptions.add atom.commands.add 'atom-workspace',
