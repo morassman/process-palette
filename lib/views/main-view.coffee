@@ -6,6 +6,8 @@ ProcessListView = require './process-list-view'
 module.exports =
 class MainView extends View
 
+  @URI = 'atom://process-palette'
+
   constructor: (@main) ->
     super(@main);
     @viewHeight = 200;
@@ -14,7 +16,6 @@ class MainView extends View
 
   @content: (main) ->
     @div {class: "process-palette process-palette-resizer"}, =>
-      @div class: "process-palette-resize-handle"
       @div {class: "button-group"}, =>
         @button "Save", {class:"btn btn-sm btn-info inline-block-tight", outlet: "saveButton", click: "savePressed"}
         @button {class:"btn btn-xs icon-pencil inline-block-tight", outlet: "editButton", click: "editPressed"}
@@ -45,21 +46,20 @@ class MainView extends View
 
     @saveButton.hide();
 
-    @on 'mousedown', '.process-palette-resize-handle', (e) => @resizeStarted(e);
+  getTitle: ->
+    return 'Process Palette';
 
-  resizeStarted: =>
-    $(document).on('mousemove', @resizeView)
-    $(document).on('mouseup', @resizeStopped)
+  getURI: ->
+    return MainView.URI;
 
-  resizeStopped: =>
-    $(document).off('mousemove', @resizeView)
-    $(document).off('mouseup', @resizeStopped)
+  getPreferredLocation: ->
+    return 'bottom';
 
-  resizeView: ({pageY, which}) =>
-    return @resizeStopped() unless which is 1
+  getAllowedLocations: ->
+    return ['bottom', 'left', 'right'];
 
-    change = @offset().top - pageY;
-    @setViewHeight(@mainContent.height() + change);
+  isPermanentDockItem: ->
+    return false;
 
   setViewHeight: (@viewHeight) ->
     @viewHeight = Math.max(@viewHeight, 100);

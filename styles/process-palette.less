@@ -29,18 +29,6 @@
   }
 }
 
-.process-palette-resizer {
-  .process-palette-resize-handle {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: -5px;
-    height: 10px;
-    cursor: row-resize;
-    z-index: 3;
-  }
-}
-
 .process-palette {
   margin: 0;
   padding: 0;
@@ -63,6 +51,7 @@
     height: 100%;
     width: 100%;
     overflow: auto;
+    background: @tool-panel-background-color;
 
     .header {
       margin-top: 6px;
@@ -84,6 +73,14 @@
 .process-palette-process-list {
   height: 100%;
   width: 100%;
+  background: @tool-panel-background-color;
+}
+
+.process-toolbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 2px;
 }
 
 .process-palette-process {
@@ -159,6 +156,8 @@
 }
 
 .process-palette-button-view {
+  display: flex;
+  flex-direction: row;
   padding-right: 5px;
 
   .pid {

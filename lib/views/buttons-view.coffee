@@ -16,7 +16,7 @@ class ButtonsView extends View
 
   @content: ->
     @span =>
-      @span {outlet: "buttonListView"}
+      @span {style: "display: flex; flex-direction: row", outlet: "buttonListView"}
 
   getElement: ->
     return @element;

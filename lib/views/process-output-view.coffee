@@ -22,15 +22,16 @@ class ProcessOutputView extends View
 
   @content: (main, processController) ->
     @div =>
-      @div {class:"process-palette-process", style:'margin-bottom:5px', outlet:"header"}, =>
-        @button {class:'btn btn-xs icon-three-bars inline-block-tight', outlet:'showListViewButton', click:'showListView'}
-        @button {class:'btn btn-xs icon-playback-play inline-block-tight', outlet:'runButton', click:'runButtonPressed'}
-        @span {class:'header inline-block text-highlight', outlet: 'commandName'}
-        @span {class:'keystroke inline-block highlight', outlet:'keystroke'}
-        @span {class:'btn-group'}, =>
-          @button {class:'btn btn-xs icon-trashcan', style:'margin-left:15px', outlet:'clearButton', click:'clearOutput'}
-          @button {class:'btn btn-xs icon-lock', style:'margin-right:15px', outlet:'scrollLockButton', click:'toggleScrollLock'}
-        @subview "buttonsView", new ButtonsView(main, processController.configController, processController);
+      @div {class:'process-palette-process', outlet:'header'}, =>
+        @div class:'process-toolbar', =>
+          @button {class:'btn btn-xs icon-three-bars inline-block-tight', outlet:'showListViewButton', click:'showListView'}
+          @button {class:'btn btn-xs icon-playback-play inline-block-tight', outlet:'runButton', click:'runButtonPressed'}
+          @span {class:'header inline-block text-highlight', outlet: 'commandName'}
+          @span {class:'keystroke inline-block highlight', outlet:'keystroke'}
+          @span {class:'btn-group'}, =>
+            @button {class:'btn btn-xs icon-trashcan', outlet:'clearButton', click:'clearOutput'}
+            @button {class:'btn btn-xs icon-lock', style:'margin-right:15px', outlet:'scrollLockButton', click:'toggleScrollLock'}
+          @subview "buttonsView", new ButtonsView(main, processController.configController, processController);
       @div {class:"process-palette-output-panel native-key-bindings", tabindex: -1, outlet:'outputPanel'}
 
   initialize: ->

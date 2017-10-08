@@ -35,7 +35,7 @@ module.exports = ProcessPalette =
     @projectControllers = [];
     @mainView = new MainView(@);
     @treeViewController = new TreeViewController(@);
-    @bottomPanel = atom.workspace.addBottomPanel(item: @mainView.getElement(), visible: false);
+    # @bottomPanel = atom.workspace.addBottomPanel(item: @mainView.getElement(), visible: false);
 
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:show': => @showPanel()
     @subscriptions.add atom.commands.add 'atom-workspace', 'process-palette:hide': => @hidePanel()
@@ -55,11 +55,11 @@ module.exports = ProcessPalette =
     #   @subscriptions.add editor.onDidSave (event) =>
     #     @fileSaved(event.path);
 
-    if _.isNumber(@state.height)
-      @mainView.setViewHeight(@state.height);
+    # if _.isNumber(@state.height)
+      # @mainView.setViewHeight(@state.height);
 
-    if @state.visible
-      @bottomPanel.show();
+    # if @state.visible
+    #   @showPanel();
 
     process.nextTick () => @load()
 
@@ -76,7 +76,7 @@ module.exports = ProcessPalette =
   serialize: ->
     if @mainView != null
       state = {};
-      state.visible = @bottomPanel.isVisible();
+      # state.visible = @bottomPanel.isVisible();
       state.height = @mainView.viewHeight;
       return state;
 
@@ -142,18 +142,56 @@ module.exports = ProcessPalette =
     atom.notifications.addInfo("Process Palette configurations reloaded");
 
   togglePanel: ->
-    if @bottomPanel.visible
-      @bottomPanel.hide();
+    if !@isVisible()
+      @showPanel();
     else
-      @bottomPanel.show();
+      @hidePanel();
 
   showPanel: ->
-    if !@bottomPanel.visible
-      @bottomPanel.show();
+    paneContainer = atom.workspace.paneContainerForURI(@mainView.getURI());
+
+    if paneContainer?
+      paneContainer.show();
+    else
+      atom.workspace.open(@mainView, {
+        searchAllPanes: true,
+        activatePane: true,
+        activateItem: true
+      }).then =>
+        paneContainer = atom.workspace.paneContainerForURI(@mainView.getURI());
+
+        if paneContainer?
+          paneContainer.show();
 
   hidePanel: ->
-    if @bottomPanel.visible
-      @bottomPanel.hide();
+    atom.workspace.hide(@mainView);
+
+  isVisible: ->
+    if @bottomPanel
+      return @state.visible;
+    else
+      return @isVisibleInDock();
+
+  isVisibleInDock: ->
+    dock = @getDock();
+
+    if !dock? or !dock.isVisible()
+      return false;
+
+    if !dock.getActivePane()?
+      return false;
+
+    return dock.getActivePane().getActiveItem() is @mainView;
+
+  getDock: ->
+    if atom.workspace.getBottomDock().getPaneItems().indexOf(@mainView) >= 0
+      return atom.workspace.getBottomDock();
+    if atom.workspace.getLeftDock().getPaneItems().indexOf(@mainView) >= 0
+      return atom.workspace.getLeftDock();
+    if atom.workspace.getRightDock().getPaneItems().indexOf(@mainView) >= 0
+      return atom.workspace.getRightDock();
+
+    return null;
 
   runLast: ->
     configController = @getLastRunConfigController();
