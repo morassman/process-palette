@@ -21,7 +21,7 @@ class ProcessOutputView extends View
     @setScrollLockEnabled(@processController.config.scrollLockEnabled);
 
   @content: (main, processController) ->
-    @div =>
+    @div style:'display: flex; flex-direction: column; flex: 1', =>
       @div {class:'process-palette-process', outlet:'header'}, =>
         @div class:'process-toolbar', =>
           @button {class:'btn btn-xs icon-three-bars inline-block-tight', outlet:'showListViewButton', click:'showListView'}
@@ -107,7 +107,7 @@ class ProcessOutputView extends View
     @outputChanged();
 
   calculateHeight: =>
-    @outputPanel.height(@main.mainView.height() - @header.height() - 5);
+    # @outputPanel.height(@main.mainView.height() - @header.height() - 5);
 
   processStarted: =>
 

@@ -15,7 +15,7 @@ class MainView extends View
     @showHelpView();
 
   @content: (main) ->
-    @div {class: "process-palette process-palette-resizer"}, =>
+    @div {class: "process-palette"}, =>
       @div {class: "button-group"}, =>
         @button "Save", {class:"btn btn-sm btn-info inline-block-tight", outlet: "saveButton", click: "savePressed"}
         @button {class:"btn btn-xs icon-pencil inline-block-tight", outlet: "editButton", click: "editPressed"}
@@ -26,7 +26,7 @@ class MainView extends View
       @div {class: "main-content", outlet: "mainContent"}, =>
         @subview "helpView", new HelpView(main)
         @subview "listView", new ProcessListView(main)
-        @div {outlet: "outputViewContainer"}
+        @div {class: "output-view", outlet: "outputViewContainer"}
 
   initialize: ->
     @disposables = new CompositeDisposable();
@@ -62,11 +62,11 @@ class MainView extends View
     return false;
 
   setViewHeight: (@viewHeight) ->
-    @viewHeight = Math.max(@viewHeight, 100);
-    @mainContent.height(@viewHeight);
-    @viewHeight = @mainContent.height();
-    @listView.parentHeightChanged(@viewHeight);
-    @outputView?.parentHeightChanged(@viewHeight);
+    # @viewHeight = Math.max(@viewHeight, 100);
+    # @mainContent.height(@viewHeight);
+    # @viewHeight = @mainContent.height();
+    # @listView.parentHeightChanged(@viewHeight);
+    # @outputView?.parentHeightChanged(@viewHeight);
 
   setSaveButtonVisible: (visible) ->
     if visible

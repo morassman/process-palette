@@ -81,7 +81,6 @@ module.exports = ProcessPalette =
     if @mainView != null
       state = {};
       state.visible = @getDock() != null;
-      state.height = @mainView.viewHeight;
       return state;
 
     return @state;

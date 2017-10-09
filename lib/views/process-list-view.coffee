@@ -64,4 +64,4 @@ class ProcessListView extends View
     @element
 
   parentHeightChanged: (parentHeight) ->
-    @processList.height(parentHeight);
+    # @processList.height(parentHeight);
