@@ -58,8 +58,12 @@ module.exports = ProcessPalette =
     # if _.isNumber(@state.height)
       # @mainView.setViewHeight(@state.height);
 
-    # if @state.visible
-    #   @showPanel();
+    atom.workspace.addOpener (uri) =>
+      if uri == @mainView.getURI()
+        return @mainView;
+
+    if @state.visible
+      @showPanel(false);
 
     process.nextTick () => @load()
 
@@ -76,7 +80,7 @@ module.exports = ProcessPalette =
   serialize: ->
     if @mainView != null
       state = {};
-      # state.visible = @bottomPanel.isVisible();
+      state.visible = @getDock() != null;
       state.height = @mainView.viewHeight;
       return state;
 
@@ -142,35 +146,23 @@ module.exports = ProcessPalette =
     atom.notifications.addInfo("Process Palette configurations reloaded");
 
   togglePanel: ->
-    if !@isVisible()
+    if @isVisibleInDock()
+      @hidePanel()
+    else
       @showPanel();
-    else
-      @hidePanel();
 
-  showPanel: ->
-    paneContainer = atom.workspace.paneContainerForURI(@mainView.getURI());
-
-    if paneContainer?
-      paneContainer.show();
-    else
-      atom.workspace.open(@mainView, {
-        searchAllPanes: true,
-        activatePane: true,
-        activateItem: true
-      }).then =>
-        paneContainer = atom.workspace.paneContainerForURI(@mainView.getURI());
-
-        if paneContainer?
-          paneContainer.show();
+  showPanel: (activate = true) ->
+    atom.workspace.open(@mainView.getURI(), {
+      searchAllPanes: true,
+      activatePane: activate,
+      activateItem: activate
+    });
 
   hidePanel: ->
     atom.workspace.hide(@mainView);
 
   isVisible: ->
-    if @bottomPanel
-      return @state.visible;
-    else
-      return @isVisibleInDock();
+    return @isVisibleInDock();
 
   isVisibleInDock: ->
     dock = @getDock();
