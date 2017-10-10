@@ -1,3 +1,6 @@
+## v0.14.2 (10 October 2017)
+- Moved panel to the dock.
+
 ## v0.14.1 (19 August 2017)
 - Added hooks for running custom JavaScript.
 
