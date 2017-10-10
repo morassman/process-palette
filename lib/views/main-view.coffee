@@ -171,7 +171,7 @@ class MainView extends View
     if !@outputViewContainer.isHidden()
       @outputView?.processController.discard();
 
-  destroy: ->
+  deactivate: ->
     @listView.destroy();
     @helpView.destroy();
     @disposables.dispose();

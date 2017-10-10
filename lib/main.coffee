@@ -59,7 +59,7 @@ module.exports = ProcessPalette =
       # @mainView.setViewHeight(@state.height);
 
     atom.workspace.addOpener (uri) =>
-      if uri == @mainView.getURI()
+      if uri == MainView.URI
         return @mainView;
 
     if @state.visible
@@ -71,7 +71,7 @@ module.exports = ProcessPalette =
     @subscriptions.dispose();
     @disposeProjectControllers();
     @treeViewController.dispose();
-    @mainView.destroy();
+    @mainView.deactivate();
 
   disposeProjectControllers: ->
     for projectController in @projectControllers
@@ -151,7 +151,7 @@ module.exports = ProcessPalette =
       @showPanel();
 
   showPanel: (activate = true) ->
-    atom.workspace.open(@mainView.getURI(), {
+    atom.workspace.open(MainView.URI, {
       searchAllPanes: true,
       activatePane: activate,
       activateItem: activate
