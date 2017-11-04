@@ -9,7 +9,7 @@ class TableRowView extends HTMLElement
     deleteElement = document.createElement("td");
     jdelete = $(deleteElement);
     deleteButton = $$ ->
-      @button {class: "btn btn-sm icon icon-x"}
+      @button {class: "btn btn-sm icon-x"}
 
     deleteButton.click => @delete();
     deleteButton.on 'mousedown', (e) -> e.preventDefault();

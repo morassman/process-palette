@@ -24,13 +24,13 @@ class ProcessOutputView extends View
     @div {class:'process-output-view'}, =>
       @div {class:'process-palette-process', outlet:'header'}, =>
         @div {class:'process-toolbar'}, =>
-          @button {class:'btn btn-xs icon icon-three-bars inline-block-tight', outlet:'showListViewButton', click:'showListView'}
-          @button {class:'btn btn-xs icon icon-playback-play inline-block-tight', outlet:'runButton', click:'runButtonPressed'}
+          @button {class:'btn btn-sm btn-fw icon-three-bars inline-block-tight', outlet:'showListViewButton', click:'showListView'}
+          @button {class:'btn btn-sm btn-fw icon-playback-play inline-block-tight', outlet:'runButton', click:'runButtonPressed'}
           @span {class:'header inline-block text-highlight', outlet: 'commandName'}
           @span {class:'keystroke inline-block highlight', outlet:'keystroke'}
           @span {class:'btn-group'}, =>
-            @button {class:'btn btn-xs icon icon-trashcan', outlet:'clearButton', click:'clearOutput'}
-            @button {class:'btn btn-xs icon icon-lock', style:'margin-right:15px', outlet:'scrollLockButton', click:'toggleScrollLock'}
+            @button {class:'btn btn-sm btn-fw icon-trashcan', outlet:'clearButton', click:'clearOutput'}
+            @button {class:'btn btn-sm btn-fw icon-lock', style:'margin-right:15px', outlet:'scrollLockButton', click:'toggleScrollLock'}
           @subview "buttonsView", new ButtonsView(main, processController.configController, processController);
       @div {class:"process-palette-output-panel native-key-bindings", tabindex: -1, outlet:'outputPanel'}
 

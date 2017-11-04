@@ -12,9 +12,9 @@ class ButtonView extends View
       @showTrashIcon();
 
   @content: (main, configController, processController) ->
-    @span {class: "btn-group", style: "display: flex"}, =>
-      @button {class: "btn btn-xs icon icon-primitive-square", outlet: "killButton", click: "killButtonPressed"}
-      @button "#{processController.getProcessID()}", {class: "btn btn-xs ", outlet: "showOutputButton", click: "showOutputButtonPressed"}
+    @span {class: "btn-group", style: "display: flex; margin-right: 0.5em"}, =>
+      @button {class: "btn btn-sm btn-fw icon-primitive-square", outlet: "killButton", click: "killButtonPressed"}
+      @button "#{processController.getProcessID()}", {class: "btn btn-sm ", outlet: "showOutputButton", click: "showOutputButtonPressed"}
 
   initialize: ->
     @disposables = new CompositeDisposable();

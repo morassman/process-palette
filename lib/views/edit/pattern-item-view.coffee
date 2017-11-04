@@ -7,7 +7,7 @@ class PatternItemView extends HTMLElement
     @checkbox = $$ ->
       @input {type: 'checkbox'}
     button = $$ ->
-      @button {class: 'btn btn-sm icon icon-arrow-up pattern-button'}
+      @button {class: 'btn btn-sm icon-arrow-up pattern-button'}
     nameSpan = $$ ->
       @span {class: 'pattern-name'}
     expressionSpan = $$ ->
