@@ -1,4 +1,4 @@
-## v0.14.2 (10 October 2017)
+## v0.15.1 (10 October 2017)
 - Moved panel to the dock.
 
 ## v0.14.1 (19 August 2017)
