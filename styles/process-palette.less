@@ -59,8 +59,6 @@
   }
 
   .help {
-    // height: 100%;
-    // width: 100%;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -86,8 +84,10 @@
 }
 
 .process-palette-process-list {
-  height: 100%;
-  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
   background: @tool-panel-background-color;
 }
 
@@ -154,17 +154,9 @@
   }
 }
 
-.process-palette-scrollable {
-  overflow: auto;
-  height: 100%;
-  width: 100%;
-}
-
 .process-palette-output-panel {
   flex: 1;
   overflow: auto;
-  // height: 100%;
-  width: 100%;
   white-space: pre;
   background-color: black;
   color: white;
@@ -177,8 +169,8 @@
   padding-right: 5px;
 
   .pid {
-    border: 1px solid;
-    border-color: @button-background-color
+    // border: 1px solid;
+    // border-color: @button-background-color
   }
 }
 
@@ -380,4 +372,10 @@
 
   }
 
+}
+
+.process-output-view {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }

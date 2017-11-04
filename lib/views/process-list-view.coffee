@@ -1,4 +1,4 @@
-{$$, View} = require 'atom-space-pen-views'
+{$, $$, View} = require 'atom-space-pen-views'
 {CompositeDisposable} = require 'atom'
 
 ProcessView = null;
@@ -8,6 +8,7 @@ class ProcessListView extends View
 
   constructor: (@main) ->
     super(@main);
+    @processList = $(@element);
     @processViews = [];
     @disposables = new CompositeDisposable();
 
@@ -15,9 +16,7 @@ class ProcessListView extends View
     @disposables.add atom.config.onDidChange 'process-palette.palettePanel.showOutputTarget', ({newValue, oldValue}) => @setOutputTargetVisible(newValue)
 
   @content: ->
-    @div {class:"process-palette-process-list"}, =>
-      @div {class:"process-palette-scrollable", outlet:"processList"}
-
+    @div {class:"process-palette-process-list"}
 
   setCommandVisible: (visible) ->
     for processView in @processViews
@@ -58,7 +57,7 @@ class ProcessListView extends View
 
   destroy: ->
     @disposables.dispose();
-    @element.remove();
+    @processList.remove();
 
   getElement: ->
     @element

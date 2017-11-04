@@ -13,7 +13,7 @@ class HelpView extends View
     configFile = new File(atom.config.getUserConfigPath());
     configFolder = configFile.getParent().getRealPathSync();
 
-    @div {class: "help", style: "display: flex"}, =>
+    @div {class: "help"}, =>
       @h2 {class: "header"}, 'Process Palette'
       @div {class: "content"}, =>
         @div =>

@@ -43,8 +43,8 @@ class ProcessView extends View
 
     @div class:'process-palette-process', =>
       @div class: 'process-toolbar', =>
-        @button {class:'btn btn-xs icon-playback-play inline-block-tight', outlet:'runButton', click:'runButtonPressed'}
-        @button {class:'btn btn-xs icon-pencil inline-block-tight', outlet:'editButton', click:'editButtonPressed'}
+        @button {class:'btn btn-xs icon icon-playback-play inline-block-tight', outlet:'runButton', click:'runButtonPressed'}
+        @button {class:'btn btn-xs icon icon-pencil inline-block-tight', outlet:'editButton', click:'editButtonPressed'}
         @span _.humanizeEventName(configController.config.getCommandName()), headerArgs
         if configController.config.keystroke
           @span _.humanizeKeystroke(configController.config.keystroke), class:'keystroke inline-block highlight'

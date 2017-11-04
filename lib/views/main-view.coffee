@@ -18,11 +18,11 @@ class MainView extends View
     @div {class: "process-palette"}, =>
       @div {class: "button-group"}, =>
         @button "Save", {class:"btn btn-sm btn-info inline-block-tight", outlet: "saveButton", click: "savePressed"}
-        @button {class:"btn btn-xs icon-pencil inline-block-tight", outlet: "editButton", click: "editPressed"}
-        @button {class:"btn btn-xs icon-sync inline-block-tight", outlet: "reloadButton", click: "reloadPressed"}
-        @button {class:"btn btn-xs icon-gear inline-block-tight", outlet: "settingsButton", click: "settingsPressed"}
-        @button {class:"btn btn-xs icon-question inline-block-tight", outlet: "helpButton", click: "toggleHelpView"}
-        @button {class:"btn btn-xs icon-chevron-down inline-block-tight", outlet: "hideButton", click: "closePressed"}
+        @button {class:"btn btn-xs icon icon-pencil inline-block-tight", outlet: "editButton", click: "editPressed"}
+        @button {class:"btn btn-xs icon icon-sync inline-block-tight", outlet: "reloadButton", click: "reloadPressed"}
+        @button {class:"btn btn-xs icon icon-gear inline-block-tight", outlet: "settingsButton", click: "settingsPressed"}
+        @button {class:"btn btn-xs icon icon-question inline-block-tight", outlet: "helpButton", click: "toggleHelpView"}
+        @button {class:"btn btn-xs icon icon-chevron-down inline-block-tight", outlet: "hideButton", click: "closePressed"}
       @div {class: "main-content", outlet: "mainContent"}, =>
         @subview "helpView", new HelpView(main)
         @subview "listView", new ProcessListView(main)
