@@ -30,12 +30,12 @@ class MainView extends View
 
   initialize: ->
     @disposables = new CompositeDisposable();
-    @disposables.add(atom.tooltips.add(@saveButton, {title: "Save changes"}));
-    @disposables.add(atom.tooltips.add(@helpButton, {title: "Toggle help"}));
-    @disposables.add(atom.tooltips.add(@editButton, {title: "Edit configuration"}));
-    @disposables.add(atom.tooltips.add(@reloadButton, {title: "Reload configurations"}));
-    @disposables.add(atom.tooltips.add(@settingsButton, {title: "Settings"}));
-    @disposables.add(atom.tooltips.add(@hideButton, {title: "Hide"}));
+    @disposables.add(atom.tooltips.add(@saveButton[0], {title: "Save changes"}));
+    @disposables.add(atom.tooltips.add(@helpButton[0], {title: "Toggle help"}));
+    @disposables.add(atom.tooltips.add(@editButton[0], {title: "Edit configuration"}));
+    @disposables.add(atom.tooltips.add(@reloadButton[0], {title: "Reload configurations"}));
+    @disposables.add(atom.tooltips.add(@settingsButton[0], {title: "Settings"}));
+    @disposables.add(atom.tooltips.add(@hideButton[0], {title: "Hide"}));
 
     @saveButton.on 'mousedown', (e) -> e.preventDefault();
     @editButton.on 'mousedown', (e) -> e.preventDefault();
