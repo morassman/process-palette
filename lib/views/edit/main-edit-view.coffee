@@ -31,8 +31,8 @@ class MainEditView extends View
 
   initialize: ->
     @disposables = new CompositeDisposable();
-    @disposables.add(atom.tooltips.add(@toggleButton, {title: "Toggle panel"}));
-    @disposables.add(atom.tooltips.add(@reloadButton, {title: "Apply and reload"}));
+    @disposables.add(atom.tooltips.add(@toggleButton[0], {title: "Toggle panel"}));
+    @disposables.add(atom.tooltips.add(@reloadButton[0], {title: "Apply and reload"}));
     @disposables.add atom.workspace.onWillDestroyPaneItem (e) => @willDestroy(e);
 
     @toggleButton.on 'mousedown', (e) -> e.preventDefault();
