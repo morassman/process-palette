@@ -64,8 +64,8 @@ class ProcessView extends View
 
   initialize: ->
     @disposables = new CompositeDisposable();
-    @disposables.add(atom.tooltips.add(@runButton, {title: 'Run process'}));
-    @disposables.add(atom.tooltips.add(@editButton, {title: 'Edit'}));
+    @disposables.add(atom.tooltips.add(@runButton[0], {title: 'Run process'}));
+    @disposables.add(atom.tooltips.add(@editButton[0], {title: 'Edit'}));
     @commandEditor.getModel().setText(@configController.config.getFullCommand());
     @commandEditor.addClass('command-editor');
     @commandEditor.addClass('multi-line-editor');
