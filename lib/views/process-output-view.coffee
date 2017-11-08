@@ -80,10 +80,10 @@ class ProcessOutputView extends View
       @disableScrollLockIfAtBottom();
 
   addToolTips: ->
-    @disposables.add(atom.tooltips.add(@showListViewButton, {title: 'Show palette'}));
-    @disposables.add(atom.tooltips.add(@scrollLockButton, {title: 'Scroll lock'}));
-    @disposables.add(atom.tooltips.add(@clearButton, {title: 'Clear output'}));
-    @disposables.add(atom.tooltips.add(@runButton, {title: 'Run process'}));
+    @disposables.add(atom.tooltips.add(@showListViewButton[0], {title: 'Show palette'}));
+    @disposables.add(atom.tooltips.add(@scrollLockButton[0], {title: 'Scroll lock'}));
+    @disposables.add(atom.tooltips.add(@clearButton[0], {title: 'Clear output'}));
+    @disposables.add(atom.tooltips.add(@runButton[0], {title: 'Run process'}));
 
   disableScrollLockIfAtBottom: ->
     if @processController.process == null
