@@ -317,6 +317,7 @@ fileProjectPath | Absolute path of file's project folder.
 selection | Currently selected text.
 word | Word under cursor.
 line | Line at cursor.
+lineNo | Line number at cursor.
 
 **Input from user**
 

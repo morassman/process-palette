@@ -102,8 +102,10 @@ class ProcessController
       lastCursor = editor.getLastCursor();
       if lastCursor?
         @fields.line = lastCursor.getCurrentBufferLine();
+        @fields.lineNo = lastCursor.getBufferRow() + 1;
       else
-        @fields.line = '';
+        @fields.line = 1;
+        @fields.lineNo = '';
 
     if filePath
       file = new File(filePath);
