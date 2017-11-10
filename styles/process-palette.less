@@ -4,7 +4,7 @@
 // for a full listing of what's available.
 @import "ui-variables";
 
-.process-palette-split-view {
+.split-view {
   width: 100%;
   height: 100%;
 
@@ -34,6 +34,7 @@
   padding: 0;
   display: flex;
   flex-direction: column;
+  background: @tool-panel-background-color;
   // min-height: 100px;
 
   .main-content {
@@ -83,7 +84,7 @@
   }
 }
 
-.process-palette-process-list {
+.process-list {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -98,7 +99,7 @@
   margin-bottom: 2px;
 }
 
-.process-palette-process {
+.process-list-item {
   padding: 2px;
   background: @tool-panel-background-color;
 
@@ -154,7 +155,7 @@
   }
 }
 
-.process-palette-output-panel {
+.output-panel {
   flex: 1;
   overflow: auto;
   white-space: pre;
@@ -163,18 +164,7 @@
   font-family: Menlo, Consolas, 'DejaVu Sans Mono', monospace;
 }
 
-.process-palette-button-view {
-  display: flex;
-  flex-direction: row;
-  padding-right: 5px;
-
-  .pid {
-    // border: 1px solid;
-    // border-color: @button-background-color
-  }
-}
-
-.process-palette-path-view {
+.path-view {
   cursor: pointer;
   cursor: hand;
   text-decoration: underline;
@@ -185,7 +175,7 @@
   cursor: hand;
 }
 
-.process-palette-command-edit-view {
+.command-edit-view {
   // overflow: auto;
   width: 100%;
   height: 100%;
@@ -237,7 +227,7 @@
 
 }
 
-.process-palette-pattern-choose-view {
+.pattern-choose-view {
 
   .pattern-button {
     margin-right: 10px;
@@ -252,13 +242,13 @@
   }
 }
 
-.process-palette-pattern-edit-view {
+.pattern-edit-view {
   .header {
     text-align: center;
   }
 }
 
-.process-palette-table-edit-view {
+.table-edit-view {
   border: 1px solid @tool-panel-border-color;
 
   table {
@@ -293,7 +283,7 @@
 
 }
 
-.process-palette-main-edit-view {
+.main-edit-view {
   // overflow: auto;
   width: 100%;
   height: 100%;

@@ -10,7 +10,7 @@ class PathView extends View
 
   @content: (pathPattern) ->
     @span =>
-      @span pathPattern.match, {class: "process-palette-path-view", click: "clicked"}
+      @span pathPattern.match, {class: "path-view", click: "clicked"}
 
   clicked: ->
     path = fsp.normalize(@pathPattern.path);

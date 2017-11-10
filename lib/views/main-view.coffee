@@ -1,6 +1,6 @@
 HelpView = require './help-view'
-ProcessListView = require './process-list-view'
-{$, View} = require 'atom-space-pen-views'
+ProjectView = require './project-view'
+{$, $$, View, TextEditorView} = require 'atom-space-pen-views'
 {CompositeDisposable} = require 'atom'
 
 module.exports =
@@ -25,7 +25,7 @@ class MainView extends View
         @button {class:"btn btn-sm btn-fw icon-chevron-down inline-block-tight", outlet: "hideButton", click: "closePressed"}
       @div {class: "main-content", outlet: "mainContent"}, =>
         @subview "helpView", new HelpView(main)
-        @subview "listView", new ProcessListView(main)
+        @div {outlet: "listView"}
         @div {class: "output-view", outlet: "outputViewContainer"}
 
   initialize: ->
@@ -139,6 +139,17 @@ class MainView extends View
   closePressed: =>
     @main.hidePanel();
 
+  addProjectView: (view) =>
+    @listView.append(view);
+    # @listDiv[0].appendChild(view.get(0));
+    # viewElement = document.createElement("div");
+    # @listDiv[0].appendChild(viewElement);
+    # jview = $(viewElement);
+    # jview.append(view);
+
+
+    @showListView();
+
   addConfigController: (configController) =>
     @listView.addConfigController(configController);
     @showListView();
@@ -172,7 +183,7 @@ class MainView extends View
       @outputView?.processController.discard();
 
   deactivate: ->
-    @listView.destroy();
+    # @listView.destroy();
     @helpView.destroy();
     @disposables.dispose();
     @element.remove();

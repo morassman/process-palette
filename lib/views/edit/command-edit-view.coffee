@@ -13,7 +13,7 @@ class CommandEditView extends View
 
   @content: ->
     @div =>
-      @div {class:'process-palette-command-edit-view'}, =>
+      @div {class:'command-edit-view'}, =>
         @table =>
           @tbody =>
             @tr =>

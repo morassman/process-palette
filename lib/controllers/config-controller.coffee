@@ -114,6 +114,7 @@ class ConfigController
   # Changes the command to execute. This is called when editing the command from the panel.
   setCommand: (command) ->
     @config.command = command;
+    @getMain().setDirty(true);
     @recreateTreeViewMenuItemIfNeeded();
     # @saveFile();
 
@@ -193,6 +194,7 @@ class ConfigController
 
     if (index != -1)
       @processControllers.splice(index, 1);
+      processController.hasBeenRemoved();
       @notifyProcessControllerRemoved(processController);
 
   removeOldest: ->
@@ -254,6 +256,9 @@ class ConfigController
       return 'Stream to ' + @config.outputTarget;
 
     return 'Output to ' + @config.outputTarget;
+
+  guiEdit: ->
+    @getMain().guiEditCommand(@);
 
   notifyProcessStarted: (processController) ->
     @processControllers.push(processController);

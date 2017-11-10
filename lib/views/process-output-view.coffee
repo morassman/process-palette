@@ -22,7 +22,7 @@ class ProcessOutputView extends View
 
   @content: (main, processController) ->
     @div {class:'process-output-view'}, =>
-      @div {class:'process-palette-process', outlet:'header'}, =>
+      @div {class:'process-list-item', outlet:'header'}, =>
         @div {class:'process-toolbar'}, =>
           @button {class:'btn btn-sm btn-fw icon-three-bars inline-block-tight', outlet:'showListViewButton', click:'showListView'}
           @button {class:'btn btn-sm btn-fw icon-playback-play inline-block-tight', outlet:'runButton', click:'runButtonPressed'}
@@ -31,8 +31,8 @@ class ProcessOutputView extends View
           @span {class:'btn-group'}, =>
             @button {class:'btn btn-sm btn-fw icon-trashcan', outlet:'clearButton', click:'clearOutput'}
             @button {class:'btn btn-sm btn-fw icon-lock', style:'margin-right:15px', outlet:'scrollLockButton', click:'toggleScrollLock'}
-          @subview "buttonsView", new ButtonsView(main, processController.configController, processController);
-      @div {class:"process-palette-output-panel native-key-bindings", tabindex: -1, outlet:'outputPanel'}
+          @subview "buttonsView", new ButtonsView(processController.configController, processController);
+      @div {class:"output-panel native-key-bindings", tabindex: -1, outlet:'outputPanel'}
 
   initialize: ->
     @disposables = new CompositeDisposable();

@@ -4,7 +4,7 @@ ButtonView = require './button-view'
 module.exports =
 class ButtonsView extends View
 
-  constructor: (@main, @configController, @parentProcessController) ->
+  constructor: (@configController, @parentProcessController) ->
     super();
     @buttonViews = [];
 
@@ -32,10 +32,10 @@ class ButtonsView extends View
     @addButton(processController);
 
     if processController.config.outputTarget == "panel" and processController.config.autoShowOutput
-      @main.showProcessOutput(processController);
+      processController.showProcessOutput();
 
   addButton: (processController) ->
-    buttonView = new ButtonView(@main, @configController, processController);
+    buttonView = new ButtonView(@configController, processController);
 
     if processController == @parentProcessController
       buttonView.highlight();

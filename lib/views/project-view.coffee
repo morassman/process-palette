@@ -4,10 +4,10 @@
 ProcessView = null;
 
 module.exports =
-class ProcessListView extends View
+class ProjectView extends View
 
-  constructor: (@main) ->
-    super(@main);
+  constructor: (@controller) ->
+    super();
     @processList = $(@element);
     @processViews = [];
     @disposables = new CompositeDisposable();
@@ -16,7 +16,7 @@ class ProcessListView extends View
     @disposables.add atom.config.onDidChange 'process-palette.palettePanel.showOutputTarget', ({newValue, oldValue}) => @setOutputTargetVisible(newValue)
 
   @content: ->
-    @div {class:"process-palette-process-list"}
+    @div {class:"process-list"}
 
   setCommandVisible: (visible) ->
     for processView in @processViews
@@ -28,7 +28,7 @@ class ProcessListView extends View
 
   addConfigController: (configController) =>
     ProcessView ?= require './process-view'
-    processView = new ProcessView(@main, configController);
+    processView = new ProcessView(configController);
     @processViews.push(processView);
 
     @processList.append $$ ->

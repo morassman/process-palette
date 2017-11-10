@@ -13,7 +13,7 @@ class MainEditView extends View
 
   @content: (title, filePath, config) ->
     @div =>
-      @div {class: 'process-palette-main-edit-view'}, =>
+      @div {class: 'main-edit-view'}, =>
         @subview 'splitView', new SplitView();
         @div {class: 'left-view', outlet: 'leftView'}, =>
           @span title, {class: 'title text-highlight'}

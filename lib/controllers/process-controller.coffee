@@ -6,7 +6,7 @@ shell = require 'shelljs'
 ProcessConfig = require '../process-config'
 ProcessOutputView = require '../views/process-output-view'
 InputDialogView = require '../views/input-dialog-view'
-ProjectsView = require '../views/projects-view'
+ProjectSelectView = require '../views/project-select-view'
 Buffer = require './buffer'
 cp = require('child_process')
 {allowUnsafeNewFunction} = require 'loophole'
@@ -71,6 +71,12 @@ class ProcessController
     # TODO : The key binding should preferably be removed, but atom.keymaps.findKeyBindings throws an error.
     @newFileDisposable?.dispose();
     @outputView?.destroy();
+
+  showProcessOutput: ->
+    @configController.getMain().showProcessOutput(@);
+
+  hasBeenRemoved: ->
+    @configController.getMain().processControllerRemoved(@);
 
   # Return false if the process didn't start.
   runProcessWithFile: (filePath) ->
@@ -246,7 +252,7 @@ class ProcessController
 
   takeProjectInput: ->
     callback = (value) => @projectInputCallback(value);
-    new ProjectsView(callback, true);
+    new ProjectSelectView(callback, true);
 
   projectInputCallback: (value) ->
     if value?

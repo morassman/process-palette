@@ -11,7 +11,7 @@ class TableEditView extends View
   @content: (columns) ->
     colWidth = 100 / columns.length;
 
-    @div {class: 'process-palette-table-edit-view'}, =>
+    @div {class: 'table-edit-view'}, =>
       @div {class: 'table-view'}, =>
         @table =>
           @colgroup =>

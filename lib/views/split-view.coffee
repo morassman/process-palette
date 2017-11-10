@@ -9,7 +9,7 @@ class SplitView extends View
       @leftMax = Number.MAX_SAFE_INTEGER;
 
   @content: ->
-    @div {class: 'process-palette-split-view'}, =>
+    @div {class: 'split-view'}, =>
       @div {class: 'left', outlet: 'left'}
       @div class: 'divider'
       @div {class: 'right', outlet: 'right'}

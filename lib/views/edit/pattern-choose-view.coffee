@@ -10,7 +10,7 @@ class PatternChooseView extends View
 
   @content: ->
     @div =>
-      @div {class: 'process-palette-pattern-choose-view'}, =>
+      @div {class: 'pattern-choose-view'}, =>
         @ul {class: 'list-group', outlet: 'list'}
 
   setPatterns: (@patterns, selectedPatternNames) ->

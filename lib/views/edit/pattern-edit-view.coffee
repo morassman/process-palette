@@ -9,7 +9,7 @@ class PatternEditView extends View
 
   @content: ->
     @div =>
-      @div {class: 'process-palette-pattern-edit-view'}, =>
+      @div {class: 'pattern-edit-view'}, =>
         @div {class: 'header'}, =>
           @h1 'Edit Patterns'
         @span 'Patterns are used to detect file paths and line number in the output when shown in the '

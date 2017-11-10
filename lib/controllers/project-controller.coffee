@@ -3,6 +3,7 @@ SaveController = require './save-controller'
 ConfigController = require './config-controller'
 ProcessController = require './process-controller'
 RegExpPattern = require '../pattern/regexp-pattern'
+ProjectView = require '../views/project-view'
 {Directory, File, BufferedProcess, CompositeDisposable} = require 'atom'
 os = require 'os';
 
@@ -17,6 +18,7 @@ class ProjectController
     @processConfigs = {};
     @global = null;
     @projectName = null;
+    @view = new ProjectView(@);
     @loadFile();
 
   getMain: ->
@@ -47,6 +49,7 @@ class ProjectController
 
   dispose: ->
     @clearControllers();
+    @view.remove();
 
   clearControllers: ->
     @clearConfigControllers();
@@ -54,7 +57,7 @@ class ProjectController
 
   clearConfigControllers: ->
     for configController in @configControllers
-      @main.mainView.removeConfigController(configController);
+      @view.removeConfigController(configController);
       configController.dispose();
 
     @configControllers = [];
@@ -110,7 +113,7 @@ class ProjectController
         if command.isValid()
           configController = new ConfigController(@, command);
           @configControllers.push(configController);
-          @main.mainView.addConfigController(configController);
+          @view.addConfigController(configController);
 
     if @processConfigs.saveCommands?
       for saveCommand in @processConfigs.saveCommands

@@ -1,8 +1,9 @@
 {Directory} = require 'atom'
 {SelectListView} = require 'atom-space-pen-views'
 
+# This view is used as a modal for selecting one of the projects that are open in Atom.
 module.exports =
-class ProjectsView extends SelectListView
+class ProjectSelectView extends SelectListView
 
   constructor: (@callback, @path = true) ->
     super();

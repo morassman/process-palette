@@ -206,6 +206,7 @@ module.exports = ProcessPalette =
     ProjectController ?= require './controllers/project-controller'
     projectController = new ProjectController(@, projectPath);
     @projectControllers.push(projectController);
+    @mainView.addProjectView(projectController.view);
 
   removeProjectController: (projectController) ->
     index = @projectControllers.indexOf(projectController);
