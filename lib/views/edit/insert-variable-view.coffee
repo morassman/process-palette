@@ -38,6 +38,7 @@ class InsertVariableView extends SelectListView
     items.push({name:'selection',description:'Currently selected text.'});
     items.push({name:'word',description:'Word under cursor.'});
     items.push({name:'line',description:'Line at cursor.'});
+    items.push({name:'lineNo',description:'Line number at cursor.'});
     items.push({name:'fullCommand',description:'The full command along with its arguments.'});
     items.push({name:'projectPath',description:'Path of the first project\'s folder.'});
     items.push({name:'selectProjectPath',description:'Prompts to choose the path of one of the projects in the workspace.'});
