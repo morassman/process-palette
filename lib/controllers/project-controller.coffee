@@ -34,6 +34,12 @@ class ProjectController
 
     return @global;
 
+  getDisplayName: ->
+    if @isGlobal()
+      return 'Global';
+
+    return @getProjectName();
+
   getProjectName: ->
     if @projectName == null
       dir = new Directory(@projectPath);

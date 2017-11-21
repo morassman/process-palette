@@ -24,8 +24,9 @@ class MainView extends View
         @button {class:"btn btn-sm btn-fw icon-question inline-block-tight", outlet: "helpButton", click: "toggleHelpView"}
         @button {class:"btn btn-sm btn-fw icon-chevron-down inline-block-tight", outlet: "hideButton", click: "closePressed"}
       @div {class: "main-content", outlet: "mainContent"}, =>
-        @subview "helpView", new HelpView(main)
-        @div {outlet: "listView"}
+        @div {outlet: "helpView"}, =>
+          @subview "hv", new HelpView(main)
+        @div {class: "projects-list", outlet: "listView"}
         @div {class: "output-view", outlet: "outputViewContainer"}
 
   initialize: ->

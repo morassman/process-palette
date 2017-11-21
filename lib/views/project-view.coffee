@@ -7,16 +7,39 @@ module.exports =
 class ProjectView extends View
 
   constructor: (@controller) ->
-    super();
-    @processList = $(@element);
+    super(@controller);
     @processViews = [];
+    @folded = false;
     @disposables = new CompositeDisposable();
 
     @disposables.add atom.config.onDidChange 'process-palette.palettePanel.showCommand', ({newValue, oldValue}) => @setCommandVisible(newValue)
     @disposables.add atom.config.onDidChange 'process-palette.palettePanel.showOutputTarget', ({newValue, oldValue}) => @setOutputTargetVisible(newValue)
 
-  @content: ->
-    @div {class:"process-list"}
+  @content: (controller) ->
+    @div {class: "project-view"}, =>
+      @div {class: "project-heading hand-cursor", click: "toggleFolded"}, =>
+        @div {class: "name", outlet: "projectName"}
+        @span {class: "icon icon-fold", outlet: "foldButton"}
+      @div {class: "process-list", outlet: "processList"}
+
+  initialize: ->
+    @projectName.html(@controller.getDisplayName());
+    @foldButton.on 'mousedown', (e) -> e.preventDefault();
+
+  toggleFolded: ->
+    if @folded
+      @foldButton.addClass('icon-fold');
+      @foldButton.removeClass('icon-unfold');
+    else
+      @foldButton.addClass('icon-unfold');
+      @foldButton.removeClass('icon-fold');
+
+    @folded = !@folded;
+
+    if @folded
+      @processList.hide();
+    else
+      @processList.show();
 
   setCommandVisible: (visible) ->
     for processView in @processViews
@@ -51,7 +74,7 @@ class ProjectView extends View
     return null;
 
   showProcessOutput: (processController) =>
-    @main.showProcessOutput(processController);
+    processController.showProcessOutput();
 
   serialize: ->
 

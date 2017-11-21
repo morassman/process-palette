@@ -1,5 +1,5 @@
 _ = require 'underscore-plus'
-{File, CompositeDisposable} = require 'atom'
+{Directory, File, CompositeDisposable} = require 'atom'
 MainView = require './views/main-view'
 TreeViewController = require './controllers/tree-view-controller'
 
@@ -203,6 +203,11 @@ module.exports = ProcessPalette =
     @mainView.processControllerRemoved(processController);
 
   addProjectPath: (projectPath) ->
+    file = new Directory(projectPath).getFile('process-palette.json');
+
+    if !file.existsSync()
+      return;
+
     ProjectController ?= require './controllers/project-controller'
     projectController = new ProjectController(@, projectPath);
     @projectControllers.push(projectController);
@@ -242,6 +247,7 @@ module.exports = ProcessPalette =
       exampleFile.read(false).then (content) =>
         file.create().then =>
           file.writeSync(content);
+          @addProjectPath(folderPath);
           @guiOpenFile(title, file);
     else
       @guiOpenFile(title, file);

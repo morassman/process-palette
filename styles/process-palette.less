@@ -35,13 +35,18 @@
   display: flex;
   flex-direction: column;
   background: @tool-panel-background-color;
-  // min-height: 100px;
 
   .main-content {
     flex: 1;
     display: flex;
     flex-direction: column;
+    overflow: auto;
     // height: 100%;
+
+    .projects-list {
+      /* Ensure that it doesn't overlap with the buttons in the top right. */
+      max-width: calc(~'100% - 20em');
+    }
 
     .output-view {
       flex: 1;
@@ -63,20 +68,21 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    align-items: center;
     overflow: auto;
     background: @tool-panel-background-color;
 
     .header {
       margin-top: 6px;
       padding: 0;
-      text-align: center;
+      // text-align: center;
     }
 
     .content {
       align-self: center;
       margin-top: 1em;
-      margin-left: 100px;
-      margin-right: 100px;
+      // margin-left: 100px;
+      // margin-right: 100px;
       margin-bottom: 1em;
       font-size: larger;
       line-height: 175%;
@@ -89,7 +95,9 @@
   display: flex;
   flex-direction: column;
   overflow: auto;
-  background: @tool-panel-background-color;
+  // background: @tool-panel-background-color;
+  padding-left: 1em;
+  padding-right: 3em;
 }
 
 .process-toolbar {
@@ -101,7 +109,7 @@
 
 .process-list-item {
   padding: 2px;
-  background: @tool-panel-background-color;
+  // background: @tool-panel-background-color;
 
   table {
     width: 100%;
@@ -121,25 +129,27 @@
     padding-right: 24px;
     color: @text-color-highlight;
     white-space: nowrap;
+    width: 7em;
   }
 
   .table-value {
-    width: 50%;
+    // width: 50%;
   }
 
   .table-button {
-    width: 50%;
+    // width: 50%;
     padding-left: 5px;
   }
 
   .table-none {
-    width: 50%;
+    // width: 50%;
   }
 
   .insert-button {
     padding-top: 1px;
     padding-bottom: 1px;
-    vertical-align: text-top;
+    margin-left: 0.5em;
+    // vertical-align: text-top;
   }
 
   .command-editor {
@@ -166,13 +176,11 @@
 
 .path-view {
   cursor: pointer;
-  cursor: hand;
   text-decoration: underline;
 }
 
 .hand-cursor {
   cursor: pointer;
-  cursor: hand;
 }
 
 .command-edit-view {
@@ -372,4 +380,37 @@
 
 .btn-fw {
   min-width: 2em;
+}
+
+.project-view {
+  margin: 1px;
+  padding-left: 0.5em;
+  // padding: 3px 3px 0 3px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: @pane-item-border-color;
+  border-radius: 4px;
+  background-color: @pane-item-background-color;
+
+  .project-heading {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .name {
+      flex: 1;
+      color: @text-color-highlight;
+      font-size: 1.2em;
+      padding-left: 3px;
+    }
+
+    .btn {
+      margin: 3px;
+    }
+  }
+
+  .project-heading:hover {
+    color: @text-color-highlight;
+  }
+
 }

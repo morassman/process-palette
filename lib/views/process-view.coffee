@@ -53,10 +53,11 @@ class ProcessView extends View
         @tbody =>
           @tr {outlet: 'commandRow'}, =>
             @td 'Command', class: 'table-title'
-            @td {class: 'table-value'}, =>
-              @subview 'commandEditor', new TextEditorView()
-            @td {class: 'table-button'}, =>
-              @button 'Insert Variable', {class: 'btn btn-xs insert-button', click: 'insertVariable'}
+            @td =>
+              @div {style: "display: flex; align-items: center"}, =>
+                @div {style: "flex: 1"}, =>
+                  @subview 'commandEditor', new TextEditorView()
+                @button 'Insert Variable', {class: 'btn btn-xs insert-button', click: 'insertVariable'}
           @tr {outlet: 'outputRow'}, =>
             @td "Output#{outputTarget}", outputTitleArgs
             @td "#{successOutput}", outputValueArgs
