@@ -185,7 +185,7 @@ class MainView extends View
 
   deactivate: ->
     # @listView.destroy();
-    @helpView.destroy();
+    @hv.destroy();
     @disposables.dispose();
     @element.remove();
 
