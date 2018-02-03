@@ -1,3 +1,7 @@
+## v0.16.1 (3 February 2018)
+- Fix bug when help view got destroyed.
+- Fix auto enabling and disabling of scroll lock.
+
 ## v0.16.0 (21 November 2017)
 - Group commands per project and make it collapsible.
 - Added a `lineNo` variable which contains the line number of the cursor (@angeldeejay)
