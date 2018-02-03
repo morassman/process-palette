@@ -27,7 +27,7 @@ class ConfigController
       bindings = {};
       binding[@config.keystroke] = @config.getCommandName();
       bindings[cssSelector] = binding;
-      atom.keymaps.add('process-palette', bindings);
+      atom.keymaps.add(@config.getCommandName(), bindings);
 
     @addMenus();
 
