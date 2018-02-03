@@ -72,12 +72,22 @@ class ProcessOutputView extends View
 
     @outputPanel.on 'mousedown', (e) =>
       # Only do this while the process is running.
-      if @processController.process != null
+      if @processController.process
         @setScrollLockEnabled(true);
+
+    @outputPanel.on 'mousewheel', (e) =>
+      if !@processController.process
+        return;
+
+      delta = e.originalEvent.deltaY;
+
+      if delta < 0
+        @setScrollLockEnabled(true);
+      else if delta > 0
+        @disableScrollLockIfAtBottom();
 
     @outputPanel.on 'scroll', (e) =>
       @lastScrollTop = @outputPanel.scrollTop();
-      @disableScrollLockIfAtBottom();
 
   addToolTips: ->
     @disposables.add(atom.tooltips.add(@showListViewButton, {title: 'Show palette'}));
@@ -86,15 +96,11 @@ class ProcessOutputView extends View
     @disposables.add(atom.tooltips.add(@runButton, {title: 'Run process'}));
 
   disableScrollLockIfAtBottom: ->
-    if @processController.process == null
-      return;
-
     if ((@outputPanel.height() + @outputPanel.scrollTop()) == @outputPanel.get(0).scrollHeight)
-      # Only do this while the process is running.
       if (@outputPanel.scrollTop() > 0)
         @setScrollLockEnabled(false);
-    else
-      @setScrollLockEnabled(true);
+    # else
+      # @setScrollLockEnabled(true);
 
   parentHeightChanged: (parentHeight) ->
     @calculateHeight();
