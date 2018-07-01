@@ -102,9 +102,11 @@ class ProcessController
     editor = atom.workspace.getActiveTextEditor();
 
     if editor
+      token = editor.tokenForBufferPosition(editor.getCursorBufferPosition());
       @fields.text = editor.getText();
       @fields.selection = editor.getSelectedText();
       @fields.word = editor.getWordUnderCursor();
+      @fields.token = if token then token.value else "";
       lastCursor = editor.getLastCursor();
       if lastCursor?
         @fields.line = lastCursor.getCurrentBufferLine();

@@ -37,6 +37,7 @@ class InsertVariableView extends SelectListView
     items.push({name:'clipboard',description:'Text currently on clipboard.'});
     items.push({name:'selection',description:'Currently selected text.'});
     items.push({name:'word',description:'Word under cursor.'});
+    items.push({name:'token',description:'Token under cursor.'});
     items.push({name:'line',description:'Line at cursor.'});
     items.push({name:'lineNo',description:'Line number at cursor.'});
     items.push({name:'fullCommand',description:'The full command along with its arguments.'});

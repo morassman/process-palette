@@ -348,6 +348,9 @@ class CommandEditView extends View
               @td 'word', {class: 'text-highlight first-column'}
               @td 'Word under cursor.'
             @tr =>
+              @td 'token', {class: 'text-highlight first-column'}
+              @td 'Token under cursor.'
+            @tr =>
               @td 'line', {class: 'text-highlight first-column'}
               @td 'Line at cursor.'
             @tr =>
