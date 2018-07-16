@@ -78,10 +78,10 @@ class ProcessController
   hasBeenRemoved: ->
     @configController.getMain().processControllerRemoved(@);
 
-  # Return false if the process didn't start.
   runProcessWithFile: (filePath) ->
+    # Return if there is already a process running.
     if @process?
-      return false;
+      return;
 
     @fields = {};
     @options = {};
@@ -142,21 +142,20 @@ class ProcessController
       @fields.fileDirPath = "";
       @fields.fileProjectPath = "";
 
-    if !@saveDirtyFiles()
-      return false;
+    @saveDirtyFiles();
 
-    @takeUserInput(@config.inputDialogs);
 
   # Return true if the execution should continue. false if the user canceled.
   saveDirtyFiles: ->
     if @config.saveOption == 'none'
-      return true;
+      @runProcessAfterSave();
     else if @config.saveOption == 'all'
       return @saveEditors(@getAllDirtyEditors());
     else if @config.saveOption == 'referenced'
       return @saveEditors(@getReferencedDirtyEditors());
+    else
+      @runProcessAfterSave();
 
-    return true;
 
   getAllDirtyEditors: ->
     result = [];
@@ -202,25 +201,28 @@ class ProcessController
 
     return null;
 
-  # return true if the editors were saved and the process can be executed.
-  # false if the user canceled saving and the process shouldn't execute.
   saveEditors: (editors) ->
     if editors.length == 0
-      return true;
+      @runProcessAfterSave();
+      return;
 
     option = 'yes';
 
     if @config.promptToSave
       option = @promptToSave(editors);
 
-      if option == 'cancel'
-        return false;
+    if option == 'cancel'
+      return;
+    else if option == 'no'
+      @runProcessAfterSave();
+      return;
 
-    if option == 'yes'
-      for editor in editors
-        editor.save();
+    promises = editors.map (e) ->
+      e.save()
 
-    return true;
+    Promise.all(promises).then (results) =>
+      @runProcessAfterSave();
+    .catch (error) -> console.error(error);
 
   # Prompt to ask if editors should be saved. Return 'yes', 'no' or 'cancel'
   promptToSave: (editors) ->
@@ -236,6 +238,9 @@ class ProcessController
 
     choice = atom.confirm(options);
     return options.buttons[choice].toLowerCase();
+
+  runProcessAfterSave: ->
+    @takeUserInput(@config.inputDialogs);
 
   takeUserInput: (inputDialogs) ->
     if inputDialogs.length > 0
