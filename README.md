@@ -318,6 +318,7 @@ selection | Currently selected text.
 word | Word under cursor.
 line | Line at cursor.
 lineNo | Line number at cursor.
+token | Token under the cursor according to the file's grammar.
 
 **Input from user**
 
