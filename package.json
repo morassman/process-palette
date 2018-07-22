@@ -1,7 +1,7 @@
 {
   "name": "process-palette",
   "main": "./lib/main",
-  "version": "0.16.1",
+  "version": "0.17.0",
   "description": "Run parameterized shell commands from Atom. Easy to use and very configurable.",
   "keywords": [
     "run",
