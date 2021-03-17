@@ -423,7 +423,7 @@ class ProcessController
 
   killWindowsProcess: ->
     parentProcess = @process;
-    killProcess = cp.spawn("taskkill /PID " + @process.pid + " /T /F");
+    killProcess = cp.spawn("taskkill", ["/pid",  @process.pid, '/f', '/t'])
 
     killProcess.on "error", (err) =>
       parentProcess.kill();
