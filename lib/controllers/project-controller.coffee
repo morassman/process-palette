@@ -5,7 +5,6 @@ ProcessController = require './process-controller'
 RegExpPattern = require '../pattern/regexp-pattern'
 ProjectView = require '../views/project-view'
 {Directory, File, BufferedProcess, CompositeDisposable} = require 'atom'
-os = require 'os';
 
 module.exports =
 class ProjectController
@@ -196,12 +195,12 @@ class ProjectController
 
   getPathExpression: (hasLine) ->
     if hasLine
-      if os.platform == "win32"
+      if process.platform == "win32"
         return "(?:[a-z]:\\\\|\\\\)?[\\w\\.\\-]+[\\\\[\\w\\.\\-]+]*";
       else
         return "(?:~\\/|\\/?)[\\w\\.\\-]+[\\/[\\w\\.\\-]+]*";
 
-    if os.platform == "win32"
+    if process.platform == "win32"
       return "(?:[a-z]:\\\\|\\\\)?(?:[\\w\\.\\-]+\\\\)+[\\w\\.\\-]+";
 
     return "(?:~\\/|\\/?)(?:[\\w\\.\\-]+\\/)+[\\w\\.\\-]+";
