@@ -11,17 +11,17 @@ Highlights:
 - Detects paths and line numbers in the output that links back to the editor.
 - Add hooks for custom JavaScript to run before and after a process.
 
-See the [changelog](https://github.com/morassman/process-palette/blob/master/CHANGELOG.md) for the latest improvements.
+See the [changelog](https://github.com/morassman/process-palette/raw/master/CHANGELOG.md) for the latest improvements.
 
 ## Examples
 ### Add a command for running Python scripts
 
-![demo](https://github.com/morassman/process-palette/blob/master/resources/demo.gif?raw=true)
+![demo](https://github.com/morassman/process-palette/raw/master/resources/demo.gif?raw=true)
 
 <a name="tree_view_example"></a>
 ### Run commands that target files directly from the project tree
 
-![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/demo2.gif?raw=true)
+![Screenshot](https://github.com/morassman/process-palette/raw/master/resources/demo2.gif?raw=true)
 
 
 ## Quick Start
@@ -29,7 +29,7 @@ Install Process Palette and then either generate or download a configuration fil
 
 ### Generate Configuration
 1. Open the Process Palette panel by choosing `Packages|Process Palette|Toggle` from the menu or `Process Palette: Toggle` from the command palette. The following panel will appear:
-![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/help.png?raw=true)
+![Screenshot](https://github.com/morassman/process-palette/raw/master/resources/help.png?raw=true)
 2. Create a global configuration or a project specific configuration with the respective `Do it!` buttons. If a project specific configuration is created and more than one project is open then one can be chosen from the dialog box that will appear.
 3. Either of the `Do it!` buttons will create an example configuration file and open it in the graphical editor.
 4. Configuration files can be edited graphically by choosing `Packages|Process Palette|Edit Configuration` from the menu or `Process Palette: Edit Configuration` from the command palette. Closing the editor will automatically reload the configuration. The `process-palette.json` file can also be edited directly, but then it needs to be reloaded by running `Process Palette: Reload Configuration`.
@@ -38,7 +38,7 @@ Install Process Palette and then either generate or download a configuration fil
 1. Download the example [process-palette.json][2f6a8e37] configuration file and place it in the root of your project folder.
 2. Load the new configuration file by choosing `Packages|Process Palette|Reload Configuration` from the menu or `Process Palette: Reload Configuration` from the command palette.
 
-  [2f6a8e37]: https://github.com/morassman/process-palette/blob/master/examples/process-palette.json "process-palette.json"
+  [2f6a8e37]: https://github.com/morassman/process-palette/raw/master/examples/process-palette.json "process-palette.json"
 
 These example configurations define a command that will echo a message to standard output. It can be run by choosing `Process Palette: Echo Example` from the command palette. This will open the Process Palette panel and show the output. The panel can also be opened directly by pressing `Ctrl-Alt-P` or running `Process Palette: Toggle` from the command palette.
 
@@ -51,7 +51,7 @@ It also contains an example called `Stream Example` to show the direct stream ab
 ## Graphical Editor
 The graphical editor makes it easier to edit the configuration files. It can be opened by choosing `Process Palette: Edit Configuration` from the command palette. A dialog will pop up from where you can choose to edit either the global configuration or a project specific configuration. The following is a screenshot of the graphical editor.
 
-![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/editor.png?raw=true)
+![Screenshot](https://github.com/morassman/process-palette/raw/master/resources/editor.png?raw=true)
 
 The commands are listed on the left. Selecting one will show its details on the right. Pressing the `Edit Patterns` button allows you to define custom patterns for recognizing file paths and line numbers when writing output to the panel, although the default built-in pattern ought to be sufficient in most cases.
 
@@ -61,7 +61,7 @@ The configuration file will be saved and automatically reloaded when closed.
 ### Palette panel
 The palette panel shows the configured command and output targets for each command. The visibility of these can be toggled in the settings.
 
-![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/panel-settings.png?raw=true)
+![Screenshot](https://github.com/morassman/process-palette/raw/master/resources/panel-settings.png?raw=true)
 
 ### Configure shell
 Commands will be executed by the system's default shell, which is `sh` on OSX and Linux and `cmd.exe` on Windows.
@@ -73,7 +73,7 @@ If you would like to use a particular shell then you can specify it under Proces
 Process Palette has a small panel that lists all the commands that are configured. It can be toggled by pressing `Ctrl-Alt-P` or from the menu `Packages|Process Palette|Toggle`.
 From here one can see all the commands and also run them.
 
-![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/panel-basic.png?raw=true)
+![Screenshot](https://github.com/morassman/process-palette/raw/master/resources/panel-basic.png?raw=true)
 
 Pressing the down arrow in the top right corner will hide the panel.
 
@@ -83,7 +83,7 @@ Multiple instances of a process can run at a time. The process ID of each instan
 ### Process Output Panel
 If the command is configured to output to the Process Palette panel then clicking on the process ID button will cause the panel to switch to showing the output of that process.
 
-![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/panel-output-basic.png?raw=true)
+![Screenshot](https://github.com/morassman/process-palette/raw/master/resources/panel-output-basic.png?raw=true)
 
 The other process instances will still be shown, but the selected one will be highlighted.
 
@@ -148,7 +148,7 @@ All `process-palette.json` configuration files can be reloaded by running the `P
 
 The new command will cause an entry to be added to the command palette called `Process Palette: Ant default`.
 
-![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/command-palette-basic.png?raw=true)
+![Screenshot](https://github.com/morassman/process-palette/raw/master/resources/command-palette-basic.png?raw=true)
 
 The working directory used when running a command is by default the project path, but it can also be configured. More on this in the Advanced Configuration section.
 
@@ -207,7 +207,7 @@ Custom shortcut keys can also be associated with commands by adding a `keystroke
 }
 ```
 
-![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/command-palette-keystroke.png?raw=true)
+![Screenshot](https://github.com/morassman/process-palette/raw/master/resources/command-palette-keystroke.png?raw=true)
 
 After reloading the configuration the `Ant: Default` command can be run by pressing `Ctrl-Alt-A`.
 
@@ -342,7 +342,7 @@ Here is an example of one such dialog:
 ]
 ```
 
-![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/input-dialog.png?raw=true)
+![Screenshot](https://github.com/morassman/process-palette/raw/master/resources/input-dialog.png?raw=true)
 
 **Output**
 
@@ -416,7 +416,7 @@ If, for instance, you are running on Linux and need to convert the `filePath` va
 ## Detect Paths And Line Numbers
 Commands that write to the output panel can be configured to detect file paths and optionally line numbers.
 
-![Screenshot](https://github.com/morassman/process-palette/blob/master/resources/pattern.png?raw=true)
+![Screenshot](https://github.com/morassman/process-palette/raw/master/resources/pattern.png?raw=true)
 
 Detected paths will be underlined. Clicking it will open the file and if a line number is detected jump to it.
 
