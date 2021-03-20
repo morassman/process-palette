@@ -24,6 +24,8 @@
     "underscore.string": "~3.2",
     "ansi-to-html": "~0.3",
     "fs-plus": "^2.8.0",
-    "loophole": "^1.1.0"
+    "loophole": "^1.1.0",
+    "xterm": "4.11.0",
+    "etch": "0.14.1"
   }
 }

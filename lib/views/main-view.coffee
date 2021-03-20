@@ -129,7 +129,7 @@ class MainView extends View
     @main.savePanel();
 
   editPressed: =>
-    @main.editConfiguration();
+    @main.editConfiguration(true);
 
   reloadPressed: =>
     @main.reloadConfiguration();
