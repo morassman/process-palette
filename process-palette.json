@@ -1,0 +1,140 @@
+{
+  "patterns": {
+    "P1": {
+      "expression": "(path):(line)"
+    },
+    "P2": {
+      "expression": "(path)\\s+(line)",
+      "path": "(?:\\/[\\w\\.\\-]+)+"
+    }
+  },
+  "commands": [
+    {
+      "namespace": "process-palette",
+      "action": "defaults-example",
+      "command": "echo 'This command uses all the defaults.'",
+      "arguments": [],
+      "cwd": null,
+      "inputDialogs": [],
+      "env": {},
+      "keystroke": null,
+      "stream": false,
+      "outputTarget": "panel",
+      "outputBufferSize": 80000,
+      "maxCompleted": 3,
+      "autoShowOutput": true,
+      "autoHideOutput": false,
+      "scrollLockEnabled": false,
+      "singular": false,
+      "promptToSave": true,
+      "saveOption": "none",
+      "patterns": [
+        "default"
+      ],
+      "successOutput": "{stdout}",
+      "errorOutput": "{stdout}\n{stderr}",
+      "fatalOutput": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "startMessage": "",
+      "successMessage": "Executed : {fullCommand}",
+      "errorMessage": "Executed : {fullCommand}\nReturned with code {exitStatus}\n{stderr}",
+      "fatalMessage": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "menus": [],
+      "startScript": null,
+      "successScript": null,
+      "errorScript": null,
+      "scriptOnStart": false,
+      "scriptOnSuccess": false,
+      "scriptOnError": false,
+      "notifyOnStart": false,
+      "notifyOnSuccess": true,
+      "notifyOnError": true
+    },
+    {
+      "namespace": "process-palette",
+      "action": "echo-example",
+      "command": "echo",
+      "arguments": [
+        "Hello",
+        "$CUSTOM_VAR",
+        "from",
+        "{configDirAbsPath}"
+      ],
+      "cwd": "{projectPath}",
+      "inputDialogs": [],
+      "env": {
+        "CUSTOM_VAR": "Atom"
+      },
+      "keystroke": "ctrl-alt-e",
+      "stream": false,
+      "outputTarget": "panel",
+      "outputBufferSize": 100,
+      "maxCompleted": 1,
+      "autoShowOutput": true,
+      "autoHideOutput": false,
+      "scrollLockEnabled": false,
+      "singular": false,
+      "promptToSave": true,
+      "saveOption": "none",
+      "patterns": [
+        "P1"
+      ],
+      "successOutput": "{stdout}",
+      "errorOutput": "{stdout}\n{stderr}",
+      "fatalOutput": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "startMessage": "",
+      "successMessage": "Executed : {fullCommand}",
+      "errorMessage": "Executed : {fullCommand}\nReturned with code {exitStatus}\n{stderr}",
+      "fatalMessage": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "menus": [],
+      "startScript": null,
+      "successScript": null,
+      "errorScript": null,
+      "scriptOnStart": false,
+      "scriptOnSuccess": false,
+      "scriptOnError": false,
+      "notifyOnStart": false,
+      "notifyOnSuccess": true,
+      "notifyOnError": true
+    },
+    {
+      "namespace": "process-palette",
+      "action": "stream-example",
+      "command": "ping localhost",
+      "arguments": [],
+      "cwd": null,
+      "inputDialogs": [],
+      "env": {},
+      "keystroke": null,
+      "stream": true,
+      "outputTarget": "panel",
+      "outputBufferSize": null,
+      "maxCompleted": 3,
+      "autoShowOutput": true,
+      "autoHideOutput": false,
+      "scrollLockEnabled": false,
+      "singular": false,
+      "promptToSave": true,
+      "saveOption": "none",
+      "patterns": [
+        "default"
+      ],
+      "successOutput": "{stdout}",
+      "errorOutput": "{stdout}\n{stderr}",
+      "fatalOutput": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "startMessage": "",
+      "successMessage": "Executed : {fullCommand}",
+      "errorMessage": "Executed : {fullCommand}\nReturned with code {exitStatus}\n{stderr}",
+      "fatalMessage": "Failed to execute : {fullCommand}\n{stdout}\n{stderr}",
+      "menus": [],
+      "startScript": null,
+      "successScript": null,
+      "errorScript": null,
+      "scriptOnStart": false,
+      "scriptOnSuccess": false,
+      "scriptOnError": false,
+      "notifyOnStart": false,
+      "notifyOnSuccess": true,
+      "notifyOnError": true
+    }
+  ]
+}
