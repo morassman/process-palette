@@ -170,6 +170,16 @@
     border: 1px solid @input-border-color;
     background-color: @input-background-color;
   }
+
+  .editor {
+    .line.cursor-line {
+      background: transparent;
+    }
+  }
+
+  .scrollbar-corner {
+    visibility: hidden;
+  }
 }
 
 .output-panel {
@@ -215,12 +225,6 @@
     text-align: center;
   }
 
-  .multi-line-editor {
-    border: 1px solid @input-border-color;
-    background-color: @input-background-color;
-    min-height: 4.5em;
-  }
-
   .bordered {
     // border: 1px solid @tool-panel-border-color;
   }
@@ -240,6 +244,12 @@
     padding-right: 5px;
   }
 
+}
+
+.multi-line-editor {
+  border: 1px solid @input-border-color;
+  background-color: @input-background-color;
+  min-height: 4.5em;
 }
 
 .pattern-choose-view {
@@ -303,6 +313,16 @@
   width: 100%;
   height: 100%;
   background-color: @tool-panel-background-color;
+
+  .editor {
+    .line.cursor-line {
+      background: transparent;
+    }
+  }
+
+  .scrollbar-corner {
+    visibility: hidden;
+  }
 
   .pointer {
     cursor: pointer;
