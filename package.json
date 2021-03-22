@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "atom-space-pen-views": "^2.0.5",
+    "atom-select-list": "0.8.0",
     "underscore-plus": "^1.0.0",
     "minimatch": "^2.0.10",
     "shelljs": "^0.7.4",
