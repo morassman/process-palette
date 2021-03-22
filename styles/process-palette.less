@@ -97,6 +97,23 @@
     .keystroke {
       color: @text-color;
     }
+
+    .process-buttons {
+      display: flex;
+      margin-right: 0.5em;
+
+      .kill {
+        border-right-width: 0px;
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+      }
+
+      .pid {
+        border-left-width: 0px;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+    }
   }
 
   table {
@@ -310,12 +327,22 @@
   .command-choose-view {
     padding: 5px;
 
+    .list {
+      display: flex;
+      flex-direction: column;
+    }
+
     .item-view {
+      display: flex;
+      padding-bottom: 5px;
+
       .name-label {
         width: 100%;
         padding-left: 5px;
         vertical-align: middle;
         display: inline-block;;
+        white-space: nowrap;
+        cursor: pointer;
       }
 
       .name-label:hover {
