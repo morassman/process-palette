@@ -290,10 +290,6 @@
         font-size: smaller;
       }
     }
-
-    .buttons {
-
-    }
   }
 
   .editor {
@@ -471,5 +467,48 @@
     width: 3px;
     height: 100%;
     cursor: col-resize;
+  }
+}
+
+.process-palette-input-dialog {
+  display: flex;
+  flex-direction: column;
+
+  table {
+    flex: 1;
+    margin-left: 1em;
+    margin-right: 1em;
+  }
+
+  th {
+    text-align: center;
+    padding-bottom: 0.5em;
+  }
+
+  atom-text-editor {
+    margin: 0px !important;
+  }
+
+  .input-message {
+    font-size: smaller;
+    color: @text-color-subtle;
+    padding-bottom: 1em;
+  }
+
+  .header {
+    text-align: center;
+    font-size: larger;    
+    padding-top: 0.5em;
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+    color: @text-color-highlight;
+    border-bottom: 1px solid @pane-item-border-color;
+    
+  }
+
+  .footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
   }
 }
