@@ -15,7 +15,6 @@
     "atom": ">=1.18.0 <2.0.0"
   },
   "dependencies": {
-    "atom-space-pen-views": "^2.0.5",
     "atom-select-list": "0.8.0",
     "underscore-plus": "^1.0.0",
     "minimatch": "^2.0.10",
