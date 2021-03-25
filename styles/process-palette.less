@@ -11,7 +11,7 @@
   flex-direction: column;
   background: @tool-panel-background-color;
 
-  .hand-cursor {
+  &-pointer {
     cursor: pointer;
   }
 
@@ -19,32 +19,26 @@
     min-width: 2em;
   }
 
-  .multi-line-editor {
+  &-multi-line-editor {
     border: 1px solid @input-border-color;
     background-color: @input-background-color;
     min-height: 4.5em;
   }
 
-  .main-content {
+  &-main-content {
     flex: 1;
     display: flex;
     flex-direction: column;
     overflow: auto;
-    // height: 100%;
 
-    // .projects-list {
-    //   /* Ensure that it doesn't overlap with the buttons in the top right. */
-    //   max-width: calc(~'100% - 20em');
-    // }
-
-    .output-view-container {
+    &-output-view-container {
       flex: 1;
       display: flex;
       flex-direction: column;
     }
   }
 
-  .button-group {
+  &-button-group {
     display: inline-block;
     position: absolute;
     top: 2px;
@@ -62,13 +56,13 @@
   overflow: auto;
   background: @tool-panel-background-color;
 
-  .header {
+  &-header {
     margin-top: 6px;
     padding: 0;
     // text-align: center;
   }
 
-  .content {
+  &-content {
     align-self: center;
     margin-top: 1em;
     // margin-left: 100px;
@@ -80,55 +74,37 @@
 }
 
 .process-palette-process-view {
-  // padding: 2px 2px 8px 2px;
   padding: 3px 3px 3px 3px;
   margin-bottom: 3px;
   border-radius: 4px;
   // background-color: @overlay-background-color;
   background-color: @inset-panel-background-color;
 
-  .process-toolbar {
+  &-toolbar {
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-bottom: 2px;
+    margin-bottom: 2px;  
+  }
 
-    .command-name {
-      color: @text-color-info;
-      font-size: 115%;
-    }
+  &-command-name {
+    color: @text-color-info;
+    font-size: 115%;
+  }
 
-    .keystroke {
-      color: @text-color;
-      padding: 1px 4px;
-      border-radius: 2px; 
-      font-weight: 600;
-      background-color: @overlay-background-color;
-    }
-
-    .process-buttons {
-      display: flex;
-      margin-right: 0.5em;
-
-      .kill {
-        border-right-width: 0px;
-        border-bottom-right-radius: 0;
-        border-top-right-radius: 0;
-      }
-
-      .pid {
-        border-left-width: 0px;
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-      }
-    }
+  &-keystroke {
+    color: @text-color;
+    padding: 1px 4px;
+    border-radius: 2px; 
+    font-weight: 600;
+    background-color: @overlay-background-color;
   }
 
   table {
     width: 100%;
   }
 
-  .table-title {
+  &-table-title {
     font-weight: 600;
     padding-right: 24px;
     // color: @text-color-highlight;
@@ -136,18 +112,14 @@
     width: 7em;
   }
 
-  .table-button {
-    padding-left: 5px;
-  }
-
-  .insert-button {
+  &-insert-button {
     padding-top: 1px;
     padding-bottom: 1px;
     margin-left: 0.5em;
     // vertical-align: text-top;
   }
 
-  .command-editor {
+  &-command-editor {
     width: 100%;
     box-shadow: none;
     border-radius: 0;
@@ -159,12 +131,14 @@
     background-color: @input-background-color;
   }
 
+  // Override the Atom's editor class.
   .editor {
     .line.cursor-line {
       background: transparent;
     }
   }
 
+  // Override the Atom's scrollbar-corner class.
   .scrollbar-corner {
     visibility: hidden;
   }
@@ -180,19 +154,15 @@
   height: 100%;
   background-color: @tool-panel-background-color;
 
-  .first-column {
+  &-first-column {
     padding-left: 20px;
-  }
-
-  .top-label {
-    vertical-align: top;
   }
 
   .th {
     text-align: center;
   }
 
-  .check-label {
+  &-check-label {
     padding-left: 10px;
   }
 
@@ -211,26 +181,26 @@
 
 .process-palette-pattern-choose-view {
 
-  .pattern-button {
+  &-button {
     margin-right: 10px;
   }
 
-  .pattern-name {
+  &-name {
     padding-left: 10px;
   }
 
-  .pattern-expression {
+  &-expression {
     padding-left: 10px;
   }
 }
 
 .process-palette-pattern-edit-view {
-  .header {
-    text-align: center;
-  }
-
   margin-left: 1em;
   margin-right: 1em;
+
+  &-header {
+    text-align: center;
+  }
 }
 
 .process-palette-table-edit-view {
@@ -240,6 +210,9 @@
     width: 100%;
     height: 100%;
     font-size: inherit;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
   }
 
   th {
@@ -253,14 +226,7 @@
     padding-bottom: 0px;
   }
 
-  .table-view {
-    // border: 1px solid @tool-panel-border-color;
-    padding-left: 5px;
-    padding-right: 5px;
-    padding-bottom: 5px;
-  }
-
-  .button-view {
+  &-buttons {
     text-align: center;
     padding-top: 5px;
     padding-bottom: 5px;
@@ -268,15 +234,51 @@
 
 }
 
+.process-palette-command-choose-view {
+  padding: 5px;
+
+  &-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &-buttons {
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+}
+
+.process-palette-command-item-view {
+  display: flex;
+  padding-bottom: 5px;
+
+  &-label {
+    width: 100%;
+    padding-left: 5px;
+    vertical-align: middle;
+    display: inline-block;;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  &-label:hover {
+    color: @text-color-highlight;
+  }
+
+  &-highlighted {
+    color: @text-color-highlight;
+  }
+}
+
 .process-palette-main-edit-view {
   display: flex;
   flex-direction: column;
-  // overflow: auto;
   width: 100%;
   height: 100%;
   background-color: @tool-panel-background-color;
 
-  .top-bar {
+  &-top-bar {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -284,20 +286,31 @@
     border-bottom: 1px solid @pane-item-border-color;    
     background-color: @tab-background-color-active;
 
-
-    .info {
+    &-info {
       flex: 1;
 
-      .title {
+      &-title {
         color: @text-color-highlight;
         margin: 0;
       }
 
-      .file-path {
+      &-path {
         color: @text-color-subtle;
         font-size: smaller;
       }
     }
+  }
+
+  &-left-view {
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+  }
+
+  &-right-view {
+    position: relative;
+    width: 100%;
+    height: 100%;
   }
 
   .editor {
@@ -310,84 +323,6 @@
     visibility: hidden;
   }
 
-  .pointer {
-    cursor: pointer;
-  }
-
-  .left-view {
-    width: 100%;
-    height: 100%;
-    padding: 5px;
-
-    .reload-button {
-      float: right;
-    }
-  }
-
-  .right-view {
-    position: relative;
-    width: 100%;
-    height: 100%;
-  }
-
-  // .left-view {
-  //   width: 15%;
-  //   height: 100%;
-  //   min-width: 150px;
-  //   display: inline-block;
-  //   border-right: 1px solid @tool-panel-border-color;
-  // }
-  //
-  // .right-view {
-  //   width: 85%;
-  //   height: 100%;
-  //   overflow: auto;
-  //   position: absolute;
-  //   display: inline-block;
-  // }
-
-  .add-command-button-view {
-    text-align: center;
-    padding-top: 5px;
-    padding-bottom: 5px;
-  }
-
-  .edit-patterns-button {
-    width: 100%;
-  }
-
-  .command-choose-view {
-    padding: 5px;
-
-    .list {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .item-view {
-      display: flex;
-      padding-bottom: 5px;
-
-      .name-label {
-        width: 100%;
-        padding-left: 5px;
-        vertical-align: middle;
-        display: inline-block;;
-        white-space: nowrap;
-        cursor: pointer;
-      }
-
-      .name-label:hover {
-        color: @text-color-highlight;
-      }
-
-      .highlighted {
-        color: @text-color-highlight;
-      }
-    }
-
-  }
-
 }
 
 .process-palette-process-output-view {
@@ -395,7 +330,7 @@
   flex-direction: column;
   flex: 1;
 
-  .output-panel {
+  &-panel {
     flex: 1;
     overflow: auto;
     white-space: pre;
@@ -406,24 +341,17 @@
 }
 
 .process-palette-project-view {
-  // margin: 1px;
   padding-left: 0.5em;
   padding-bottom: 3px;
   margin-bottom: 2px;
-  // border-style: solid;
-  // border-width: 1px;
-  // border-color: @pane-item-border-color;
-  // border-radius: 4px;
   background-color: @overlay-background-color;
-  // background-color: @inset-panel-background-color;
- 
 
-  .project-heading {
+  &-heading {
     display: flex;
     flex-direction: row;
     align-items: center;
 
-    .name {
+    &-name {
       flex: 1;
       color: @text-color-highlight;
       font-size: 1.2em;
@@ -435,11 +363,14 @@
     }
   }
 
-  .project-heading:hover {
+
+
+  &-heading:hover {
     color: @text-color-highlight;
+    cursor: pointer;
   }
 
-  .process-list {
+  &-process-list {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -458,7 +389,7 @@
   overflow-x: hidden;
   overflow-y: auto;
 
-  .left {
+  &-left {
     // float: left;
     width: 100px;
     height : 100%;
@@ -466,14 +397,14 @@
     overflow-y: auto;
   }
 
-  .right {
+  &-right {
     // margin-left: 103px;
     width: 100%;
     height: 100%;
     overflow-y: auto;
   }
 
-  .divider {
+  &-divider {
     // float: left;
     background-color: @pane-item-border-color;
     width: 3px;
@@ -501,13 +432,13 @@
     margin: 0px !important;
   }
 
-  .input-message {
+  &-message {
     font-size: smaller;
     color: @text-color-subtle;
     padding-bottom: 1em;
   }
 
-  .header {
+  &-header {
     text-align: center;
     font-size: larger;    
     padding-top: 0.5em;
@@ -518,7 +449,7 @@
     
   }
 
-  .footer {
+  &-footer {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
