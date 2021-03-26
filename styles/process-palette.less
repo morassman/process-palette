@@ -98,8 +98,6 @@
 }
 
 .process-palette-process-view {
-  // background-color: @overlay-background-color;
-  
   &-toolbar {
     display: flex;
     flex-direction: row;
@@ -113,6 +111,15 @@
     }
   }
 
+  &-command {
+    display: flex;
+    align-items: center;
+  }
+
+  &-target {
+    display: flex;
+  }
+
   &-command-name {
     color: @text-color-info;
     font-size: 115%;
@@ -123,7 +130,10 @@
     padding: 1px 4px;
     border-radius: 2px; 
     font-weight: 600;
-    background-color: @overlay-background-color;
+    border-width: 1px;
+    border-color: @button-border-color;
+    background-color: @button-background-color;
+    // background-color: @overlay-background-color;
   }
 
   table {
