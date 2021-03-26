@@ -10,6 +10,7 @@
   display: flex;
   flex-direction: column;
   background: @tool-panel-background-color;
+  overflow: hidden;
 
   &-pointer {
     cursor: pointer;
@@ -29,7 +30,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    overflow: auto;
+    overflow: hidden;
 
     &-output-view-container {
       flex: 1;
@@ -38,13 +39,10 @@
     }
   }
 
-  &-button-group {
-    display: inline-block;
-    position: absolute;
-    top: 2px;
-    right: 16px;
-    z-index: 30;
-    text-align: center;
+  &-main-buttons {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-right: 0.8em;
   }
 }
 
@@ -57,9 +55,23 @@
   background: @tool-panel-background-color;
 
   &-header {
-    margin-top: 6px;
     padding: 0;
-    // text-align: center;
+    display: flex;
+    width: 100%;
+  }
+
+  &-header-left {
+    flex: 1;
+  }
+
+  &-header-center {
+    flex: 1;
+    text-align: center;
+  }
+
+  &-header-right {
+    flex: 1;
+    text-align: right;
   }
 
   &-content {
@@ -73,18 +85,32 @@
   }
 }
 
-.process-palette-process-view {
-  padding: 3px 3px 3px 3px;
+.process-palette-process-view-list {
+  padding: 3px;
   margin-bottom: 3px;
   border-radius: 4px;
-  // background-color: @overlay-background-color;
   background-color: @inset-panel-background-color;
+}
 
+.process-palette-process-view-output {
+  padding: 2px;
+  background-color: @tab-background-color-active;
+}
+
+.process-palette-process-view {
+  // background-color: @overlay-background-color;
+  
   &-toolbar {
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-bottom: 2px;  
+    margin-bottom: 2px;
+    
+    .btn-group {
+      .btn {
+        height: 100%;
+      }
+    }
   }
 
   &-command-name {
@@ -340,11 +366,17 @@
   }
 }
 
+.process-palette-project-list-view {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
 .process-palette-project-view {
   padding-left: 0.5em;
   padding-bottom: 3px;
   margin-bottom: 2px;
-  background-color: @overlay-background-color;
+  background-color: @tab-background-color-active;
 
   &-heading {
     display: flex;
@@ -433,7 +465,7 @@
   }
 
   &-message {
-    font-size: smaller;
+    font-size: small;
     color: @text-color-subtle;
     padding-bottom: 1em;
   }
@@ -454,4 +486,69 @@
     flex-direction: row;
     justify-content: space-evenly;
   }
+}
+
+.process-palette-tabs-view {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+
+  &-header {
+    display: flex;
+    background-color: @tab-bar-background-color;
+  }
+
+  &-list {
+    cursor: default;
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-top: 1px;
+  }
+
+  &-tab {
+    display: flex;
+    align-items: center;
+    margin-right: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    // border-color: @tab-border-color;
+    color: @text-color-subtle;
+    background-color: @tab-background-color;
+  }
+
+  &-tab:hover {
+    color: @text-color-highlight;
+    // background-color: @tab-background-color-active;
+    // background-color: @overlay-background-color;
+  }
+
+  &-tab-selected {
+    color: @text-color-highlight;
+    background-color: @tab-background-color-active;
+    // background-color: @overlay-background-color;
+  }
+  
+  &-content {
+    display: flex;
+    flex: 1;
+    overflow: auto;
+  }
+
+  &-content-container {
+    display: flex;
+    flex: 1
+  }
+
+}
+
+.process-palette-config-tab-view {
+  display: flex;
+  flex: 1;
 }
