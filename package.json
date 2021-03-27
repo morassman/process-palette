@@ -15,17 +15,16 @@
     "atom": ">=1.18.0 <2.0.0"
   },
   "dependencies": {
+    "ansi-to-html": "0.6.14",
     "atom-select-list": "0.8.0",
-    "underscore-plus": "^1.0.0",
-    "minimatch": "^2.0.10",
-    "shelljs": "^0.7.4",
-    "path": "^0.11.14",
-    "ps-tree": "1.0.0",
-    "underscore.string": "~3.2",
-    "ansi-to-html": "~0.3",
-    "fs-plus": "^2.8.0",
-    "loophole": "^1.1.0",
-    "xterm": "4.11.0",
-    "etch": "0.14.1"
+    "etch": "0.14.1",
+    "fs-plus": "3.1.1",
+    "loophole": "1.1.0",
+    "minimatch": "3.0.4",
+    "path": "0.12.7",
+    "ps-tree": "1.2.0",
+    "shelljs": "0.8.4",
+    "underscore-plus": "1.7.0",
+    "underscore.string": "3.3.5"
   }
 }
