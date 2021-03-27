@@ -93,7 +93,10 @@
 }
 
 .process-palette-process-view-output {
-  padding: 2px;
+  padding-top: 2px;
+  padding-left: 2px;
+  padding-bottom: 2px;
+  padding-right: 0.8em;
   background-color: @tab-background-color-active;
 }
 
@@ -393,11 +396,16 @@
     flex-direction: row;
     align-items: center;
 
+    &-icon {
+      padding-top: 4px; 
+      width: 1.5em;
+    }
+
     &-name {
       flex: 1;
       color: @text-color-highlight;
       font-size: 1.2em;
-      padding-left: 3px;
+      padding-left: 2px;
     }
 
     .btn {
@@ -419,7 +427,7 @@
     overflow: auto;
     // background: @tool-panel-background-color;
     padding-left: 1.5em;
-    padding-right: 3em;
+    padding-right: 2em;
   }
 
 }
