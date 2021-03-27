@@ -100,18 +100,34 @@
   background-color: @tab-background-color-active;
 }
 
+.process-palette-pid-btn-list {
+  flex: 1;
+}
+
+.process-palette-pid-btn {
+  display: inline-flex;
+  margin-right: 0.5em;
+  
+  &-x {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: 1px solid @button-border-color;
+  }
+
+  &-pid {
+    flex: 1;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    border-left: none !important;
+  }
+}
+
 .process-palette-process-view {
   &-toolbar {
     display: flex;
     flex-direction: row;
-    align-items: center;
-    margin-bottom: 2px;
-    
-    .btn-group {
-      .btn {
-        height: 100%;
-      }
-    }
+    align-items: end;
+    margin-bottom: 2px;  
   }
 
   &-command {
