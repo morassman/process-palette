@@ -77,8 +77,6 @@
   &-content {
     align-self: center;
     margin-top: 1em;
-    // margin-left: 100px;
-    // margin-right: 100px;
     margin-bottom: 1em;
     font-size: larger;
     line-height: 175%;
@@ -126,8 +124,7 @@
   &-toolbar {
     display: flex;
     flex-direction: row;
-    align-items: end;
-    margin-bottom: 2px;  
+    align-items: center;
   }
 
   &-command {
@@ -152,7 +149,6 @@
     border-width: 1px;
     border-color: @button-border-color;
     background-color: @button-background-color;
-    // background-color: @overlay-background-color;
   }
 
   table {
@@ -162,7 +158,6 @@
   &-table-title {
     font-weight: 600;
     padding-right: 24px;
-    // color: @text-color-highlight;
     white-space: nowrap;
     width: 7em;
   }
@@ -171,7 +166,6 @@
     padding-top: 1px;
     padding-bottom: 1px;
     margin-left: 0.5em;
-    // vertical-align: text-top;
   }
 
   &-command-editor {
@@ -441,7 +435,6 @@
     display: flex;
     flex-direction: column;
     overflow: auto;
-    // background: @tool-panel-background-color;
     padding-left: 1.5em;
     padding-right: 2em;
   }
@@ -456,7 +449,6 @@
   overflow-y: auto;
 
   &-left {
-    // float: left;
     width: 100px;
     height : 100%;
     overflow-x: hidden;
@@ -464,14 +456,12 @@
   }
 
   &-right {
-    // margin-left: 103px;
     width: 100%;
     height: 100%;
     overflow-y: auto;
   }
 
   &-divider {
-    // float: left;
     background-color: @pane-item-border-color;
     width: 3px;
     height: 100%;
@@ -531,6 +521,7 @@
   &-header {
     display: flex;
     background-color: @tab-bar-background-color;
+    box-shadow: inset 0 -1px 0 @tab-bar-border-color;
   }
 
   &-list {
@@ -541,7 +532,6 @@
     white-space: nowrap;
     overflow-x: auto;
     overflow-y: hidden;
-    padding-top: 1px;
   }
 
   &-list::-webkit-scrollbar {
@@ -551,14 +541,12 @@
   &-tab {
     display: flex;
     align-items: center;
-    margin-right: 3px;
     padding-left: 5px;
     padding-right: 5px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    // border-color: @tab-border-color;
     color: @text-color-subtle;
     background-color: @tab-background-color;
+    border-right: 1px solid @tab-bar-border-color;
+    border-bottom: 1px solid @tab-bar-border-color;
 
     .icon::before {
       margin: 0px;
@@ -567,15 +555,16 @@
 
   &-tab:hover {
     color: @text-color-highlight;
-    // background-color: @tab-background-color-active;
-    // background-color: @overlay-background-color;
   }
 
   &-tab-selected {
     color: @text-color-highlight;
     background-color: @tab-background-color-active;
-    // background-color: @overlay-background-color;
+    padding-bottom: 1px;
+    border-bottom: unset;
   }
+
+
   
   &-content {
     display: flex;
