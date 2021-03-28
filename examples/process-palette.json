@@ -189,7 +189,7 @@
     {
       "namespace": "process-palette",
       "action": "run-with-example",
-      "command": "echo Executed 'Run With' from tree view on {fileAbsPath}",
+      "command": "echo Executed on {fileAbsPath}. You can also choose 'Run With' on a file in the tree view.",
       "arguments": [],
       "cwd": null,
       "inputDialogs": [],
