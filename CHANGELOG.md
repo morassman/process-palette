@@ -1,3 +1,6 @@
+## v0.18.1 (28 March 2021)
+- Configure scheduler for etch.
+
 ## v0.18.0 (28 March 2021)
 - Convert project to Javascript.
 - Replace space-pen with etch.
