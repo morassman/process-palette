@@ -1,3 +1,11 @@
+## v0.18.0 (28 March 2021)
+- Convert project to Javascript.
+- Replace space-pen with etch.
+- Add tabs for running processes.
+- Change input dialog to prompt for all variables at once.
+- Move editor buttons into a title bar.
+- Add more example commands.
+
 ## v0.17.0 (22 July 2018)
 - Added `token` variable which contains the token under the cursor.
 - Run command only after all editors finish saving.
