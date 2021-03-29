@@ -1,3 +1,6 @@
+## v0.18.2 (29 March 2021)
+- Show panel when a command is configured to auto show its output.
+
 ## v0.18.1 (28 March 2021)
 - Configure scheduler for etch.
 
