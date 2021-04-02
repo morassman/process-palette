@@ -21,10 +21,17 @@
     "fs-plus": "3.1.1",
     "loophole": "1.1.0",
     "minimatch": "3.0.4",
+    "node-pty-prebuilt-multiarch": "0.10.0",
     "path": "0.12.7",
     "ps-tree": "1.2.0",
     "shelljs": "0.8.4",
     "underscore-plus": "1.7.0",
-    "underscore.string": "3.3.5"
+    "underscore.string": "3.3.5",
+    "xterm": "^4.11.0",
+    "xterm-addon-fit": "0.5.0"
+  },
+  "devDependencies": {
+    "@types/atom": "^1.40.10",
+    "@types/node": "^14.14.37"
   }
 }

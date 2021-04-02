@@ -130,10 +130,12 @@
   &-command {
     display: flex;
     align-items: center;
+    padding-top: 1px;
   }
 
   &-target {
-    display: flex;
+    display: inline-block;
+    // display: flex;
   }
 
   &-command-name {
@@ -157,9 +159,8 @@
 
   &-table-title {
     font-weight: 600;
-    padding-right: 24px;
+    padding-right: 0.5em;
     white-space: nowrap;
-    width: 7em;
   }
 
   &-insert-button {
@@ -378,6 +379,7 @@
   display: flex;
   flex-direction: column;
   flex: 1;
+  height: 100%;
 
   &-panel {
     flex: 1;
@@ -387,12 +389,25 @@
     color: white;
     font-family: Menlo, Consolas, 'DejaVu Sans Mono', monospace;
   }
+
+  &-terminal {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    
+    .xterm {
+      padding-bottom: 2em;
+    }
+  }
 }
 
 .process-palette-project-list-view {
   display: flex;
   flex-direction: column;
   flex: 1;
+  overflow: auto;
+  height: 100%;
 }
 
 .process-palette-project-view {
@@ -563,13 +578,12 @@
     padding-bottom: 1px;
     border-bottom: unset;
   }
-
-
   
   &-content {
     display: flex;
     flex: 1;
-    overflow: auto;
+    height: 100%
+    // overflow: auto;
   }
 
   &-content-container {
@@ -582,4 +596,5 @@
 .process-palette-config-tab-view {
   display: flex;
   flex: 1;
+  height: 100%;
 }

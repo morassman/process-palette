@@ -235,7 +235,7 @@ The following properties relate to the output produced by the process. The outpu
 
 Property|Description|Default
 ---|---|---
-outputTarget|Where the output produced by the process should be directed to. It can have one of the following  values: "panel", "editor", "clipboard", "console" or "void". If the value is overridden with `null` then it will default to "void". More on this below.|"panel"
+outputTarget|Where the output produced by the process should be directed to. It can have one of the following  values: "panel", "terminal", "editor", "clipboard", "console" or "void". If the value is overridden with `null` then it will default to "void". More on this below.|"panel"
 successOutput|The format of the output when the process returned with an exit status of 0.|"{stdout}"
 errorOutput|The format of the output when the process returned with a non-0 exit status.|"{stdout}\n{stderr}"
 fatalOutput|The format of the output when the command could not be executed at all.|"Failed to execute : {fullCommand}\n{stdout}\n{stderr}"
