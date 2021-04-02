@@ -394,6 +394,8 @@
     flex: 1;
     width: 100%;
     height: 100%;
+    // Make relative so the search addon view can be added.
+    position: relative;
     background-color: black;
     
     .xterm {
@@ -654,6 +656,45 @@
     flex: 1;
     width: 100%;
     height: 100%;
+    // Make relative so the search addon view can be added.
+    position: relative;
     background-color: black;
   }
+}
+
+.process-palette-search-addon {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 2px;
+  right: 1em;
+  padding: 3px;
+  z-index: 10000;
+  background-color: @overlay-background-color;
+
+  input {
+    flex: 1;
+    width: 15em;
+  }
+
+  .process-palette-icon-button {
+    margin-left: 5px;
+  }
+}
+
+.process-palette-input {
+  border-left: none;
+  border-top: none;
+  border-right: none;
+  background: none;
+  border-radius: unset;
+}
+
+.process-palette-input:focus {
+  border-bottom: 1px solid @button-background-color-selected;
+  box-shadow: none;
+}
+
+.process-palette-icon-button:hover {
+  color: @text-color-highlight;
 }

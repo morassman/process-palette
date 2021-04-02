@@ -28,7 +28,9 @@
     "underscore-plus": "1.7.0",
     "underscore.string": "3.3.5",
     "xterm": "^4.11.0",
-    "xterm-addon-fit": "0.5.0"
+    "xterm-addon-fit": "0.5.0",
+    "xterm-addon-search": "0.8.0",
+    "xterm-addon-search-bar": "0.2.0"
   },
   "devDependencies": {
     "@types/atom": "^1.40.10",
