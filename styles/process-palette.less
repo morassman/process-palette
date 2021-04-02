@@ -672,9 +672,40 @@
   z-index: 10000;
   background-color: @overlay-background-color;
 
-  input {
+  &-input {
     flex: 1;
-    width: 15em;
+    display: flex;
+    align-items: center;
+    background-color: @input-background-color;
+
+    input {
+      flex: 1;
+      width: 15em;
+    }
+
+    &-btn {
+      margin-left: 2px;
+      margin-right: 2px;
+      padding: 2px;
+      font-weight: 700;
+      width: 2em;
+      text-align: center;
+      cursor: default;
+
+      &-word {
+        text-decoration: underline overline;
+      }
+    }
+
+    &-btn:hover {
+      color: @text-color-highlight;
+    }
+
+    &-btn-checked {
+      color: @text-color-highlight;
+      border-radius: 2px;
+      background-color: @button-background-color-selected;
+    }
   }
 
   .process-palette-icon-button {
