@@ -393,14 +393,15 @@
   &-terminal {
     flex: 1;
     width: 100%;
-    height: 100%;
+    height: 1em;
+    // height: 100%;
     // Make relative so the search addon view can be added.
     position: relative;
     background-color: black;
     
-    .xterm {
-      padding-bottom: 2em;
-    }
+    // .xterm {
+    //   padding-bottom: 2em;
+    // }
   }
 }
 
@@ -529,6 +530,34 @@
   }
 }
 
+.process-palette-modal {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(80vh);
+
+  &-header {
+    text-align: center;
+    font-size: larger;    
+    padding-top: 0.5em;
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+    color: @text-color-highlight;
+    border-bottom: 1px solid @pane-item-border-color;
+  }
+
+  &-body {
+    flex: 1;
+    overflow: auto;
+  }
+
+  &-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding-top: 1em;
+  }
+}
+
 .process-palette-tabs-view {
   display: flex;
   flex-direction: column;
@@ -571,15 +600,18 @@
   }
 
   &-tab-icon {
-    padding-right: 0.25em
+    padding-right: 0.25em;
   }
 
   &-tab-close {
-    padding-left: 0.5em
+    padding-left: 0.5em;
+    transform: scale(0.75);
+    border-radius: 3px;
   }
 
   &-tab-close:hover {
-    color: @text-color-warning;
+    // color: @text-color-warning;
+    background-color: @button-background-color-selected;
   }
 
   &-tab:hover {
@@ -655,7 +687,8 @@
   &-output {
     flex: 1;
     width: 100%;
-    height: 100%;
+    // height: 100%;
+    height: 1em;
     // Make relative so the search addon view can be added.
     position: relative;
     background-color: black;
@@ -728,4 +761,70 @@
 
 .process-palette-icon-button:hover {
   color: @text-color-highlight;
+}
+
+.process-palette-add-terminal-btn {
+  display: inline-flex;
+  margin-right: 0.5em;
+  
+  &-default {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: 1px solid @button-border-color;
+  }
+
+  &-custom {
+    flex: 1;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    border-left: none !important;
+    padding: 0 !important;
+  }
+
+  &-custom::before {
+    font-size: 12px !important;
+  }
+}
+
+.process-palette-custom-terminal {
+  display: flex;
+  flex-direction: column;
+  padding-left: 1em;
+  padding-right: 1em;
+
+  atom-text-editor {
+    margin: 0px !important;
+  }
+
+  &-tab {
+    display: flex;
+    align-items: center;
+
+    h2 {
+      padding-right: 1.5em;
+    }
+
+    atom-text-editor {
+      flex: 1;
+    }
+  }
+
+  &-cwd {
+    font-size: 1.1em;
+
+    tr {
+      cursor: pointer;
+    }
+
+    td {
+      padding-top: 5px;
+      padding-left: 3px;
+      padding-right: 3px;
+      padding-bottom: 5px;
+    }
+
+    tr:hover {
+      color: @text-color-highlight;
+    }
+  }
 }
