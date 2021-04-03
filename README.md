@@ -1,15 +1,19 @@
 # Process Palette
 Run parameterized shell commands from Atom.
 
-Highlights:
+## Terminals are now supported!
+You can now configure a command to run in a terminal. This allows you to provide input when prompted. You can also simply add a terminal without configuring a command for general purpose use.
+
+## Highlights:
 - Parameterize commands with values from the workspace, e.g, file path, project path, selected text, etc.
-- Add entries to the command palette with optionally shortcut keys for each command.
+- Add entries to the command palette with optional shortcut keys for each command.
 - Define parameterized environment variables.
 - Run multiple instances of commands in parallel.
 - Provides a convenient graphical editor. No need to edit configuration files directly unless you want to.
 - Integrates with the project tree. Select a file in the project tree and choose which command to run it with.
 - Detects paths and line numbers in the output that links back to the editor.
 - Add hooks for custom JavaScript to run before and after a process.
+- Open embedded terminals and optionally configure its working directory and environment variables.
 
 See the [changelog](https://github.com/morassman/process-palette/raw/master/CHANGELOG.md) for the latest improvements.
 

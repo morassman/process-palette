@@ -747,16 +747,8 @@
 }
 
 .process-palette-input {
-  border-left: none;
-  border-top: none;
-  border-right: none;
-  background: none;
-  border-radius: unset;
-}
-
-.process-palette-input:focus {
-  border-bottom: 1px solid @button-background-color-selected;
-  box-shadow: none;
+  font-family: Menlo, Consolas, DejaVu Sans Mono, monospace;
+  font-size: 1.2em;
 }
 
 .process-palette-icon-button:hover {
@@ -792,10 +784,6 @@
   padding-left: 1em;
   padding-right: 1em;
 
-  atom-text-editor {
-    margin: 0px !important;
-  }
-
   &-tab {
     display: flex;
     align-items: center;
@@ -804,7 +792,7 @@
       padding-right: 1.5em;
     }
 
-    atom-text-editor {
+    div {
       flex: 1;
     }
   }
