@@ -2,7 +2,7 @@
 Run parameterized shell commands from Atom.
 
 ## Terminals are now supported!
-You can now configure a command to run in a terminal. This allows you to provide input when prompted. You can also simply add a terminal without configuring a command for general purpose use.
+You can now configure a command to run in an embedded terminal. This allows you to provide input when prompted. You can also simply add a terminal without configuring a command for general purpose use.
 
 ## Highlights:
 - Parameterize commands with values from the workspace, e.g, file path, project path, selected text, etc.
@@ -25,8 +25,12 @@ See the [changelog](https://github.com/morassman/process-palette/raw/master/CHAN
 <a name="tree_view_example"></a>
 ### Run commands that target files directly from the project tree
 
-![Screenshot](https://github.com/morassman/process-palette/raw/master/resources/demo2.gif?raw=true)
+![demo](https://github.com/morassman/process-palette/raw/master/resources/demo2.gif?raw=true)
 
+
+### Add a terminal
+
+![demo](https://github.com/morassman/process-palette/raw/master/resources/demo3.gif?raw=true)
 
 ## Quick Start
 Install Process Palette and then either generate or download a configuration file.
