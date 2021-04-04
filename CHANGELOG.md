@@ -1,5 +1,7 @@
 ## x.x.x
 - Apply patterns before sanitizing output.
+- Add `terminal` as an output target.
+- Add ability to create terminal tabs.
 
 ## v0.18.2 (29 March 2021)
 - Show panel when a command is configured to auto show its output.
