@@ -1,4 +1,4 @@
-## x.x.x
+## 0.19.0 (4 April 2021)
 - Apply patterns before sanitizing output.
 - Add `terminal` as an output target.
 - Add ability to create terminal tabs.
