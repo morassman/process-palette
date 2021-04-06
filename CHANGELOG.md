@@ -1,3 +1,6 @@
+## 0.19.1 (6 April 2021)
+- Fix streaming error output.
+
 ## 0.19.0 (4 April 2021)
 - Apply patterns before sanitizing output.
 - Add `terminal` as an output target.
