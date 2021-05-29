@@ -1,3 +1,6 @@
+## 0.19.2 (29 May 2021)
+- Fix wrapping long lines in output panel.
+
 ## 0.19.1 (6 April 2021)
 - Fix streaming error output.
 
