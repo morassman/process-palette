@@ -27,7 +27,7 @@
     "node-pty-prebuilt-multiarch": "0.10.0",
     "path": "0.12.7",
     "ps-tree": "1.2.0",
-    "shelljs": "0.8.4",
+    "shelljs": "0.8.5",
     "underscore-plus": "1.7.0",
     "underscore.string": "3.3.5",
     "xterm": "^4.11.0",
