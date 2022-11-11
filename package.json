@@ -23,7 +23,7 @@
     "etch": "0.14.1",
     "fs-plus": "3.1.1",
     "loophole": "1.1.0",
-    "minimatch": "3.0.4",
+    "minimatch": "3.0.5",
     "node-pty-prebuilt-multiarch": "0.10.0",
     "path": "0.12.7",
     "ps-tree": "1.2.0",
